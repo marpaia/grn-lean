@@ -1,0 +1,19 @@
+name = "grn-lean"
+defaultTargets = ["GRN"]
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "v4.31.0"
+
+[[require]]
+name = "crnt-lean"
+path = "../crnt-lean"
+
+[[lean_lib]]
+name = "GRN"
+globs = ["GRN", "GRN.+"]
+
+[[lean_exe]]
+name = "analyze"
+root = "Analyze"
