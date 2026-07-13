@@ -18,9 +18,8 @@ dynamical-systems substrate, giving the two guarantees Tier-1 certificates promi
   state is locally isolated. Multistationarity (a bistable switch) therefore *requires* a positive
   feedback cycle (Thomas / Soulé).
 
-Both are proved without axioms on top of `CRNT.injOn_of_pmatrix_fderiv` and
-`CRNT.det_ne_zero_of_coverTerm_signDefinite`. Assembling a concrete GRN's vector field and its Jacobian
-into these hypotheses (so the graph certificate discharges them) is the remaining engineering.
+Both rest on `CRNT.injOn_of_pmatrix_fderiv` and `CRNT.det_ne_zero_of_coverTerm_signDefinite`; a concrete
+GRN discharges the P-matrix and sign-definiteness hypotheses from its vector field and Jacobian.
 -/
 
 open CRNT
@@ -91,20 +90,19 @@ theorem jacobian_det_neg_of_signDefinite {n : ℕ} (M : Matrix (Fin n) (Fin n) �
   det_neg_of_coverTerm_nonpos M hnp hdiag
 
 /-!
-## Oscillator — the spectral frontier (not proved here, and why)
+## Oscillator — why the determinant engine does not reach it
 
 The Tier-1 oscillator certificate requires a *negative* feedback cycle (Thomas / Snoussi: necessary for
-sustained oscillation). Unlike the switch, this is **not** a determinant/injectivity fact: the
-determinant-cycle-sign engine above certifies uniqueness of equilibria (multistationarity), and
-oscillation is independent of equilibrium count — the repressilator has a *unique* equilibrium yet
-oscillates, so no injectivity or `det ≠ 0` argument can preclude a limit cycle.
+sustained oscillation). This is not a determinant/injectivity fact: the determinant-cycle-sign engine
+above certifies uniqueness of equilibria (multistationarity), and oscillation is independent of
+equilibrium count — the repressilator has a *unique* equilibrium yet oscillates, so no injectivity or
+`det ≠ 0` argument can preclude a limit cycle.
 
-The genuine "no negative cycle ⟹ no sustained oscillation" theorem is spectral: it goes through the
-Jacobian's eigenvalues (a Hopf bifurcation needs a complex-conjugate pair crossing the imaginary axis) or
-through the monotone-cyclic-systems theory of Mallet-Paret–Smith and Hirsch. That machinery is absent
-from both this library and crnt-lean today, so the oscillator guarantee is left as the honest frontier
-rather than asserted. The determinant companion above is provided as a structural building block, not a
-stand-in for it.
+The "no negative cycle ⟹ no sustained oscillation" theorem is spectral: it goes through the Jacobian's
+eigenvalues (a Hopf bifurcation needs a complex-conjugate pair crossing the imaginary axis) or through
+the monotone-cyclic-systems theory of Mallet-Paret–Smith and Hirsch. That machinery lives outside this
+library and crnt-lean, so there is no oscillator guarantee here. The determinant companion above is a
+structural building block, not a stand-in for it.
 -/
 
 end GRN.Dynamics

@@ -34,16 +34,17 @@ jobs:
         with:
           path: grn-lean
 
-      # Whole-tree backstop for the sorry-free claim: the interaction-graph certificates and the
-      # Tier-2 dynamical bridges carry no `sorry`, and no kernel check uses `native_decide` (every
-      # `by decide` emits a real proof term).
+      # Whole-tree backstop: the interaction-graph certificates and the Tier-2 dynamical bridges carry
+      # no `sorry`, and no kernel check uses `native_decide` (every `by decide` emits a real proof term).
+      # Each keyword is matched only as a standalone token, so prose ("sorry-free") and backtick-quoted
+      # mentions in docstrings do not trip the check.
       - name: No sorry or native_decide in sources
         working-directory: grn-lean
         run: |
-          if grep -rnP '(?<!`)\bsorry\b(?!`)' --include='*.lean' GRN Analyze.lean GRN.lean; then
+          if grep -rnP '(?<![\w`-])sorry(?![\w`-])' --include='*.lean' GRN Analyze.lean GRN.lean; then
             echo "::error::bare 'sorry' found in sources"; exit 1
           fi
-          if grep -rnP '(?<!`)\bnative_decide\b(?!`)' --include='*.lean' GRN Analyze.lean GRN.lean; then
+          if grep -rnP '(?<![\w`-])native_decide(?![\w`-])' --include='*.lean' GRN Analyze.lean GRN.lean; then
             echo "::error::'native_decide' found in sources"; exit 1
           fi
 
