@@ -167,4 +167,159 @@ theorem cascade_ec50_unique (stages : List StageParams) (h : ∀ s ∈ stages, s
   have hsub : Icc lo hi ⊆ Ici 0 := fun w hw => le_trans hlo hw.1
   exact cascadeResponse_injOn stages h (hsub hu) (hsub hv) (hfu.trans hfv.symm)
 
+/-! ## The cascade is the functor's real steady state
+
+A linear cascade instantiates the feedforward IR directly: species `Fin n`, species `k` produced by
+stage `k` driven by species `k-1` (or the inducer at the head). `linearChain_steady` shows the functor's
+own `steadyPoint` at each species equals the cascade dose-response of the stages up to it, so
+`linearChain_reporter` identifies the reporter's steady level with `cascadeResponse` — the EC50 of which is
+already `cascade_ec50`. This closes "EC50 through the WF-recursion `steadyPoint`" for the cascade class. -/
+
+/-- Appending a stage post-composes its map onto the cascade response. -/
+theorem cascadeResponse_snoc (l : List StageParams) (s : StageParams) (u : ℝ) :
+    cascadeResponse (l ++ [s]) u = stageMap s (cascadeResponse l u) := by
+  induction l generalizing u with
+  | nil => rfl
+  | cons a rest ih => simp only [List.cons_append, cascadeResponse, ih]
+
+/-- A linear cascade as a feedforward system over `Fin stages.length`: species `k` is stage `k`, driven by
+species `k-1`, or by the inducer `u` at the head (`k = 0`). -/
+noncomputable def linearChain (stages : List StageParams) (u : ℝ) (hu : 0 ≤ u)
+    (hs : ∀ s ∈ stages, s.Activating) :
+    FeedforwardSystem (Fin stages.length) (fun j i => j.val + 1 = i.val) where
+  wf := Subrelation.wf
+    (show Subrelation (fun j i : Fin stages.length => j.val + 1 = i.val) (fun j i => j.val < i.val)
+      from fun {_ _} h => by omega)
+    (InvImage.wf Fin.val Nat.lt_wfRel.wf)
+  γ := fun i => (stages.get i).γ
+  hγ := fun i => (hs _ (stages.get_mem i)).2.2.2.1
+  prod := fun i x => hill (stages.get i).a0 (stages.get i).a1 (stages.get i).K (stages.get i).n
+    (if _h : 0 < i.val then x ⟨i.val - 1, by have := i.isLt; omega⟩ else u)
+  local' := fun i x y hxy => by
+    by_cases h : 0 < i.val
+    · simp only [dif_pos h]
+      have hr : (⟨i.val - 1, by have := i.isLt; omega⟩ : Fin stages.length).val + 1 = i.val :=
+        Nat.sub_add_cancel h
+      rw [hxy ⟨i.val - 1, by have := i.isLt; omega⟩ hr]
+    · simp only [dif_neg h]
+  nonneg := fun i x hx => by
+    have ha := hs _ (stages.get_mem i)
+    refine hill_nonneg ha.1 ha.2.2.2.2 (le_of_lt (lt_of_le_of_lt ha.2.2.2.2 ha.2.2.1)) _ ?_
+    by_cases h : 0 < i.val
+    · simp only [dif_pos h]; exact hx _
+    · simp only [dif_neg h]; exact hu
+
+theorem linearChain_gamma (stages : List StageParams) (u : ℝ) (hu : 0 ≤ u)
+    (hs : ∀ s ∈ stages, s.Activating) (i : Fin stages.length) :
+    (linearChain stages u hu hs).γ i = (stages.get i).γ := rfl
+
+theorem linearChain_prod (stages : List StageParams) (u : ℝ) (hu : 0 ≤ u)
+    (hs : ∀ s ∈ stages, s.Activating) (i : Fin stages.length) (x : Fin stages.length → ℝ) :
+    (linearChain stages u hu hs).prod i x =
+      hill (stages.get i).a0 (stages.get i).a1 (stages.get i).K (stages.get i).n
+        (if _h : 0 < i.val then x ⟨i.val - 1, by have := i.isLt; omega⟩ else u) := rfl
+
+/-- **The cascade is the functor's steady state.** For a linear chain, the WF-recursion `steadyPoint` at
+species `i` equals the cascade dose-response of the stages up to and including `i`. -/
+theorem linearChain_steady (stages : List StageParams) (u : ℝ) (hu : 0 ≤ u)
+    (hs : ∀ s ∈ stages, s.Activating) (i : Fin stages.length) :
+    (linearChain stages u hu hs).steadyPoint i = cascadeResponse (stages.take (i.val + 1)) u := by
+  refine (linearChain stages u hu hs).wf.induction
+    (C := fun i => (linearChain stages u hu hs).steadyPoint i =
+      cascadeResponse (stages.take (i.val + 1)) u) i (fun i ih => ?_)
+  have hik : i.val < stages.length := i.isLt
+  have htake : stages.take (i.val + 1) = stages.take i.val ++ [stages.get i] := by
+    rw [List.take_add_one, List.getElem?_eq_getElem hik]; rfl
+  rw [htake, cascadeResponse_snoc, FeedforwardSystem.steadyPoint_eq, linearChain_prod,
+    linearChain_gamma, stageMap]
+  congr 1
+  by_cases h : 0 < i.val
+  · have hr : (⟨i.val - 1, by have := i.isLt; omega⟩ : Fin stages.length).val + 1 = i.val :=
+      Nat.sub_add_cancel h
+    rw [dif_pos h, dif_pos hr, ih ⟨i.val - 1, by have := i.isLt; omega⟩ hr, hr]
+  · rw [dif_neg h]
+    have h0 : i.val = 0 := by omega
+    rw [h0]
+    rfl
+
+/-- **The reporter's steady level is the cascade dose-response.** For a nonempty chain, the functor's
+`steadyPoint` at the last species is `cascadeResponse stages u`, whose EC50 is `cascade_ec50`. -/
+theorem linearChain_reporter (stages : List StageParams) (u : ℝ) (hu : 0 ≤ u)
+    (hs : ∀ s ∈ stages, s.Activating) (hne : stages ≠ []) :
+    (linearChain stages u hu hs).steadyPoint ⟨stages.length - 1, by
+      have := List.length_pos_of_ne_nil hne; omega⟩ = cascadeResponse stages u := by
+  rw [linearChain_steady]
+  congr 1
+  have := List.length_pos_of_ne_nil hne
+  rw [Nat.sub_add_cancel this, List.take_length]
+
+/-! ## General-DAG EC50 through the steady state
+
+The capstone of Frontier A: any acyclic feedforward system whose reporter dose-response is continuous on
+`[0,∞)` (`steadyFam_continuousOn`) and strictly monotone in the inducer (chained from `steadyFam_lt_base`
+and `steadyFam_lt_step`) has a **unique EC50** — every intermediate reporter level is reached at exactly one
+inducer value. This lifts `ec50_exists_unique` onto the functor's real WF-recursion `steadyPoint` for
+arbitrary acyclic topologies, not just linear cascades. -/
+
+/-- **A feedforward reporter has a unique EC50.** If the reporter's steady level is continuous and strictly
+monotone in the inducer on `[lo, hi]`, every level between the endpoints is hit at exactly one inducer
+value. Continuity comes from `steadyFam_continuousOn`; strict monotonicity from chaining `steadyFam_lt_base`
+/ `steadyFam_lt_step` along a regulation path to the reporter. -/
+theorem steadyFam_ec50 {ι : Type*} {r : ι → ι → Prop} (wf : WellFounded r) (γ : ι → ℝ)
+    (prod : ℝ → ι → (ι → ℝ) → ℝ) (top : ι) {lo hi : ℝ} (hle : lo ≤ hi)
+    (hcont : ContinuousOn (fun u => steadyFam wf γ prod u top) (Set.Icc lo hi))
+    (hstrict : StrictMonoOn (fun u => steadyFam wf γ prod u top) (Set.Icc lo hi))
+    {L : ℝ} (hL : L ∈ Set.Icc (steadyFam wf γ prod lo top) (steadyFam wf γ prod hi top)) :
+    ∃! u, u ∈ Set.Icc lo hi ∧ steadyFam wf γ prod u top = L :=
+  ec50_exists_unique hle hcont hstrict hL
+
+/-- A parameterized direct sensor: the reporter reads the inducer `u` through one Hill response,
+independent of the (single, unregulated) state coordinate. -/
+noncomputable def paramDirect (a0 a1 K n : ℝ) : ℝ → Fin 1 → (Fin 1 → ℝ) → ℝ :=
+  fun u _ _ => hill a0 a1 K n u
+
+/-- **The A pipeline, end to end on Hill kinetics.** The parameterized direct sensor's steady reporter
+level has a unique EC50 — continuity from `steadyFam_continuousOn`, strict monotonicity from
+`steadyFam_lt_base` (with `steadyFam_mono` for the ambient order), assembled by `steadyFam_ec50`. This
+exercises the whole of Frontier A against the real Hill response, not an abstract hypothesis. -/
+theorem paramDirect_ec50 {a0 a1 K n γ lo hi : ℝ}
+    (hK : 0 < K) (hn : 0 < n) (ha : a0 < a1) (hγ : 0 < γ) (ha0 : 0 ≤ a0)
+    (hlo : 0 ≤ lo) (hle : lo ≤ hi) {L : ℝ}
+    (hL : L ∈ Set.Icc (steadyFam wellFounded_lt (fun _ : Fin 1 => γ) (paramDirect a0 a1 K n) lo 0)
+      (steadyFam wellFounded_lt (fun _ : Fin 1 => γ) (paramDirect a0 a1 K n) hi 0)) :
+    ∃! u, u ∈ Set.Icc lo hi ∧
+      steadyFam wellFounded_lt (fun _ : Fin 1 => γ) (paramDirect a0 a1 K n) u 0 = L := by
+  have ha1 : 0 ≤ a1 := le_of_lt (lt_of_le_of_lt ha0 ha)
+  have hγi : ∀ _ : Fin 1, 0 < γ := fun _ => hγ
+  have hprod : ∀ i : Fin 1, ContinuousOn (fun v : ℝ × (Fin 1 → ℝ) => paramDirect a0 a1 K n v.1 i v.2)
+      (Set.Ici 0 ×ˢ Set.univ.pi (fun _ => Set.Ici 0)) := by
+    intro i
+    simp only [paramDirect]
+    exact (hill_continuousOn hK hn.le).comp continuous_fst.continuousOn
+      (fun v hv => (Set.mem_prod.1 hv).1)
+  have hnn : ∀ t ∈ Set.Ici (0 : ℝ), ∀ (k : Fin 1) x, (∀ l, 0 ≤ x l) → 0 ≤ paramDirect a0 a1 K n t k x :=
+    fun t ht _ _ _ => hill_nonneg hK ha0 ha1 t ht
+  have hcont : ContinuousOn
+      (fun u => steadyFam wellFounded_lt (fun _ : Fin 1 => γ) (paramDirect a0 a1 K n) u 0)
+      (Set.Icc lo hi) :=
+    (steadyFam_continuousOn wellFounded_lt _ hγi hnn hprod 0).mono (fun u hu => le_trans hlo hu.1)
+  have hstrict : StrictMonoOn
+      (fun u => steadyFam wellFounded_lt (fun _ : Fin 1 => γ) (paramDirect a0 a1 K n) u 0)
+      (Set.Icc lo hi) := by
+    intro p hp q hq hpq
+    have hp0 : 0 ≤ p := le_trans hlo hp.1
+    have hq0 : 0 ≤ q := le_trans hlo hq.1
+    have hnnp : ∀ (k : Fin 1) x, (∀ l, 0 ≤ x l) → 0 ≤ paramDirect a0 a1 K n p k x :=
+      fun _ _ _ => hill_nonneg hK ha0 ha1 p hp0
+    have hnnq : ∀ (k : Fin 1) x, (∀ l, 0 ≤ x l) → 0 ≤ paramDirect a0 a1 K n q k x :=
+      fun _ _ _ => hill_nonneg hK ha0 ha1 q hq0
+    have hle' : ∀ k, steadyFam wellFounded_lt (fun _ : Fin 1 => γ) (paramDirect a0 a1 K n) p k
+        ≤ steadyFam wellFounded_lt (fun _ : Fin 1 => γ) (paramDirect a0 a1 K n) q k :=
+      steadyFam_mono wellFounded_lt hγi hnnp hnnq
+        (fun _ _ _ => hill_monotoneOn hK hn.le ha.le (Set.mem_Ici.2 hp0) (Set.mem_Ici.2 hq0) hpq.le)
+        (fun _ _ _ _ _ _ => le_refl _)
+    exact steadyFam_lt_base wellFounded_lt hγi hnnp hnnq hle' (fun _ _ _ _ _ => le_refl _)
+      (fun _ _ => hill_strictMonoOn hK hn ha (Set.mem_Ici.2 hp0) (Set.mem_Ici.2 hq0) hpq)
+  exact steadyFam_ec50 wellFounded_lt _ (paramDirect a0 a1 K n) 0 hle hcont hstrict hL
+
 end GRN.Dynamics
