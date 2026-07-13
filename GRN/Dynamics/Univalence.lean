@@ -18,7 +18,7 @@ dynamical-systems substrate, giving the two guarantees Tier-1 certificates promi
   state is locally isolated. Multistationarity (a bistable switch) therefore *requires* a positive
   feedback cycle (Thomas / Soulé).
 
-Both are proved sorry-free on top of `CRNT.injOn_of_pmatrix_fderiv` and
+Both are proved without axioms on top of `CRNT.injOn_of_pmatrix_fderiv` and
 `CRNT.det_ne_zero_of_coverTerm_signDefinite`. Assembling a concrete GRN's vector field and its Jacobian
 into these hypotheses (so the graph certificate discharges them) is the remaining engineering.
 -/
