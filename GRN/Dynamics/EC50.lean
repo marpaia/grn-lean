@@ -54,4 +54,78 @@ theorem doseResponse_ec50 {a0 a1 K n γ lo hi : ℝ}
     unfold doseResponse
     gcongr
 
+/-! ## Multi-stage cascade dose-response -/
+
+/-- One stage of a feedforward cascade: an activating Hill response with its degradation. -/
+structure StageParams where
+  a0 : ℝ
+  a1 : ℝ
+  K : ℝ
+  n : ℝ
+  γ : ℝ
+
+/-- A well-posed strictly-activating stage. -/
+def StageParams.Activating (s : StageParams) : Prop :=
+  0 < s.K ∧ 0 < s.n ∧ s.a0 < s.a1 ∧ 0 < s.γ ∧ 0 ≤ s.a0
+
+/-- A stage's steady input/output map: `hill(v)/γ`. -/
+noncomputable def stageMap (s : StageParams) (v : ℝ) : ℝ := hill s.a0 s.a1 s.K s.n v / s.γ
+
+theorem stageMap_nonneg (s : StageParams) (hs : s.Activating) {v : ℝ} (hv : 0 ≤ v) :
+    0 ≤ stageMap s v := by
+  obtain ⟨hK, _, ha, hγ, ha0⟩ := hs
+  exact div_nonneg (hill_nonneg hK ha0 (le_of_lt (lt_of_le_of_lt ha0 ha)) v hv) hγ.le
+
+theorem stageMap_mapsTo (s : StageParams) (hs : s.Activating) :
+    MapsTo (stageMap s) (Ici 0) (Ici 0) :=
+  fun _ hv => mem_Ici.mpr (stageMap_nonneg s hs (mem_Ici.mp hv))
+
+theorem stageMap_continuousOn (s : StageParams) (hs : s.Activating) :
+    ContinuousOn (stageMap s) (Ici 0) := by
+  obtain ⟨hK, hn, _, _, _⟩ := hs
+  exact (hill_continuousOn hK hn.le).div_const s.γ
+
+theorem stageMap_strictMonoOn (s : StageParams) (hs : s.Activating) :
+    StrictMonoOn (stageMap s) (Ici 0) := by
+  obtain ⟨hK, hn, ha, hγ, _⟩ := hs
+  intro u hu v hv huv
+  have := hill_strictMonoOn hK hn ha hu hv huv
+  unfold stageMap
+  gcongr
+
+/-- The multi-stage cascade dose-response: stages applied in series to the inducer. -/
+noncomputable def cascadeResponse : List StageParams → ℝ → ℝ
+  | [], u => u
+  | s :: rest, u => cascadeResponse rest (stageMap s u)
+
+theorem cascadeResponse_continuousOn : ∀ (stages : List StageParams),
+    (∀ s ∈ stages, s.Activating) → ContinuousOn (cascadeResponse stages) (Ici 0)
+  | [], _ => continuousOn_id
+  | s :: rest, h => by
+    have hs := h s (by simp)
+    have hrest : ∀ t ∈ rest, t.Activating := fun t ht => h t (by simp [ht])
+    exact (cascadeResponse_continuousOn rest hrest).comp (stageMap_continuousOn s hs)
+      (stageMap_mapsTo s hs)
+
+theorem cascadeResponse_strictMonoOn : ∀ (stages : List StageParams),
+    (∀ s ∈ stages, s.Activating) → StrictMonoOn (cascadeResponse stages) (Ici 0)
+  | [], _ => strictMonoOn_id
+  | s :: rest, h => by
+    have hs := h s (by simp)
+    have hrest : ∀ t ∈ rest, t.Activating := fun t ht => h t (by simp [ht])
+    exact (cascadeResponse_strictMonoOn rest hrest).comp (stageMap_strictMonoOn s hs)
+      (stageMap_mapsTo s hs)
+
+/-- **A multi-stage activating cascade has a unique EC50.** The dose-response is a composition of
+strictly-monotone continuous stage maps, so it meets every intermediate level at exactly one inducer
+value. -/
+theorem cascade_ec50 (stages : List StageParams) (h : ∀ s ∈ stages, s.Activating)
+    {lo hi : ℝ} (hlo : 0 ≤ lo) (hle : lo ≤ hi) {L : ℝ}
+    (hL : L ∈ Icc (cascadeResponse stages lo) (cascadeResponse stages hi)) :
+    ∃! u, u ∈ Icc lo hi ∧ cascadeResponse stages u = L := by
+  have hsub : Icc lo hi ⊆ Ici 0 := fun u hu => le_trans hlo hu.1
+  exact ec50_exists_unique hle
+    ((cascadeResponse_continuousOn stages h).mono hsub)
+    ((cascadeResponse_strictMonoOn stages h).mono hsub) hL
+
 end GRN.Dynamics
