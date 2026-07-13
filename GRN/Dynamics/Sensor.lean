@@ -100,6 +100,22 @@ theorem hill_strictMonoOn (hK : 0 < K) (hn : 0 < n) (ha : a0 < a1) :
   · nlinarith [mul_pos (sub_pos.2 ha) (sub_pos.2 hr)]
   · exact mul_pos h2 h1
 
+/-- A Hill operator's response is continuous on `[0, ∞)` — the input to the intermediate-value step that
+locates the EC50 (T3). -/
+theorem hill_continuousOn (hK : 0 < K) (hn : 0 ≤ n) :
+    ContinuousOn (hill a0 a1 K n) (Ici 0) := by
+  have hr : ContinuousOn (fun u : ℝ => (u / K) ^ n) (Ici 0) :=
+    ((continuous_id.div_const K).continuousOn).rpow_const (fun _ _ => Or.inr hn)
+  have hnum : ContinuousOn (fun u : ℝ => a0 + a1 * (u / K) ^ n) (Ici 0) :=
+    continuousOn_const.add (continuousOn_const.mul hr)
+  have hden : ContinuousOn (fun u : ℝ => 1 + (u / K) ^ n) (Ici 0) :=
+    continuousOn_const.add hr
+  have hne : ∀ u ∈ Ici (0:ℝ), (1 : ℝ) + (u / K) ^ n ≠ 0 := by
+    intro u hu
+    have : (0:ℝ) ≤ (u / K) ^ n := Real.rpow_nonneg (div_nonneg (mem_Ici.mp hu) hK.le) n
+    positivity
+  exact hnum.div hden hne
+
 /-- One feedforward stage: a Hill operator's kinetic parameters. -/
 structure Stage where
   a0 : ℝ
@@ -144,5 +160,17 @@ theorem hill_ec50_unique (hK : 0 < K) (hn : 0 < n) (ha : a0 < a1) {L a b : ℝ}
     (ha' : (0:ℝ) ≤ a) (hb' : (0:ℝ) ≤ b)
     (hfa : hill a0 a1 K n a = L) (hfb : hill a0 a1 K n b = L) : a = b :=
   ec50_unique (hill_strictMonoOn hK hn ha) ha' hb' hfa hfb
+
+/-- **EC50 exists and is unique** (T3): a continuous strictly-monotone dose-response on `[lo, hi]` meets
+every level between its endpoints at exactly one input. Existence by the intermediate value theorem,
+uniqueness by strict monotonicity. -/
+theorem ec50_exists_unique {f : ℝ → ℝ} {lo hi : ℝ} (hlo : lo ≤ hi)
+    (hcont : ContinuousOn f (Icc lo hi)) (hmono : StrictMonoOn f (Icc lo hi))
+    {L : ℝ} (hL : L ∈ Icc (f lo) (f hi)) :
+    ∃! u, u ∈ Icc lo hi ∧ f u = L := by
+  obtain ⟨u, hu, hfu⟩ := intermediate_value_Icc hlo hcont hL
+  refine ⟨u, ⟨hu, hfu⟩, ?_⟩
+  rintro v ⟨hv, hfv⟩
+  exact hmono.injOn hv hu (hfv.trans hfu.symm)
 
 end GRN.Dynamics
