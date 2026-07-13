@@ -100,6 +100,27 @@ theorem hill_strictMonoOn (hK : 0 < K) (hn : 0 < n) (ha : a0 < a1) :
   · nlinarith [mul_pos (sub_pos.2 ha) (sub_pos.2 hr)]
   · exact mul_pos h2 h1
 
+/-- A strictly repressing Hill operator (`a1 < a0`) is strictly antitone on `[0, ∞)`. -/
+theorem hill_strictAntiOn (hK : 0 < K) (hn : 0 < n) (ha : a1 < a0) :
+    StrictAntiOn (hill a0 a1 K n) (Ici 0) := by
+  intro u hu v hv huv
+  rw [mem_Ici] at hu hv
+  have huK : (0:ℝ) ≤ u / K := div_nonneg hu hK.le
+  have hvK : (0:ℝ) ≤ v / K := div_nonneg hv hK.le
+  have hUK : u / K < v / K := by
+    rw [div_eq_mul_inv, div_eq_mul_inv]
+    exact mul_lt_mul_of_pos_right huv (inv_pos.2 hK)
+  have hr : (u / K) ^ n < (v / K) ^ n := Real.rpow_lt_rpow huK hUK hn
+  have hru : (0:ℝ) ≤ (u / K) ^ n := Real.rpow_nonneg huK n
+  have hrv : (0:ℝ) ≤ (v / K) ^ n := Real.rpow_nonneg hvK n
+  have h1 : (0:ℝ) < 1 + (u / K) ^ n := by linarith
+  have h2 : (0:ℝ) < 1 + (v / K) ^ n := by linarith
+  simp only [hill]
+  rw [← sub_pos, div_sub_div _ _ (ne_of_gt h1) (ne_of_gt h2)]
+  apply div_pos
+  · nlinarith [mul_pos (sub_pos.2 ha) (sub_pos.2 hr)]
+  · exact mul_pos h1 h2
+
 /-- A Hill operator's response is continuous on `[0, ∞)` — the input to the intermediate-value step that
 locates the EC50 (T3). -/
 theorem hill_continuousOn (hK : 0 < K) (hn : 0 ≤ n) :

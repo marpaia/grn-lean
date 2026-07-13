@@ -12,10 +12,10 @@ relation, and its well-foundedness from acyclicity. Kinetics half: the operator-
 definitions (`valuation`, `opRate`, `prodOf`) that build the production function. The `local'`/`nonneg`
 obligations and the `FeedforwardSystem` assembly build on these.
 
-Scope: `source`, `receiver`, `hill1`, and `hill2` are interpreted with their LOICA kinetics (so uniqueness
-covers two-input logic sensors); `sum` (variable-arity, nested list params) still contributes `0`.
-Dose-response monotonicity is proved for the single-input operators; `hill2`'s two-input monotonicity is a
-separate argument.
+Scope: all five operators (`source`, `receiver`, `hill1`, `hill2`, `sum`) are interpreted with their LOICA
+kinetics, so uniqueness (`grn_unique_steady`) covers every kind. Dose-response monotonicity
+(`grn_doseResponse_mono`) covers `source`/`receiver`/`hill1`/`hill2` (the `MonoActivating` predicate);
+`sum`'s per-input dose-response is a further step.
 -/
 
 namespace GRN
@@ -67,6 +67,12 @@ noncomputable def valuation (g : GRN) (inducer : String → ℝ) (x : g.Species 
 /-- A list-valued real parameter of a node (for the two-input operators' `K`/`n`). -/
 def _root_.Node.rlist (nd : Node) (key : String) : List ℝ :=
   (((nd.param? key).map ParamValue.numList).getD []).map (fun q => (q : ℝ))
+
+/-- A nested-list real parameter (for the `sum` operator's per-input `alpha` pairs). -/
+def _root_.Node.rnested (nd : Node) (key : String) : List (List ℝ) :=
+  match nd.param? key with
+  | some (.list xs) => xs.map (fun p => p.numList.map (fun q => (q : ℝ)))
+  | _ => []
 
 /-- The two-input Hill response (LOICA `Hill2`). -/
 noncomputable def hill2 (a0 a1 a2 a3 K1 K2 n1 n2 u1 u2 : ℝ) : ℝ :=
@@ -140,6 +146,21 @@ theorem hill2_monotoneOn_right {a0 a1 a2 a3 K1 K2 n1 n2 u1 : ℝ}
       mul_nonneg (mul_nonneg (mul_nonneg (sub_nonneg.2 ha') hr1) hr1) (sub_nonneg.2 hrle)]
   · exact (mul_pos hdv hdu).le
 
+/-- The two-input Hill response is jointly monotone when it activates in every context — raising either
+input does not decrease the output. -/
+theorem hill2_mono {a0 a1 a2 a3 K1 K2 n1 n2 u1 u2 u1' u2' : ℝ}
+    (hK1 : 0 < K1) (hK2 : 0 < K2) (hn1 : 0 ≤ n1) (hn2 : 0 ≤ n2)
+    (h01 : a0 ≤ a1) (h23 : a2 ≤ a3) (h02 : a0 ≤ a2) (h13 : a1 ≤ a3)
+    (hu1 : 0 ≤ u1) (hu2 : 0 ≤ u2) (hu1' : u1 ≤ u1') (hu2' : u2 ≤ u2') :
+    hill2 a0 a1 a2 a3 K1 K2 n1 n2 u1 u2 ≤ hill2 a0 a1 a2 a3 K1 K2 n1 n2 u1' u2' :=
+  calc hill2 a0 a1 a2 a3 K1 K2 n1 n2 u1 u2
+      ≤ hill2 a0 a1 a2 a3 K1 K2 n1 n2 u1' u2 :=
+        hill2_monotoneOn_left hK1 hK2 hn1 hu2 h01 h23
+          (Set.mem_Ici.mpr hu1) (Set.mem_Ici.mpr (le_trans hu1 hu1')) hu1'
+    _ ≤ hill2 a0 a1 a2 a3 K1 K2 n1 n2 u1' u2' :=
+        hill2_monotoneOn_right hK1 hK2 hn2 (le_trans hu1 hu1') h02 h13
+          (Set.mem_Ici.mpr hu2) (Set.mem_Ici.mpr (le_trans hu2 hu2')) hu2'
+
 theorem getD_map_nonneg {f : String → ℝ} (hf : ∀ id, 0 ≤ f id) (l : List String) (k : ℕ) :
     0 ≤ (l.map f).getD k 0 := by
   induction l generalizing k with
@@ -167,6 +188,10 @@ noncomputable def opRateV (op : Node) (vals : List ℝ) : ℝ :=
         ((op.rlist "K").getD 0 1) ((op.rlist "K").getD 1 1)
         ((op.rlist "n").getD 0 2) ((op.rlist "n").getD 1 2)
         (vals.getD 0 0) (vals.getD 1 0)
+  | .sum =>
+      ((List.range vals.length).map (fun i =>
+        hill (((op.rnested "alpha").getD i []).getD 0 0) (((op.rnested "alpha").getD i []).getD 1 0)
+          ((op.rlist "K").getD i 1) ((op.rlist "n").getD i 2) (vals.getD i 0))).sum
   | _ => 0
 
 /-- An operator's expression rate, reading input ids through a valuation. -/
@@ -210,6 +235,10 @@ structure WellPosed (g : GRN) where
   a3_nonneg : ∀ op ∈ g.operators, 0 ≤ (op.alphaNums.map (fun q => (q : ℝ))).getD 3 0
   K1_pos : ∀ op ∈ g.operators, 0 < (op.rlist "K").getD 0 1
   K2_pos : ∀ op ∈ g.operators, 0 < (op.rlist "K").getD 1 1
+  sum_wp : ∀ op ∈ g.operators, ∀ i,
+    0 ≤ ((op.rnested "alpha").getD i []).getD 0 0 ∧
+    0 ≤ ((op.rnested "alpha").getD i []).getD 1 0 ∧
+    0 < (op.rlist "K").getD i 1
 
 /-- Production reads only direct regulators — the `local'` obligation. -/
 theorem prodOf_local (g : GRN) (inducer : String → ℝ) (i : g.Species) (x y : g.Species → ℝ)
@@ -248,6 +277,10 @@ theorem prodOf_nonneg (g : GRN) (wp : g.WellPosed) (i : g.Species) (x : g.Specie
       | exact hill_nonneg (wp.K_pos op hmem) (wp.a0_nonneg op hmem) (wp.a1_nonneg op hmem) _ hvals
       | exact hill2_nonneg (wp.a0_nonneg op hmem) (wp.a1_nonneg op hmem) (wp.a2_nonneg op hmem)
           (wp.a3_nonneg op hmem) (wp.K1_pos op hmem) (wp.K2_pos op hmem) hv0 hv1
+      | refine List.sum_nonneg (fun v hv => ?_)
+        obtain ⟨i, -, rfl⟩ := List.mem_map.mp hv
+        exact hill_nonneg (wp.sum_wp op hmem i).2.2 (wp.sum_wp op hmem i).1
+          (wp.sum_wp op hmem i).2.1 _ (getD_map_nonneg hvnn _ i)
       | exact le_refl 0
 
 /-- The assembled feedforward system of an acyclic, well-posed GRN. -/
@@ -280,22 +313,69 @@ theorem headD_map_mono {f₁ f₂ : String → ℝ} {l : List String} (h : ∀ i
   | nil => simp
   | cons a _ => simpa using h a (by simp)
 
-/-- A single-input activating operator's rate is monotone in its input values. -/
+theorem getD_map_nonneg' {f : String → ℝ} {l : List String} (h : ∀ id ∈ l, 0 ≤ f id) (k : ℕ) :
+    0 ≤ (l.map f).getD k 0 := by
+  induction l generalizing k with
+  | nil => simp
+  | cons a t ih =>
+    cases k with
+    | zero => simpa using h a (by simp)
+    | succ k => simpa using ih (fun id hid => h id (by simp [hid])) k
+
+theorem getD_map_mono {f₁ f₂ : String → ℝ} {l : List String} (h : ∀ id ∈ l, f₁ id ≤ f₂ id) (k : ℕ) :
+    (l.map f₁).getD k 0 ≤ (l.map f₂).getD k 0 := by
+  induction l generalizing k with
+  | nil => simp
+  | cons a t ih =>
+    cases k with
+    | zero => simpa using h a (by simp)
+    | succ k => simpa using ih (fun id hid => h id (by simp [hid])) k
+
+/-- The per-operator condition under which its rate is monotone in its inputs: an activating Hill/receiver,
+or a `hill2` activating in every context. -/
+def _root_.Node.MonoActivating (op : Node) : Prop :=
+  match op.kind with
+  | .receiver | .hill1 =>
+      0 < op.rparam "K" 1 ∧ 0 ≤ op.rparam "n" 2 ∧
+      (op.alphaNums.map (fun q => (q : ℝ))).getD 0 0 ≤ (op.alphaNums.map (fun q => (q : ℝ))).getD 1 0
+  | .hill2 =>
+      0 < (op.rlist "K").getD 0 1 ∧ 0 < (op.rlist "K").getD 1 1 ∧
+      0 ≤ (op.rlist "n").getD 0 2 ∧ 0 ≤ (op.rlist "n").getD 1 2 ∧
+      (op.alphaNums.map (fun q => (q : ℝ))).getD 0 0 ≤ (op.alphaNums.map (fun q => (q : ℝ))).getD 1 0 ∧
+      (op.alphaNums.map (fun q => (q : ℝ))).getD 2 0 ≤ (op.alphaNums.map (fun q => (q : ℝ))).getD 3 0 ∧
+      (op.alphaNums.map (fun q => (q : ℝ))).getD 0 0 ≤ (op.alphaNums.map (fun q => (q : ℝ))).getD 2 0 ∧
+      (op.alphaNums.map (fun q => (q : ℝ))).getD 1 0 ≤ (op.alphaNums.map (fun q => (q : ℝ))).getD 3 0
+  | .sum => False
+  | _ => True
+
+/-- An activating operator's rate is monotone in its input values (covers single-input Hill/receiver and
+two-input `hill2`). -/
 theorem opRate_mono (g : GRN) (op : Node) {val₁ val₂ : String → ℝ}
-    (hsingle : op.kind = .source ∨ op.kind = .receiver ∨ op.kind = .hill1)
-    (hK : 0 < op.rparam "K" 1) (hn : 0 ≤ op.rparam "n" 2)
-    (hact : (op.alphaNums.map (fun q => (q : ℝ))).getD 0 0 ≤ (op.alphaNums.map (fun q => (q : ℝ))).getD 1 0)
+    (hact : op.MonoActivating)
     (h01 : ∀ id ∈ g.inputsOf op.id, 0 ≤ val₁ id)
     (hle : ∀ id ∈ g.inputsOf op.id, val₁ id ≤ val₂ id) :
     g.opRate val₁ op ≤ g.opRate val₂ op := by
-  rcases hsingle with h | h | h <;>
-    simp only [opRate, opRateV, h] <;>
-    first
-      | exact le_refl _
-      | exact (hill_monotoneOn hK hn hact)
-          (Set.mem_Ici.mpr (headD_map_nonneg' h01))
-          (Set.mem_Ici.mpr (headD_map_nonneg' (fun id hid => (h01 id hid).trans (hle id hid))))
-          (headD_map_mono hle)
+  have hillCase : ∀ (hh : 0 < op.rparam "K" 1 ∧ 0 ≤ op.rparam "n" 2 ∧
+      (op.alphaNums.map (fun q => (q : ℝ))).getD 0 0 ≤ (op.alphaNums.map (fun q => (q : ℝ))).getD 1 0),
+      hill ((op.alphaNums.map (fun q => (q : ℝ))).getD 0 0) ((op.alphaNums.map (fun q => (q : ℝ))).getD 1 0)
+          (op.rparam "K" 1) (op.rparam "n" 2) ((g.inputsOf op.id |>.map val₁).headD 0) ≤
+        hill ((op.alphaNums.map (fun q => (q : ℝ))).getD 0 0) ((op.alphaNums.map (fun q => (q : ℝ))).getD 1 0)
+          (op.rparam "K" 1) (op.rparam "n" 2) ((g.inputsOf op.id |>.map val₂).headD 0) :=
+    fun hh => hill_monotoneOn hh.1 hh.2.1 hh.2.2
+      (Set.mem_Ici.mpr (headD_map_nonneg' h01))
+      (Set.mem_Ici.mpr (headD_map_nonneg' (fun id hid => (h01 id hid).trans (hle id hid))))
+      (headD_map_mono hle)
+  rcases hk : op.kind with _ | _ | _ | _ | _ | _ | _ | _ <;>
+    simp only [opRate, opRateV, Node.MonoActivating, hk] at hact ⊢
+  · exact le_refl _
+  · exact le_refl _
+  · exact le_refl _
+  · exact le_refl _
+  · exact hillCase hact
+  · exact hillCase hact
+  · exact hill2_mono hact.1 hact.2.1 hact.2.2.1 hact.2.2.2.1 hact.2.2.2.2.1
+      hact.2.2.2.2.2.1 hact.2.2.2.2.2.2.1 hact.2.2.2.2.2.2.2
+      (getD_map_nonneg' h01 0) (getD_map_nonneg' h01 1) (getD_map_mono hle 0) (getD_map_mono hle 1)
 
 /-- **Monotone dose-response through the functor** (activating case). Raising the inducer levels of an
 acyclic, well-posed GRN whose operators are all activating does not decrease any species' steady state —
@@ -303,17 +383,14 @@ so the reporter's dose-response is monotone. Obtained by instantiating `steady_l
 production. -/
 theorem grn_doseResponse_mono (g : GRN) (hac : g.Acyclic) (wp wp' : g.WellPosed)
     (hγ : ∀ i, wp.γ i = wp'.γ i) (hind : ∀ id, wp.inducer id ≤ wp'.inducer id)
-    (hn : ∀ op ∈ g.operators, 0 ≤ op.rparam "n" 2)
-    (hsingle : ∀ op ∈ g.operators, op.kind = .source ∨ op.kind = .receiver ∨ op.kind = .hill1)
-    (hact : ∀ op ∈ g.operators,
-      (op.alphaNums.map (fun q => (q : ℝ))).getD 0 0 ≤ (op.alphaNums.map (fun q => (q : ℝ))).getD 1 0) :
+    (hMA : ∀ op ∈ g.operators, op.MonoActivating) :
     ∀ i, (g.toSystem hac wp).steadyPoint i ≤ (g.toSystem hac wp').steadyPoint i := by
   apply Dynamics.FeedforwardSystem.steady_le _ _ hγ
   · -- hmonoT: T = toSystem wp' is monotone in earlier species
     intro i x y hx _ hxy
     refine List.sum_le_sum (fun op hop => ?_)
     have hmem : op ∈ g.operators := List.mem_of_mem_filter hop
-    refine g.opRate_mono op (hsingle op hmem) (wp'.K_pos op hmem) (hn op hmem) (hact op hmem)
+    refine g.opRate_mono op (hMA op hmem)
       (fun id _ => g.valuation_nonneg wp'.inducer_nonneg hx id) (fun id hid => ?_)
     unfold valuation
     split
@@ -324,7 +401,7 @@ theorem grn_doseResponse_mono (g : GRN) (hac : g.Acyclic) (wp wp' : g.WellPosed)
     intro i x hx
     refine List.sum_le_sum (fun op hop => ?_)
     have hmem : op ∈ g.operators := List.mem_of_mem_filter hop
-    refine g.opRate_mono op (hsingle op hmem) (wp'.K_pos op hmem) (hn op hmem) (hact op hmem)
+    refine g.opRate_mono op (hMA op hmem)
       (fun id _ => g.valuation_nonneg wp.inducer_nonneg hx id) (fun id _ => ?_)
     unfold valuation
     split

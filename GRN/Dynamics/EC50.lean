@@ -128,4 +128,43 @@ theorem cascade_ec50 (stages : List StageParams) (h : ∀ s ∈ stages, s.Activa
     ((cascadeResponse_continuousOn stages h).mono hsub)
     ((cascadeResponse_strictMonoOn stages h).mono hsub) hL
 
+/-! ## Sign-consistent cascade: unique EC50 with repressors -/
+
+/-- A well-posed *sign-consistent* stage: strictly activating or strictly repressing. -/
+def StageParams.SignActivating (s : StageParams) : Prop :=
+  0 < s.K ∧ 0 < s.n ∧ 0 < s.γ ∧ 0 ≤ s.a0 ∧ 0 ≤ s.a1 ∧ (s.a0 < s.a1 ∨ s.a1 < s.a0)
+
+theorem stageMap_mapsTo_sign (s : StageParams) (hs : s.SignActivating) :
+    MapsTo (stageMap s) (Ici 0) (Ici 0) := by
+  obtain ⟨hK, _, hγ, ha0, ha1, _⟩ := hs
+  exact fun v hv => mem_Ici.mpr (div_nonneg (hill_nonneg hK ha0 ha1 v (mem_Ici.mp hv)) hγ.le)
+
+/-- Each sign-consistent stage map is injective on `[0, ∞)` — strictly monotone or strictly antitone. -/
+theorem stageMap_injOn (s : StageParams) (hs : s.SignActivating) : InjOn (stageMap s) (Ici 0) := by
+  obtain ⟨hK, hn, hγ, _, _, hdir⟩ := hs
+  rcases hdir with h | h
+  · refine StrictMonoOn.injOn (fun u hu v hv huv => ?_)
+    have := hill_strictMonoOn hK hn h hu hv huv
+    unfold stageMap; gcongr
+  · refine StrictAntiOn.injOn (fun u hu v hv huv => ?_)
+    have := hill_strictAntiOn hK hn h hu hv huv
+    unfold stageMap; gcongr
+
+theorem cascadeResponse_injOn : ∀ (stages : List StageParams),
+    (∀ s ∈ stages, s.SignActivating) → InjOn (cascadeResponse stages) (Ici 0)
+  | [], _ => Set.injOn_id _
+  | s :: rest, h => by
+    have hs := h s (by simp)
+    have hrest : ∀ t ∈ rest, t.SignActivating := fun t ht => h t (by simp [ht])
+    exact (cascadeResponse_injOn rest hrest).comp (stageMap_injOn s hs) (stageMap_mapsTo_sign s hs)
+
+/-- **A sign-consistent cascade has a unique EC50** (at most one): with each stage strictly activating or
+repressing, the dose-response is injective, so any level is reached at one inducer value at most —
+repressors and mixed-sign cascades included. -/
+theorem cascade_ec50_unique (stages : List StageParams) (h : ∀ s ∈ stages, s.SignActivating)
+    {lo hi : ℝ} (hlo : 0 ≤ lo) {L u v : ℝ} (hu : u ∈ Icc lo hi) (hv : v ∈ Icc lo hi)
+    (hfu : cascadeResponse stages u = L) (hfv : cascadeResponse stages v = L) : u = v := by
+  have hsub : Icc lo hi ⊆ Ici 0 := fun w hw => le_trans hlo hw.1
+  exact cascadeResponse_injOn stages h (hsub hu) (hsub hv) (hfu.trans hfv.symm)
+
 end GRN.Dynamics
