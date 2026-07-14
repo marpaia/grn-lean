@@ -4,7 +4,7 @@ import GRN.Dynamics.GRNEc50
 import GRN.Dynamics.TopoOrder
 
 /-!
-# Tier 2 — the assembled GRN Jacobian
+# The assembled GRN Jacobian
 
 The assembled ODE reindexes the regulated species by `Fin n` through an enumeration `e : Fin n ≃ Species`.
 `assembledProd` is the interpreted production in that enumeration; `negJac` is the Jacobian of the negated

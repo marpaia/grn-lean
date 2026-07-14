@@ -3,7 +3,7 @@ import GRN.Dynamics.GRNEc50
 import GRN.Dynamics.Spin
 
 /-!
-# Tier 2 — the reconvergent (sign-consistent) sensor
+# The reconvergent (sign-consistent) sensor
 
 A sensor GRN need not be a pure activation cascade: it may mix activation and repression and reconverge,
 yet still be a monotone system whenever its signed interaction graph is *balanced* (`isMonotoneEdges`).

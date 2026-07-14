@@ -4,7 +4,7 @@ import GRN.Certificate
 import CRNT.Multistationarity.JacobianDeterminantSign
 
 /-!
-# Tier 2 — analytic entry signs and the Thomas / Soulé combinatorial core
+# Analytic entry signs and the Thomas / Soulé combinatorial core
 
 The assembled Jacobian's cover terms are sign-definite exactly when the signed interaction graph
 carries no positive feedback cycle. Three pieces connect to establish this:

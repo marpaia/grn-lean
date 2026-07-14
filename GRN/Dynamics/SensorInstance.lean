@@ -2,7 +2,7 @@ import Mathlib
 import GRN.Dynamics.Assembled
 
 /-!
-# Tier 2 — a concrete sensor carried end-to-end
+# A concrete sensor carried end-to-end
 
 Instantiates the assembled-ODE machinery on a concrete sensor field, validating that the pipeline
 `field → hasFDerivAt → acyclic ⟹ P-matrix Jacobian ⟹ Gale–Nikaido` runs all the way to a

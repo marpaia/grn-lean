@@ -2,7 +2,7 @@ import Mathlib
 import GRN.Dynamics.VectorField
 
 /-!
-# Tier 2 — the sensor theorem
+# The sensor theorem
 
 The sensor certificate (`GRN.certifies · .sensor`, interaction-graph monotonicity) promises a well-posed
 dose-response: a monotone input/output map with a unique half-maximal crossing (EC50). This file proves

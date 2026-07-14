@@ -1,7 +1,7 @@
 import Mathlib
 
 /-!
-# Tier 2 — the feedforward IR and its unique steady state
+# The feedforward IR and its unique steady state
 
 A `FeedforwardSystem` is the intermediate representation the sensor functor targets: a type of species
 `ι` with a **well-founded** "is-regulated-by" relation `r`, each species produced only from `r`-earlier

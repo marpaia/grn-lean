@@ -3,7 +3,7 @@ import GRN.Dynamics.Sensor
 import GRN.Dynamics.Feedforward
 
 /-!
-# Tier 2 — EC50 through the functor (direct sensor)
+# EC50 through the functor (direct sensor)
 
 The dose-response of a direct sensor — a reporter driven straight from the inducer — is its steady
 reporter level as a function of the inducer, `hill(inducer)/γ`. This file shows that map *is* the

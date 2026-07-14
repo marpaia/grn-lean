@@ -4,7 +4,7 @@ import GRN.Dynamics.JacobianSigns
 import GRN.Certificate
 
 /-!
-# Tier 2 — switch wiring (Thomas / Soulé)
+# Switch wiring (Thomas / Soulé)
 
 The switch certificate is Thomas' rule: a positive feedback cycle is *necessary* for multistationarity.
 The dynamical content is on the assembled Jacobian: if the signed interaction graph carries no positive

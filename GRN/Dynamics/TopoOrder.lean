@@ -3,7 +3,7 @@ import GRN.Dynamics.Interpret
 import GRN.Certificate
 
 /-!
-# Tier 2 — a topological order for an acyclic GRN
+# A topological order for an acyclic GRN
 
 An acyclic regulation relation admits a **topological order**: a rank `order : Species → ℕ` with
 `regulates j i → order j < order i`. This is the enumeration the assembled-ODE Jacobian argument

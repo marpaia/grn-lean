@@ -41,7 +41,7 @@ def parseKind : String → Except String NodeKind
   | k            => .error s!"unknown node kind: {k}"
 
 /-- Read the `alpha` parameter (the sign-bearing one) from a params object.
-Other parameters are threaded in when the Tier-2 vector field needs them. -/
+Other parameters are threaded in when the Hill-kinetic vector field needs them. -/
 def paramsFromJson (j : Json) : List (String × ParamValue) :=
   match j.getObjVal? "alpha" with
   | .ok a  => [("alpha", jsonToParam a)]

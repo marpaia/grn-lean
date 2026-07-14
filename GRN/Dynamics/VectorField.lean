@@ -4,9 +4,9 @@ import CRNT.Multistationarity.PMatrixUnivalence
 import GRN.Certificate
 
 /-!
-# Tier 2 — the Hill-kinetic vector field
+# The Hill-kinetic vector field
 
-Tier 1 (`GRN.Certificate`) checks structural predicates on the signed interaction graph. Tier 2 proves
+`GRN.Certificate` checks structural predicates on the signed interaction graph. The dynamical layer proves
 the *implication* — that a checked predicate entails the dynamical property — for the vector field LOICA
 integrates (`notes/loica-vector-field.md`):
 
@@ -23,7 +23,7 @@ The theorems this module provides, and the crnt-lean results each reuses:
 * **Invariant box.** Production is bounded and degradation pulls inward, so the nonnegative box is forward
   invariant — `CRNT.Dynamics.Nagumo` — the compact region the dynamical claims live on.
 
-This module is deliberately outside the `import GRN` umbrella so the Tier-1 core stays free of the heavy
+This module is deliberately outside the `import GRN` umbrella so the certificate core stays free of the heavy
 analysis and crnt-lean dependencies.
 -/
 

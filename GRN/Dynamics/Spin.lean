@@ -2,7 +2,7 @@ import Mathlib
 import GRN.Certificate
 
 /-!
-# Tier 2 — the balancing spin witness
+# The balancing spin witness
 
 The sensor certificate `isMonotoneEdges` checks *sign-consistency* of the signed interaction graph by a
 relaxation (`colorable`): it assigns each vertex a spin `±1` so that every edge's sign is the product of

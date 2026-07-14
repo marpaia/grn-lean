@@ -2,7 +2,7 @@ import Mathlib
 import GRN.Dynamics.Jacobian
 
 /-!
-# Tier 2 — unifying the constructive and assembled engines
+# Unifying the constructive and assembled engines
 
 Two independent proofs deliver the unique steady state of an acyclic GRN: the constructive
 forward-substitution `steadyPoint` of the feedforward IR (`GRN.Dynamics.Feedforward`), and the

@@ -3,7 +3,7 @@ import GRN.Dynamics.Univalence
 import CRNT.Dynamics.Nagumo
 
 /-!
-# Tier 2 — the assembled gene-regulatory vector field
+# The assembled gene-regulatory vector field
 
 The species-indexed assembled field `F x = e(x) − (γ+μ)·x`: production `e` minus first-order
 degradation/dilution `γ` (LOICA's `dxₛ/dt = eₛ(x) − (γₛ+μ)xₛ`). Here the state is `Fin n → ℝ`, one

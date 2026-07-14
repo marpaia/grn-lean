@@ -3,10 +3,10 @@ import CRNT.Multistationarity.GaleNikaidoUniv
 import CRNT.Multistationarity.JacobianDeterminantSign
 
 /-!
-# Tier 2 — assembled-ODE univalence: the sensor and switch bridges
+# Assembled-ODE univalence: the sensor and switch bridges
 
 This module connects the assembled multi-species vector field to crnt-lean's field-agnostic
-dynamical-systems substrate, giving the two guarantees Tier-1 certificates promise for the *full*
+dynamical-systems substrate, giving the two guarantees the structural certificates promise for the *full*
 (reconvergent) ODE, not just the feedforward composition proved in `GRN.Dynamics.Sensor`.
 
 * **Sensor.** `unique_equilibrium_of_pmatrix`: if the vector field's Jacobian is a P-matrix on a
@@ -92,7 +92,7 @@ theorem jacobian_det_neg_of_signDefinite {n : ℕ} (M : Matrix (Fin n) (Fin n) �
 /-!
 ## Oscillator — why the determinant engine does not reach it
 
-The Tier-1 oscillator certificate requires a *negative* feedback cycle (Thomas / Snoussi: necessary for
+The oscillator certificate requires a *negative* feedback cycle (Thomas / Snoussi: necessary for
 sustained oscillation). This is not a determinant/injectivity fact: the determinant-cycle-sign engine
 above certifies uniqueness of equilibria (multistationarity), and oscillation is independent of
 equilibrium count — the repressilator has a *unique* equilibrium yet oscillates, so no injectivity or

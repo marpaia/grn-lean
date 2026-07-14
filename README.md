@@ -77,7 +77,7 @@ provenance, not a gap in the proof.
 - `GRN.Certificate` — the decidable monotonicity, positive-loop, and negative-loop certificates.
 - `GRN.Examples` — worked circuits (sensor, toggle, repressilator) with kernel-checked certificates.
 - `GRN.Interop` / `Analyze` — the JSON bridge and the `analyze` executable.
-- `GRN.Dynamics.VectorField` — the Tier-2 dynamical layer: the Hill-kinetic vector field over `ℝ` and the
+- `GRN.Dynamics.VectorField` — the dynamical layer: the Hill-kinetic vector field over `ℝ` and the
   dynamical theorems (below). Outside the `import GRN` umbrella, so the core stays light.
 
 ## Build
@@ -90,11 +90,11 @@ lake exe analyze design.json
 ```
 
 The package is pinned to `leanprover/lean4:v4.31.0`, on Mathlib `v4.31.0`, and depends on
-[crnt-lean](https://github.com/marpaia/crnt-lean) (same pins) for the Tier-2 dynamical-systems substrate.
+[crnt-lean](https://github.com/marpaia/crnt-lean) (same pins) for the dynamical-systems substrate.
 
-## Tier 2: from checked graph fact to proven dynamical guarantee
+## From checked graph fact to proven dynamical guarantee
 
-The Tier-1 certificates are kernel-checked _graph_ predicates. Tier 2 proves the _implication_ — that each
+The structural certificates are kernel-checked _graph_ predicates. The dynamical layer proves the _implication_ — that each
 predicate entails the dynamical property for the Hill-kinetic vector field (`notes/loica-vector-field.md`).
 Every result below is sorry-free.
 
@@ -120,7 +120,7 @@ Every result below is sorry-free.
   it; it needs Hopf / monotone-cyclic-systems (Mallet-Paret–Smith, Hirsch) theory absent from crnt-lean.
   Left unasserted, with the determinant companion (`jacobian_det_neg_of_signDefinite`) as a building block.
 
-The Tier-2 theorems assume well-formedness of the design — `WellPosed` (positive degradation and rate
+These theorems assume well-formedness of the design — `WellPosed` (positive degradation and rate
 constants, alpha vectors carrying their levels) and `Node.Regular` — and the switch additionally assumes
 the interaction graph is monotone with a well-defined sign pattern (each edge `±1`, parallel edges
 consistent).
@@ -138,7 +138,7 @@ formalized here.
   signs the delivered portfolio off. Portfolio diversity hedges the simulation proxy; a certificate
   eliminates the proxy for the property it proves.
 - **crnt-lean** — the mass-action reaction-network theory `grn-lean` borrows general dynamics and
-  fixed-point math from at Tier 2.
+  fixed-point math from.
 
 ## License
 

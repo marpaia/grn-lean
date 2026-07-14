@@ -3,7 +3,7 @@ import GRN.Dynamics.Interpret
 import GRN.Dynamics.EC50
 
 /-!
-# Tier 2 — general-GRN EC50 through the interpreter
+# General-GRN EC50 through the interpreter
 
 For an arbitrary acyclic, well-posed `GRN`, the reporter's steady level as a function of a chosen
 inducer's level has a **unique EC50**, obtained through the functor's real WF-recursion `steadyPoint`.

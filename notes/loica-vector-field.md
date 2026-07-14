@@ -1,6 +1,6 @@
-# The LOICA vector field (Tier-2 reference)
+# The LOICA vector field (reference)
 
-The exact ODE LOICA integrates, transcribed from `~/git/RudgeLab/LOICA` so the Tier-2 Lean vector
+The exact ODE LOICA integrates, transcribed from `~/git/RudgeLab/LOICA` so the Lean vector
 field matches the simulator that scores quiver designs. Sign conventions here are the source of truth
 for `GRN.InteractionGraph`.
 
@@ -55,7 +55,7 @@ port 1 → r₂, and integrates `a₀ + a₁·r₁ + a₂·r₂ + a₃·r₁·r�
 `a₂` is port 1's. Both quiver's `certificate.py` and `grn-lean`'s `operatorInputSigns` read the vector
 with this convention: port 0's sign from `[a₁−a₀, a₃−a₂]`, port 1's from `[a₂−a₀, a₃−a₁]`.
 
-## Consequences for the Tier-2 theorems
+## Consequences for the dynamical theorems
 
 - The field is smooth and globally Lipschitz (bounded Hill terms plus the linear `−(γ+μ)x`), but not
   globally bounded, so `crnt-lean`'s `exists_flow` (global-bound hypothesis) does not apply directly;

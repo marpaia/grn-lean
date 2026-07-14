@@ -3,7 +3,7 @@ import GRN.Dynamics.Feedforward
 import GRN.Dynamics.Sensor
 
 /-!
-# Tier 2 — a real two-stage Hill cascade through the constructive machinery
+# A real two-stage Hill cascade through the constructive machinery
 
 Validates the `FeedforwardSystem` IR on an actual Hill-kinetic sensor cascade (not a constant production):
 an external inducer drives species 0 via a Hill response, which drives the reporter species 1 via another.
