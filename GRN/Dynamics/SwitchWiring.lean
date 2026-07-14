@@ -1,5 +1,6 @@
 import Mathlib
 import GRN.Dynamics.Jacobian
+import GRN.Dynamics.JacobianSigns
 import GRN.Certificate
 
 /-!
@@ -19,18 +20,23 @@ namespace GRN
 open Dynamics CRNT
 open scoped Matrix
 
--- UNIT: coverterm-of-nocycle
+-- UNIT: coverterm-of-nocycle  (assembly; wired from the JacobianSigns core)
 /-- **No positive cycle ⟹ sign-definite cover terms.** If the signed interaction graph has no positive
-feedback loop, every cycle-cover term of the negated-field Jacobian `negJac` is nonnegative and the
-diagonal term is strictly positive — the sign-definite hypothesis feeding
-`jacobian_nonsingular_of_signDefinite`. -/
+feedback loop and every interaction edge is monotone (`hmono`, ruling out non-monotone `sign = 0`
+ports whose definite pointwise derivative could otherwise close a positive cycle), every cycle-cover
+term of the negated-field Jacobian `negJac` is nonnegative and the diagonal term is strictly positive
+— the sign-definite hypothesis feeding `jacobian_nonsingular_of_signDefinite`. -/
 theorem coverTerm_signDefinite_of_noPositiveLoop (g : GRN) (wp : g.WellPosed)
     (hreg : ∀ op ∈ g.operators, op.Regular) {n : ℕ} (e : Fin n ≃ g.Species)
     (E : (Fin n → ℝ) →L[ℝ] (Fin n → ℝ)) (z : Fin n → ℝ)
     (hE : HasFDerivAt (g.assembledProd wp e) E z) (hz : ∀ k, 0 < z k)
+    (hmono : ∀ edge ∈ signedInteractionGraph g, edge.2.2 = 1 ∨ edge.2.2 = -1)
     (hnopos : hasPositiveLoopEdges (signedInteractionGraph g) = false) :
     (∀ σ : Equiv.Perm (Fin n), 0 ≤ coverTerm (g.negJac wp e E) σ) ∧
-      0 < coverTerm (g.negJac wp e E) 1 := by sorry
+      0 < coverTerm (g.negJac wp e E) 1 :=
+  coverTerm_signDefinite_of_cycles (g.negJac wp e E)
+    (negJac_diag_pos g wp hreg e E z hE hz hmono hnopos)
+    (fun σ hσ => negJac_coverTerm_cycle_nonneg g wp hreg e E z hE hz hmono hnopos σ hσ)
 
 -- UNIT: grn-switch-isolation
 /-- **Local isolation of the equilibrium.** Assembling the cover-term signs and applying
@@ -41,7 +47,11 @@ theorem grn_switch_isolation (g : GRN) (wp : g.WellPosed)
     (hreg : ∀ op ∈ g.operators, op.Regular) {n : ℕ} (e : Fin n ≃ g.Species)
     (E : (Fin n → ℝ) →L[ℝ] (Fin n → ℝ)) (z : Fin n → ℝ)
     (hE : HasFDerivAt (g.assembledProd wp e) E z) (hz : ∀ k, 0 < z k)
+    (hmono : ∀ edge ∈ signedInteractionGraph g, edge.2.2 = 1 ∨ edge.2.2 = -1)
     (hnopos : hasPositiveLoopEdges (signedInteractionGraph g) = false) :
-    (g.negJac wp e E).det ≠ 0 := by sorry
+    (g.negJac wp e E).det ≠ 0 := by
+  obtain ⟨hnn, hdiag⟩ :=
+    coverTerm_signDefinite_of_noPositiveLoop g wp hreg e E z hE hz hmono hnopos
+  exact jacobian_nonsingular_of_signDefinite (g.negJac wp e E) hnn hdiag
 
 end GRN

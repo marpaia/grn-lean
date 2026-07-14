@@ -248,6 +248,69 @@ theorem monoActivating_of_graph (g : GRN) (wp : g.WellPosed)
     (hreg : ∀ op ∈ g.operators, op.Regular)
     (hnosum : ∀ op ∈ g.operators, op.kind ≠ NodeKind.sum)
     (hsign : ∀ op ∈ g.operators, ∀ sgn ∈ operatorInputSigns op, sgn = some (1 : Int))
-    (op : Node) (hop : op ∈ g.operators) : op.MonoActivating := by sorry
+    (op : Node) (hop : op ∈ g.operators) : op.MonoActivating := by
+  have hS := hsign op hop
+  have pairSign_lt : ∀ {a b : ℚ}, pairSign a b = some 1 → a < b := by
+    intro a b h
+    simp only [pairSign] at h
+    split_ifs at h with h1 h2 <;> first | exact h1 | simp_all
+  have sign_le : ∀ {pairs : List (ℚ × ℚ)}, signFromPairs pairs = some 1 →
+      ∀ p ∈ pairs, p.1 ≤ p.2 := by
+    intro pairs h p hp
+    by_contra hc
+    rw [not_le] at hc
+    have hneg : pairs.any (fun q => decide (q.2 < q.1)) = true :=
+      List.any_eq_true.2 ⟨p, hp, by simpa using hc⟩
+    simp only [signFromPairs, hneg, Bool.and_true] at h
+    split_ifs at h <;> simp_all
+  rcases hk : op.kind with _ | _ | _ | _ | _ | _ | _ | _
+  · simp only [Node.MonoActivating, hk]
+  · simp only [Node.MonoActivating, hk]
+  · simp only [Node.MonoActivating, hk]
+  · simp only [Node.MonoActivating, hk]
+  · -- receiver
+    have hRr := hreg op hop
+    simp only [Node.Regular, hk] at hRr
+    simp only [Node.MonoActivating, hk]
+    refine ⟨hRr.1, hRr.2, ?_⟩
+    rcases halpha : op.alphaNums with _ | ⟨a0, _ | ⟨a1, rest⟩⟩
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · have hps := hS (pairSign a0 a1) (by simp [operatorInputSigns, hk, halpha])
+      show (a0 : ℝ) ≤ (a1 : ℝ)
+      exact_mod_cast (pairSign_lt hps).le
+  · -- hill1
+    have hRr := hreg op hop
+    simp only [Node.Regular, hk] at hRr
+    simp only [Node.MonoActivating, hk]
+    refine ⟨hRr.1, hRr.2, ?_⟩
+    rcases halpha : op.alphaNums with _ | ⟨a0, _ | ⟨a1, rest⟩⟩
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · have hps := hS (pairSign a0 a1) (by simp [operatorInputSigns, hk, halpha])
+      show (a0 : ℝ) ≤ (a1 : ℝ)
+      exact_mod_cast (pairSign_lt hps).le
+  · -- hill2
+    have hRr := hreg op hop
+    simp only [Node.Regular, hk] at hRr
+    simp only [Node.MonoActivating, hk]
+    rcases halpha : op.alphaNums with _ | ⟨a0, _ | ⟨a1, _ | ⟨a2, _ | ⟨a3, rest⟩⟩⟩⟩
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · have h1 := hS (signFromPairs [(a0, a1), (a2, a3)]) (by simp [operatorInputSigns, hk, halpha])
+      have h2 := hS (signFromPairs [(a0, a2), (a1, a3)]) (by simp [operatorInputSigns, hk, halpha])
+      have e1 : a0 ≤ a1 := sign_le h1 (a0, a1) (by simp)
+      have e2 : a2 ≤ a3 := sign_le h1 (a2, a3) (by simp)
+      have e3 : a0 ≤ a2 := sign_le h2 (a0, a2) (by simp)
+      have e4 : a1 ≤ a3 := sign_le h2 (a1, a3) (by simp)
+      refine ⟨hRr.1, hRr.2.1, hRr.2.2.1, hRr.2.2.2, ?_, ?_, ?_, ?_⟩
+      · show (a0 : ℝ) ≤ (a1 : ℝ); exact_mod_cast e1
+      · show (a2 : ℝ) ≤ (a3 : ℝ); exact_mod_cast e2
+      · show (a0 : ℝ) ≤ (a2 : ℝ); exact_mod_cast e3
+      · show (a1 : ℝ) ≤ (a3 : ℝ); exact_mod_cast e4
+  · -- sum
+    exact absurd hk (hnosum op hop)
 
 end GRN
