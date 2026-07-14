@@ -237,4 +237,17 @@ theorem grn_reporter_ec50 (g : GRN) (hac : g.Acyclic) (wp : g.WellPosed) (s : St
   exact steadyFam_ec50 (g.regulates_wf hac) wp.γ
     (fun u i x => g.prodOf (inducerAt wp.inducer s u) i x) top hle hcont hstrict hL
 
+/-! ## `MonoActivating` from graph sign data -/
+
+-- UNIT: monoactivating-of-graph
+/-- **`MonoActivating` from the interaction graph.** For a well-posed GRN whose operators are `Regular`,
+carry no `sum`, and whose per-port interaction-graph signs are all `+1` (pure activation), every operator
+is `MonoActivating`. This discharges the per-operator hypotheses of `grn_reporter_ec50` and
+`grn_doseResponse_mono` directly from the graph, with no hand-supplied kinetic inequalities. -/
+theorem monoActivating_of_graph (g : GRN) (wp : g.WellPosed)
+    (hreg : ∀ op ∈ g.operators, op.Regular)
+    (hnosum : ∀ op ∈ g.operators, op.kind ≠ NodeKind.sum)
+    (hsign : ∀ op ∈ g.operators, ∀ sgn ∈ operatorInputSigns op, sgn = some (1 : Int))
+    (op : Node) (hop : op ∈ g.operators) : op.MonoActivating := by sorry
+
 end GRN
