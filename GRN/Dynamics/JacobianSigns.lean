@@ -6,9 +6,8 @@ import CRNT.Multistationarity.JacobianDeterminantSign
 /-!
 # Tier 2 — analytic entry signs and the Thomas / Soulé combinatorial core
 
-The full close of the switch frontier connects three layers, so that the assembled Jacobian's
-cover terms are sign-definite exactly when the signed interaction graph carries no positive
-feedback cycle:
+The assembled Jacobian's cover terms are sign-definite exactly when the signed interaction graph
+carries no positive feedback cycle. Three pieces connect to establish this:
 
 * **Concrete signed derivatives.** The pointwise derivative sign of an interpreted rate with
   respect to one regulator input at a strictly positive state: `hill` is globally monotone, so its
@@ -65,11 +64,10 @@ private lemma graphEdgeSign_eq_one_or_neg_one (g : GRN) (src dst : String)
     have hmem : ed ∈ signedInteractionGraph g := List.mem_of_find?_eq_some hf
     exact hmono ed hmem
 
-/-! ## Layer 1 — concrete signed derivatives of the interpreted rates
+/-! ## Concrete signed derivatives of the interpreted rates
 
 Each lemma exposes the pointwise derivative and pins its sign at a strictly positive input. -/
 
--- UNIT: hill-deriv-sign  (analytic; globally monotone, tractable)
 /-- **Single-input Hill derivative sign.** At a strictly positive input the derivative of the Hill
 response exists and its sign is `pairSign a0 a1`: positive when `a0 < a1` (activation), negative when
 `a1 < a0` (repression), zero when `a0 = a1`. Globally monotone, so the sign is context-free. -/
@@ -120,12 +118,11 @@ theorem hill_hasDerivAt_sign (a0 a1 K n u : ℝ) (hK : 0 < K) (hn : 0 < n) (hu :
     have : a1 - a0 = 0 := by linarith
     rw [this, mul_zero]
 
--- UNIT: hill2-deriv-left  (analytic; HARD — wall risk)
 /-- **Two-input Hill left-port derivative sign.** At a strictly positive pair the derivative of the
 `hill2` response in its first input exists and, on a monotone left port, matches
 `signFromPairs [(a0,a1),(a2,a3)]`.
 
-This is the hard, wall-risk piece. The sign of `∂/∂u₁` is `sign ((a1 − a0) + (a3 − a2)·r₂)` with
+The sign of `∂/∂u₁` is `sign ((a1 − a0) + (a3 − a2)·r₂)` with
 `r₂ = (u₂/K₂)^{n₂} > 0`; a monotone left port makes both coefficients same-signed and one strict, so
 strict positivity of the co-input `u₂` is required for the strict conclusion (a non-monotone port —
 excluded by `hmono` — would give a mixed sign). -/
@@ -206,7 +203,6 @@ theorem hill2_hasDerivAt_left_sign (a0 a1 a2 a3 K1 K2 n1 n2 u1 u2 : ℝ)
       exact mul_neg_of_pos_of_neg hX hbr
     · positivity
 
--- UNIT: hill2-deriv-right  (analytic; HARD — wall risk)
 /-- **Two-input Hill right-port derivative sign.** The right-port companion of
 `hill2_hasDerivAt_left_sign`: at a strictly positive pair the derivative in the second input matches
 `signFromPairs [(a0,a2),(a1,a3)]` on a monotone right port. The sign of `∂/∂u₂` is
@@ -276,7 +272,6 @@ theorem hill2_hasDerivAt_right_sign (a0 a1 a2 a3 K1 K2 n1 n2 u1 u2 : ℝ)
     · nlinarith [hprod]
     · exact pow_pos hDenpos 2
 
--- UNIT: sum-deriv-sign  (analytic; per-input summand reuses `hill`)
 /-- **`sum`-operator per-input derivative sign.** A `sum` summand is a single-input Hill in one input
 only, so the port derivative reuses the `hill` sign: nonnegative on an activating summand
 (`a0 ≤ a1`), matching the `+1` sign `operatorInputSigns` assigns every `sum` port. -/
@@ -450,18 +445,17 @@ private lemma signFromPairs_none {pairs : List (ℚ × ℚ)} (h : signFromPairs 
   exact le_antisymm (not_lt.mp (not_rel_of_any_false (r := fun a b => b < a) hneg p hp))
     (not_lt.mp (not_rel_of_any_false (r := fun a b => a < b) hpos p hp))
 
-/-! ## Layer 2 — concrete directional derivative and entry-sign assembly
+/-! ## Directional derivative and entry-sign assembly
 
 `assembledProd_hasDerivAt_dir` strengthens `hasFDerivAt_assembledProd` by naming the concrete
 `c`-directional derivative of the `r`-coordinate, which the abstract `fderiv` hides. The entry-sign
 lemmas read the interaction-graph edge sign off that derivative. -/
 
--- UNIT: assembledprod-dir-deriv  (analytic/structural; strengthens `hasFDerivAt_assembledProd`)
 /-- **Concrete directional derivative of the assembled production.** At a strictly positive state the
 `c`-axis derivative of the `r`-coordinate of `assembledProd` exists as a named scalar `d`, and every
 Fréchet derivative `E` reads it as the Jacobian entry `jacobianMatrix E r c`. This exposes the
 closed-form entry that `hasFDerivAt_assembledProd` leaves as an opaque `fderiv`, so entry signs can be
-read from the Layer-1 rate derivatives. -/
+read from the concrete rate derivatives. -/
 theorem assembledProd_hasDerivAt_dir (g : GRN) (wp : g.WellPosed)
     (hreg : ∀ op ∈ g.operators, op.Regular) {n : ℕ} (e : Fin n ≃ g.Species)
     (z : Fin n → ℝ) (hz : ∀ k, 0 < z k) (r c : Fin n) :
@@ -1085,7 +1079,6 @@ private theorem negJac_eq_diag_sub (g : GRN) (wp : g.WellPosed) {n : ℕ} (e : F
   simp only [GRN.negJac]
   rw [jacobianMatrix_sub, jacobianMatrix_degCLM]
 
--- UNIT: negjac-sign-matches  (assembly; the internal `NegJacSignMatches` content)
 /-- **`negJac` off-diagonal signs match the negated interaction-graph edge signs.** For `r ≠ c`, at a
 strictly positive state and under `hmono`, the entry `negJac r c` carries the sign *opposite* to the
 graph edge from `e c` to `e r`: an activating edge (`+1`) gives a nonpositive entry, a repressing edge
@@ -1109,7 +1102,6 @@ theorem negJac_offDiag_signMatches (g : GRN) (wp : g.WellPosed)
   · rw [hentry, neg_nonneg]; exact h2 h
   · rw [hentry, h3 h, neg_zero]
 
--- UNIT: negjac-diag-pos  (assembly)
 /-- **`negJac` has a strictly positive diagonal under no positive loop.** The diagonal entry is the
 positive degradation rate minus the self-regulation derivative. With no positive feedback loop, no
 species carries a positive self-loop (a length-one positive cycle), so every self-regulation
@@ -1160,13 +1152,12 @@ theorem negJac_diag_pos (g : GRN) (wp : g.WellPosed)
   rw [hentry]
   linarith [wp.γ_pos (e k)]
 
-/-! ## Layer 3 — the combinatorial Thomas / Soulé core
+/-! ## The Thomas–Soulé cover-sign core
 
 Matrix-level and reusable: no positive cycle in a sign pattern with a positive diagonal forces
-sign-definite cover terms. The `Perm`-cycle ↔ directed-graph-cycle correspondence is the genuinely
-new sub-lemma linking `Equiv.Perm (Fin n)` cycles to the cycles `cycleSignsEdges` enumerates. -/
+sign-definite cover terms. The `Perm`-cycle ↔ directed-graph-cycle correspondence is the sub-lemma
+linking `Equiv.Perm (Fin n)` cycles to the cycles `cycleSignsEdges` enumerates. -/
 
--- UNIT: cyclesigns-nonpos  (combinatorial; unfolds `hasPositiveLoopEdges`)
 /-- **No positive loop bounds every enumerated cycle sign.** When `hasPositiveLoopEdges` is `false`,
 every sign product `cycleSignsEdges` enumerates is nonpositive. -/
 theorem cycleSignsEdges_nonpos_of_noPositiveLoop (edges : List SignedEdge)
@@ -1278,7 +1269,6 @@ private theorem dfs_prod_mem (E : List SignedEdge) (start : String) :
         exact ih f hd.1 (hd.1 :: path) (prod * hd.2) hc2 (by simp) hlast' hnodup' hdisj'
           (List.mem_cons_of_mem _ hstart) hfuel'
 
--- UNIT: perm-cycle-correspondence  (combinatorial; the new sub-lemma)
 /-- **A `Perm`-cycle is a directed graph cycle.** A nontrivial cycle `σ` of `Fin n` whose every step
 `e i → e (σ i)` is a signed interaction edge (`graphEdgeSign ≠ 0`) maps to a directed cycle enumerated by
 `cycleSignsEdges`: the product of the graph edge signs around `σ`'s orbit occurs in
@@ -1439,7 +1429,6 @@ private theorem coverTerm_eq_supportCover {n : ℕ} (M : Matrix (Fin n) (Fin n) 
     rw [hi]
   rw [hc, Finset.prod_mul_prod_compl]
 
--- UNIT: coverterm-of-cycles  (combinatorial CORE; matrix-level, reusable)
 /-- **Sign-definite cover terms from single-cycle signs.** A matrix with a strictly positive diagonal
 whose every *cyclic* permutation has a nonnegative cover term has every cover term nonnegative and a
 strictly positive diagonal (identity) term. Factoring a permutation's cover term over its disjoint
@@ -1547,7 +1536,6 @@ private lemma regulates_of_graphEdgeSign_ne_zero (g : GRN) (s t : g.Species)
     obtain ⟨op, hop, hin, hout⟩ := mem_opEdges g g.operators ed hmem
     exact ⟨op, hop, by rw [← h1]; exact hin, by rw [← h2]; exact hout⟩
 
--- UNIT: negjac-cycle-nonneg  (assembly; bridges Layer 2 and Layer 3)
 /-- **Single-cycle cover terms of `negJac` are nonnegative under no positive loop.** For a cyclic
 permutation `σ`, the cover term `coverTerm negJac σ` factors as `coverCoeff σ` times the product of
 `negJac` entries around the orbit. Each off-diagonal factor's sign is the negated graph edge sign

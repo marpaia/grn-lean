@@ -12,8 +12,7 @@ integrates (`notes/loica-vector-field.md`):
 
 `dxₛ/dt = eₛ(x) − γₛ · xₛ`, with `e` a sum of Hill terms.
 
-Target theorems, and the crnt-lean results each reuses (this module is the active frontier; the circuit
-field and these theorems are being built up from the operator kinetics established here):
+The theorems this module provides, and the crnt-lean results each reuses:
 
 * **Sensor.** A sign-consistent interaction graph gives a Jacobian that is, after a diagonal signature, a
   P-matrix on the invariant box, hence injective — crnt-lean's Gale–Nikaido univalence

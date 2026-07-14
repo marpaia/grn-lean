@@ -13,7 +13,7 @@ receiver operator with `alpha = [a0, a1]` activates when `a1 > a0` and represses
 when `a1 < a0`. A two-input `hill2` operator contributes a per-input sign read
 from its four-entry response vector.
 
-The sign is read from real-valued kinetics, so this step is the one place a
+The sign is read from real-valued kinetics, so this extraction is the one place a
 finite-precision boundary enters (`Float` comparisons do not reduce in the Lean
 kernel). The downstream certificates in `GRN.Certificate` operate on the
 resulting integer-signed graph and are kernel-checkable; this extraction is
@@ -74,7 +74,7 @@ def edgesFrom : List (Option Int) → List String → List String → List Signe
        | none => []) ++ edgesFrom ss is outputs
   | _, _, _ => []
 
-/-- The per-port signs used to emit an operator's edges. A `sum` operator adds its inputs, so every
+/-- The per-port signs from which an operator's edges are built. A `sum` operator adds its inputs, so every
 actual input species (`g.inputsOf op.id`) carries a `+1` sign — matching the number of inputs the edge
 walk consumes, rather than the declared `nInputs`. Other kinds read `operatorInputSigns`. -/
 def opEdgeSigns (g : GRN) (op : Node) : List (Option Int) :=

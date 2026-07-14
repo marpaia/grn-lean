@@ -5,11 +5,10 @@ import GRN.Dynamics.EC50
 /-!
 # Tier 2 — general-GRN EC50 through the interpreter
 
-The comprehensive close of Frontier A: for an arbitrary acyclic, well-posed `GRN`, the reporter's steady
-level as a function of a chosen inducer's level has a **unique EC50**, obtained through the functor's real
-WF-recursion `steadyPoint`.
+For an arbitrary acyclic, well-posed `GRN`, the reporter's steady level as a function of a chosen
+inducer's level has a **unique EC50**, obtained through the functor's real WF-recursion `steadyPoint`.
 
-The work is discharging the abstract hypotheses of `steadyFam_ec50` for the interpreted production:
+This discharges the abstract hypotheses of `steadyFam_ec50` for the interpreted production:
 * **continuity** — `prodOf` is jointly continuous in `(inducer level, state)` on the nonnegative orthant,
   for every operator kind (`prodOf_param_continuousOn`);
 * **monotonicity** — raising the inducer does not lower any steady value (via `opRate_mono` / `steady_le`);
@@ -239,7 +238,6 @@ theorem grn_reporter_ec50 (g : GRN) (hac : g.Acyclic) (wp : g.WellPosed) (s : St
 
 /-! ## `MonoActivating` from graph sign data -/
 
--- UNIT: monoactivating-of-graph
 /-- **`MonoActivating` from the interaction graph.** For a well-posed GRN whose operators are `Regular`,
 carry no `sum`, and whose per-port interaction-graph signs are all `+1` (pure activation), every operator
 is `MonoActivating`. This discharges the per-operator hypotheses of `grn_reporter_ec50` and

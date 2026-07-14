@@ -17,7 +17,7 @@ that guarantee for the Hill-kinetic response, bottom-up:
   so the EC50 the certificate promises is well defined.
 
 This is the analytic content of the Angeli–Sontag guarantee for the feedforward (acyclic) sensor topology.
-The general assembled-ODE statement is the remaining frontier (see `GRN.Dynamics.VectorField`).
+The general assembled-ODE statement lives in `GRN.Dynamics.VectorField`.
 -/
 
 open Real Set

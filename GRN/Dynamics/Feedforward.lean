@@ -13,8 +13,8 @@ relation is well-founded precisely when the circuit is acyclic, so a sensor GRN 
 directly — no topological sort or `Fin n` reindexing required.
 
 The steady state (where the assembled field `prodᵢ − γᵢ·xᵢ` vanishes) is **unique and constructive**:
-solved species by species down the well-founded order, with no Fréchet derivatives, P-matrices, or
-fixed-point theorems (see `notes/functor-plan.md`).
+solved by forward substitution species by species down the well-founded order, with no Fréchet
+derivatives, P-matrices, or fixed-point theorems.
 -/
 
 namespace GRN.Dynamics

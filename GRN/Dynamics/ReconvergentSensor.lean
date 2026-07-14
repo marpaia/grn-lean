@@ -124,7 +124,6 @@ theorem hill_edge_mem (g : GRN) {op : Node} (hop : op ∈ g.operators)
       · exact List.mem_append_right _ (ih hmt)
   exact gen g.operators hop
 
--- UNIT: flip-cooperative
 /-- **Cooperativity in flipped coordinates.** For a well-posed GRN with a balancing spin `σ` whose every
 single-input operator is monotone-signed, the flipped production is monotone increasing in the flipped
 regulator coordinates — each edge of sign `s` contributes `σ_i · s · σ_j = 1` by `balance`.
@@ -230,7 +229,6 @@ theorem flipProd_mono (g : GRN) (σ : String → ℝ) (wp : g.WellPosed)
       have hk := key op hopf; rw [hσi] at hk; linarith [hk]
     linarith [hBA]
 
--- UNIT: flip-nonneg
 /-- **Physical nonnegativity in the flipped frame.** The flipped steady value `σ_i · x_i` is a nonnegative
 physical concentration: `σ_i`-scaling the flipped steady point recovers `(σ_i)²·prodOf/γ_i`, and `prodOf`
 is nonnegative on inputs that are themselves nonnegative physical concentrations — exactly the induction
@@ -271,7 +269,6 @@ theorem flip_steadyFam_nonneg (g : GRN) (hac : g.Acyclic) (σ : String → ℝ) 
   rw [harith]
   exact div_nonneg (mul_nonneg (mul_self_nonneg _) hP) (wp.γ_pos i).le
 
--- UNIT: flip-propagate
 /-- **Propagation in the flipped frame.** The flipped steady point is monotone in the flipped inducer level.
 Mirroring `steadyFam_mono`'s well-founded induction, but in the flipped frame: one level of the recursion is
 unfolded with `steadyFam_eq`, the numerators are compared by raising the inducer (`hdrive`) and then raising
@@ -343,7 +340,6 @@ theorem flip_steadyFam_mono (g : GRN) (hac : g.Acyclic) (σ : String → ℝ) (w
       div_eq_mul_inv, div_eq_mul_inv]
   exact mul_le_mul_of_nonneg_right hnum (inv_nonneg.2 (wp.γ_pos i).le)
 
--- UNIT: unflip-response
 /-- **The reconvergent dose-response.** Unflipping to the original coordinates: for an acyclic, well-posed,
 balanced GRN, the reporter's steady level is monotone in the chosen inducer's level when its spin is `+1`
 and antitone when its spin is `-1` — the directional dose-response the sensor certificate promises for a

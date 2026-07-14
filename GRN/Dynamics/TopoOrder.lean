@@ -16,7 +16,6 @@ without a hand-written well-foundedness proof.
 
 namespace GRN
 
--- UNIT: topo-order
 open Classical in
 /-- A topological order of the regulated species of an acyclic GRN, as data: a rank in `ℕ` that strictly
 increases along every regulation edge. Well-founded recursion on the (acyclic ⟹ well-founded) regulation
@@ -316,7 +315,6 @@ private theorem foldr_append_ne {α β : Type*} (L : List α) (F : α → List �
     · intro hc; rw [List.append_eq_nil_iff] at hc; exact hF hc.1
     · intro hc; rw [List.append_eq_nil_iff] at hc; exact ih hv' hc.2
 
--- UNIT: acyclic-decide
 /-- **Bool acyclicity ⟹ `Acyclic`.** If the Bool cycle check on the regulation edges passes, no species
 transitively regulates itself, so a concrete `GRN` value discharges `g.Acyclic` by `decide`. -/
 theorem acyclic_of_acyclicBool (g : GRN) (h : g.acyclicBool = true) : g.Acyclic := by

@@ -5,7 +5,7 @@ import GRN.Dynamics.VectorField
 import GRN.Dynamics.Sensor
 
 /-!
-# Phase B — interpreting a GRN into a `FeedforwardSystem`
+# Interpreting a GRN into a `FeedforwardSystem`
 
 The functor `GRN → FeedforwardSystem`. Structural half: the regulated-species carrier, the "regulates"
 relation, and its well-foundedness from acyclicity. Kinetics half: the operator-interpretation
@@ -15,7 +15,7 @@ obligations and the `FeedforwardSystem` assembly build on these.
 Scope: all five operators (`source`, `receiver`, `hill1`, `hill2`, `sum`) are interpreted with their LOICA
 kinetics, so uniqueness (`grn_unique_steady`) covers every kind. Dose-response monotonicity
 (`grn_doseResponse_mono`) covers `source`/`receiver`/`hill1`/`hill2` (the `MonoActivating` predicate);
-`sum`'s per-input dose-response is a further step.
+`sum`'s per-input dose-response is not covered by `MonoActivating`.
 -/
 
 namespace GRN
@@ -416,10 +416,9 @@ theorem grn_doseResponse_mono (g : GRN) (hac : g.Acyclic) (wp wp' : g.WellPosed)
     · exact le_refl _
     · exact hind _
 
-/-- **Regression.** The interpretation and the constructive machinery compose end to end: any GRN with no
+/-- **End-to-end composition.** The interpretation and the constructive machinery compose: any GRN with no
 regulation edges (a constitutive / source-driven sensor) is acyclic, so the functor delivers a unique
-steady state. A fully concrete `GRN` *value* additionally needs `DecidableEq` computation on `Node`; the
-pipeline itself is exercised here. -/
+steady state. A fully concrete `GRN` *value* additionally needs `DecidableEq` computation on `Node`. -/
 example (g : GRN) (hnr : ∀ j i, ¬ g.regulates j i) (wp : g.WellPosed) :
     ∃! x, (g.toSystem (g.acyclic_of_no_regulates hnr) wp).IsSteady x :=
   g.grn_unique_steady (g.acyclic_of_no_regulates hnr) wp

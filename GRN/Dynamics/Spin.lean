@@ -44,7 +44,6 @@ noncomputable def spinAssignment (edges : List SignedEdge) : String → Int :=
     | some x => if 0 ≤ x then 1 else -1
     | none => 1
 
--- UNIT: spin-witness
 /-- On a sign-consistent graph the balancing spin takes values in `{±1}` at every vertex. -/
 theorem spinAssignment_mem (edges : List SignedEdge) (h : isMonotoneEdges edges = true)
     {v : String} (hv : v ∈ verticesOf edges) :

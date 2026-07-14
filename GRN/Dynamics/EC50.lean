@@ -255,7 +255,7 @@ theorem linearChain_reporter (stages : List StageParams) (u : ℝ) (hu : 0 ≤ u
 
 /-! ## General-DAG EC50 through the steady state
 
-The capstone of Frontier A: any acyclic feedforward system whose reporter dose-response is continuous on
+Any acyclic feedforward system whose reporter dose-response is continuous on
 `[0,∞)` (`steadyFam_continuousOn`) and strictly monotone in the inducer (chained from `steadyFam_lt_base`
 and `steadyFam_lt_step`) has a **unique EC50** — every intermediate reporter level is reached at exactly one
 inducer value. This lifts `ec50_exists_unique` onto the functor's real WF-recursion `steadyPoint` for
@@ -278,10 +278,10 @@ independent of the (single, unregulated) state coordinate. -/
 noncomputable def paramDirect (a0 a1 K n : ℝ) : ℝ → Fin 1 → (Fin 1 → ℝ) → ℝ :=
   fun u _ _ => hill a0 a1 K n u
 
-/-- **The A pipeline, end to end on Hill kinetics.** The parameterized direct sensor's steady reporter
-level has a unique EC50 — continuity from `steadyFam_continuousOn`, strict monotonicity from
+/-- **The dose-response pipeline, end to end on Hill kinetics.** The parameterized direct sensor's steady
+reporter level has a unique EC50 — continuity from `steadyFam_continuousOn`, strict monotonicity from
 `steadyFam_lt_base` (with `steadyFam_mono` for the ambient order), assembled by `steadyFam_ec50`. This
-exercises the whole of Frontier A against the real Hill response, not an abstract hypothesis. -/
+runs the full pipeline against the real Hill response rather than an abstract hypothesis. -/
 theorem paramDirect_ec50 {a0 a1 K n γ lo hi : ℝ}
     (hK : 0 < K) (hn : 0 < n) (ha : a0 < a1) (hγ : 0 < γ) (ha0 : 0 ≤ a0)
     (hlo : 0 ≤ lo) (hle : lo ≤ hi) {L : ℝ}

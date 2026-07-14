@@ -15,7 +15,6 @@ namespace GRN
 
 open Dynamics
 
--- UNIT: steadyPoint-eq-equilibrium
 /-- **The assembled equilibrium is the constructive steady point.** For an acyclic, well-posed GRN, any
 zero of the assembled field (reindexed by `e : Fin n ≃ Species`) coincides with the constructive
 forward-substitution `steadyPoint` — the two steady-state engines agree. -/

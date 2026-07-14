@@ -20,7 +20,6 @@ namespace GRN
 open Dynamics CRNT
 open scoped Matrix
 
--- UNIT: coverterm-of-nocycle  (assembly; wired from the JacobianSigns core)
 /-- **No positive cycle ⟹ sign-definite cover terms.** If the signed interaction graph has no positive
 feedback loop and every interaction edge is monotone (`hmono`, ruling out non-monotone `sign = 0`
 ports whose definite pointwise derivative could otherwise close a positive cycle), every cycle-cover
@@ -39,7 +38,6 @@ theorem coverTerm_signDefinite_of_noPositiveLoop (g : GRN) (wp : g.WellPosed)
     (negJac_diag_pos g wp hreg e E z hE hz hmono hconsist hnopos)
     (fun σ hσ => negJac_coverTerm_cycle_nonneg g wp hreg e E z hE hz hmono hconsist hnopos σ hσ)
 
--- UNIT: grn-switch-isolation
 /-- **Local isolation of the equilibrium.** Assembling the cover-term signs and applying
 `jacobian_nonsingular_of_signDefinite`: with no positive feedback cycle the assembled Jacobian is
 nonsingular, so the equilibrium is locally isolated — multistationarity requires a positive cycle

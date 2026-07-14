@@ -38,7 +38,6 @@ noncomputable def negJac (g : GRN) (wp : g.WellPosed) {n : ℕ} (e : Fin n ≃ g
     (E : (Fin n → ℝ) →L[ℝ] (Fin n → ℝ)) : Matrix (Fin n) (Fin n) ℝ :=
   jacobianMatrix (Dynamics.degCLM (fun k => wp.γ (e k)) - E)
 
--- UNIT: prodOf-fderiv
 /-- **The assembled Hill production is Fréchet-differentiable** at a strictly positive state: differentiate
 `valuation` / `opRate` / `hill` / `hill2` / `sum`, giving the assembled field derivative `F'`. -/
 theorem hasFDerivAt_assembledProd (g : GRN) (wp : g.WellPosed)
@@ -206,7 +205,6 @@ theorem hasFDerivAt_assembledProd (g : GRN) (wp : g.WellPosed)
   unfold GRN.assembledProd GRN.prodOf
   exact hsumD _ (fun op hop => List.mem_of_mem_filter hop)
 
--- UNIT: jacobian-triangular
 /-- **The assembled Jacobian is triangular.** Under a topological enumeration (`regulates (e k) (e l) →
 k < l`), the negated-field Jacobian `negJac` is block-triangular for the identity order, with a strictly
 positive (degradation) diagonal. -/
@@ -304,7 +302,6 @@ theorem negJac_blockTriangular (g : GRN) (wp : g.WellPosed)
     rw [hzero k k hnr, sub_zero]
     exact wp.γ_pos (e k)
 
--- UNIT: grn-assembled-sensor-unique
 /-- **The assembled sensor has a unique equilibrium.** Feeding the triangular Jacobian through
 `isPMatrix_of_lowerTriangular` and `unique_equilibrium_of_pmatrix`: for an acyclic, well-posed GRN with a
 topological enumeration, the assembled field has at most one steady state on any concentration box. -/
