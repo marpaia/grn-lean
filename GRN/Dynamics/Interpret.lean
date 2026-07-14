@@ -221,7 +221,11 @@ theorem map_headD_nonneg {f : String → ℝ} (hf : ∀ id, 0 ≤ f id) (l : Lis
 /-! ## Well-posedness and the assembled system -/
 
 /-- The data making a GRN's assembled ODE well-posed: nonnegative inducers, positive degradation, and
-nonnegative Hill parameters / rates on every operator. -/
+nonnegative Hill parameters / rates on every operator. A `sum` operator combines activating Hill
+summands (`a0 ≤ a1` per input), matching the `+1` sign every `sum` port carries in the interaction
+graph. The `alpha` vector of each single- or two-input Hill operator carries its full complement of
+levels (two for `receiver`/`hill1`, four for `hill2`), so the interaction-graph sign extraction reads
+the same coefficients the kinetics use. -/
 structure WellPosed (g : GRN) where
   inducer : String → ℝ
   inducer_nonneg : ∀ id, 0 ≤ inducer id
@@ -238,7 +242,11 @@ structure WellPosed (g : GRN) where
   sum_wp : ∀ op ∈ g.operators, ∀ i,
     0 ≤ ((op.rnested "alpha").getD i []).getD 0 0 ∧
     0 ≤ ((op.rnested "alpha").getD i []).getD 1 0 ∧
-    0 < (op.rlist "K").getD i 1
+    0 < (op.rlist "K").getD i 1 ∧
+    ((op.rnested "alpha").getD i []).getD 0 0 ≤ ((op.rnested "alpha").getD i []).getD 1 0
+  alpha_wf : ∀ op ∈ g.operators,
+    ((op.kind = .receiver ∨ op.kind = .hill1) → 2 ≤ op.alphaNums.length) ∧
+    (op.kind = .hill2 → 4 ≤ op.alphaNums.length)
 
 /-- Production reads only direct regulators — the `local'` obligation. -/
 theorem prodOf_local (g : GRN) (inducer : String → ℝ) (i : g.Species) (x y : g.Species → ℝ)
@@ -279,7 +287,7 @@ theorem prodOf_nonneg (g : GRN) (wp : g.WellPosed) (i : g.Species) (x : g.Specie
           (wp.a3_nonneg op hmem) (wp.K1_pos op hmem) (wp.K2_pos op hmem) hv0 hv1
       | refine List.sum_nonneg (fun v hv => ?_)
         obtain ⟨i, -, rfl⟩ := List.mem_map.mp hv
-        exact hill_nonneg (wp.sum_wp op hmem i).2.2 (wp.sum_wp op hmem i).1
+        exact hill_nonneg (wp.sum_wp op hmem i).2.2.1 (wp.sum_wp op hmem i).1
           (wp.sum_wp op hmem i).2.1 _ (getD_map_nonneg hvnn _ i)
       | exact le_refl 0
 

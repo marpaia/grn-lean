@@ -105,10 +105,10 @@ theorem hill_edge_mem (g : GRN) {op : Node} (hop : op ∈ g.operators)
     {i : String} (hiout : i ∈ g.outputsOf op.id)
     {s : Int} (hps : pairSign b0 b1 = some s) :
     ((j0, i, s) : SignedEdge) ∈ signedInteractionGraph g := by
-  have hos : operatorInputSigns op = [pairSign b0 b1] := by
-    rcases hkrh with h | h <;> simp only [operatorInputSigns, h, hab]
+  have hos : g.opEdgeSigns op = [pairSign b0 b1] := by
+    rcases hkrh with h | h <;> simp only [opEdgeSigns, operatorInputSigns, h, hab]
   have hmem : ((j0, i, s) : SignedEdge) ∈
-      edgesFrom (operatorInputSigns op) (g.inputsOf op.id) (g.outputsOf op.id) := by
+      edgesFrom (g.opEdgeSigns op) (g.inputsOf op.id) (g.outputsOf op.id) := by
     rw [hos, hin, hps]
     simp only [edgesFrom, List.append_nil]
     exact List.mem_map.mpr ⟨i, hiout, rfl⟩

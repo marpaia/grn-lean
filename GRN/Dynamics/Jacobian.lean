@@ -189,7 +189,7 @@ theorem hasFDerivAt_assembledProd (g : GRN) (wp : g.WellPosed)
         simp only [List.map_cons, List.sum_cons]
         refine DifferentiableAt.add ?_ ih
         obtain ⟨hd, hnn, hdisj⟩ := slotGet op idx
-        exact hillD _ _ _ _ _ (wp.sum_wp op hop idx).2.2 hnn hd hdisj
+        exact hillD _ _ _ _ _ (wp.sum_wp op hop idx).2.2.1 hnn hd hdisj
   -- A finite list sum of differentiable operator rates is differentiable.
   have hsumD : ∀ L : List Node, (∀ op ∈ L, op ∈ g.operators) →
       DifferentiableAt ℝ (fun x : Fin n → ℝ =>

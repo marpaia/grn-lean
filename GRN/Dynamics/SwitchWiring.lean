@@ -31,12 +31,13 @@ theorem coverTerm_signDefinite_of_noPositiveLoop (g : GRN) (wp : g.WellPosed)
     (E : (Fin n → ℝ) →L[ℝ] (Fin n → ℝ)) (z : Fin n → ℝ)
     (hE : HasFDerivAt (g.assembledProd wp e) E z) (hz : ∀ k, 0 < z k)
     (hmono : ∀ edge ∈ signedInteractionGraph g, edge.2.2 = 1 ∨ edge.2.2 = -1)
+    (hconsist : EdgeSignConsistent g)
     (hnopos : hasPositiveLoopEdges (signedInteractionGraph g) = false) :
     (∀ σ : Equiv.Perm (Fin n), 0 ≤ coverTerm (g.negJac wp e E) σ) ∧
       0 < coverTerm (g.negJac wp e E) 1 :=
   coverTerm_signDefinite_of_cycles (g.negJac wp e E)
-    (negJac_diag_pos g wp hreg e E z hE hz hmono hnopos)
-    (fun σ hσ => negJac_coverTerm_cycle_nonneg g wp hreg e E z hE hz hmono hnopos σ hσ)
+    (negJac_diag_pos g wp hreg e E z hE hz hmono hconsist hnopos)
+    (fun σ hσ => negJac_coverTerm_cycle_nonneg g wp hreg e E z hE hz hmono hconsist hnopos σ hσ)
 
 -- UNIT: grn-switch-isolation
 /-- **Local isolation of the equilibrium.** Assembling the cover-term signs and applying
@@ -48,10 +49,11 @@ theorem grn_switch_isolation (g : GRN) (wp : g.WellPosed)
     (E : (Fin n → ℝ) →L[ℝ] (Fin n → ℝ)) (z : Fin n → ℝ)
     (hE : HasFDerivAt (g.assembledProd wp e) E z) (hz : ∀ k, 0 < z k)
     (hmono : ∀ edge ∈ signedInteractionGraph g, edge.2.2 = 1 ∨ edge.2.2 = -1)
+    (hconsist : EdgeSignConsistent g)
     (hnopos : hasPositiveLoopEdges (signedInteractionGraph g) = false) :
     (g.negJac wp e E).det ≠ 0 := by
   obtain ⟨hnn, hdiag⟩ :=
-    coverTerm_signDefinite_of_noPositiveLoop g wp hreg e E z hE hz hmono hnopos
+    coverTerm_signDefinite_of_noPositiveLoop g wp hreg e E z hE hz hmono hconsist hnopos
   exact jacobian_nonsingular_of_signDefinite (g.negJac wp e E) hnn hdiag
 
 end GRN

@@ -74,11 +74,19 @@ def edgesFrom : List (Option Int) → List String → List String → List Signe
        | none => []) ++ edgesFrom ss is outputs
   | _, _, _ => []
 
+/-- The per-port signs used to emit an operator's edges. A `sum` operator adds its inputs, so every
+actual input species (`g.inputsOf op.id`) carries a `+1` sign — matching the number of inputs the edge
+walk consumes, rather than the declared `nInputs`. Other kinds read `operatorInputSigns`. -/
+def opEdgeSigns (g : GRN) (op : Node) : List (Option Int) :=
+  match op.kind with
+  | .sum => List.replicate (g.inputsOf op.id).length (some 1)
+  | _ => operatorInputSigns op
+
 /-- The signed edges contributed by a list of operators. -/
 def opEdges (g : GRN) : List Node → List SignedEdge
   | [] => []
   | op :: ops =>
-      edgesFrom (operatorInputSigns op) (g.inputsOf op.id) (g.outputsOf op.id) ++ opEdges g ops
+      edgesFrom (g.opEdgeSigns op) (g.inputsOf op.id) (g.outputsOf op.id) ++ opEdges g ops
 
 /-- Collapse operators to a signed, directed species-to-species interaction graph: one signed edge from
 every input species to every species an operator produces; inputs with no effect are dropped. -/
