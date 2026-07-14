@@ -9,10 +9,10 @@ For an arbitrary acyclic, well-posed `GRN`, the reporter's steady level as a fun
 inducer's level has a **unique EC50**, obtained through the functor's real WF-recursion `steadyPoint`.
 
 This discharges the abstract hypotheses of `steadyFam_ec50` for the interpreted production:
-* **continuity** — `prodOf` is jointly continuous in `(inducer level, state)` on the nonnegative orthant,
+* **continuity**: `prodOf` is jointly continuous in `(inducer level, state)` on the nonnegative orthant,
   for every operator kind (`prodOf_param_continuousOn`);
-* **monotonicity** — raising the inducer does not lower any steady value (via `opRate_mono` / `steady_le`);
-* **strictness** — a strictly-activating drive from the inducer to the reporter makes the dose-response
+* **monotonicity**: raising the inducer does not lower any steady value (via `opRate_mono` / `steady_le`);
+* **strictness**: a strictly-activating drive from the inducer to the reporter makes the dose-response
   injective (the `steadyFam_lt_base` / `steadyFam_lt_step` engine).
 -/
 
@@ -66,7 +66,7 @@ theorem hill2_continuousOn {a0 a1 a2 a3 K1 K2 n1 n2 : ℝ}
   simp only [hill2]
   exact hnum.div hden (fun p hp => ne_of_gt (hdenpos p hp))
 
-/-- Continuity of a two-input Hill response fed by two nonnegative continuous inputs — the composition
+/-- Continuity of a two-input Hill response fed by two nonnegative continuous inputs, the composition
 form, stated directly (no product-map composition) to keep definitional checking cheap. -/
 theorem hill2_comp_continuousOn {X : Type*} [TopologicalSpace X] {D : Set X}
     {a0 a1 a2 a3 K1 K2 n1 n2 : ℝ} (hK1 : 0 < K1) (hK2 : 0 < K2) (hn1 : 0 ≤ n1) (hn2 : 0 ≤ n2)
@@ -125,7 +125,7 @@ def _root_.Node.Regular (op : Node) : Prop :=
 /-! ## Production is continuous in the inducer level -/
 
 /-- An operator's rate is jointly continuous in the inducer level and the state, on the nonnegative
-orthant — for every operator kind. -/
+orthant, for every operator kind. -/
 theorem opRate_param_continuousOn (g : GRN) (base : String → ℝ) (s : String) (hbase : ∀ id, 0 ≤ base id)
     (op : Node) (hreg : op.Regular) :
     ContinuousOn (fun v : ℝ × (g.Species → ℝ) =>
@@ -215,7 +215,7 @@ def _root_.GRN.WellPosed.setInducer {g : GRN} (wp : g.WellPosed) (s : String) (u
 /-- **General-GRN EC50 through the real `steadyPoint`.** For an acyclic, well-posed GRN whose operators are
 `Regular`, if the reporter's steady level is strictly monotone in a chosen inducer's level on `[lo, hi]`,
 then it has a unique EC50. Continuity is discharged automatically (`prodOf_param_continuousOn` +
-`steadyFam_continuousOn`); strict monotonicity — which depends on the drive from inducer to reporter — is
+`steadyFam_continuousOn`); strict monotonicity, which depends on the drive from inducer to reporter, is
 the one hypothesis, dischargeable via the `steadyFam_lt_base` / `steadyFam_lt_step` engine. -/
 theorem grn_reporter_ec50 (g : GRN) (hac : g.Acyclic) (wp : g.WellPosed) (s : String) (top : g.Species)
     (hreg : ∀ op ∈ g.operators, op.Regular) {lo hi : ℝ} (hlo : 0 ≤ lo) (hle : lo ≤ hi)

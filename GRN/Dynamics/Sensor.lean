@@ -8,12 +8,12 @@ The sensor certificate (`GRN.certifies · .sensor`, interaction-graph monotonici
 dose-response: a monotone input/output map with a unique half-maximal crossing (EC50). This file proves
 that guarantee for the Hill-kinetic response, bottom-up:
 
-* `hill_monotoneOn` / `hill_antitoneOn` — a single operator's response is monotone in its input,
+* `hill_monotoneOn` / `hill_antitoneOn`: a single operator's response is monotone in its input,
   increasing when it activates (`a0 ≤ a1`) and decreasing when it represses. This is the atom the edge
   sign records.
-* `hill_strictMonoOn` — the strict version, for a genuine (non-flat) activator.
-* `cascade_monotoneOn` — a feedforward cascade, the composition of stage responses, is monotone.
-* `ec50_unique` / `hill_ec50_unique` — a strictly monotone response meets any level at exactly one input,
+* `hill_strictMonoOn`: the strict version, for a genuine (non-flat) activator.
+* `cascade_monotoneOn`: a feedforward cascade, the composition of stage responses, is monotone.
+* `ec50_unique` / `hill_ec50_unique`: a strictly monotone response meets any level at exactly one input,
   so the EC50 the certificate promises is well defined.
 
 This is the analytic content of the Angeli–Sontag guarantee for the feedforward (acyclic) sensor topology.
@@ -68,7 +68,7 @@ theorem hill_antitoneOn (hK : 0 < K) (hn : 0 ≤ n) (ha : a1 ≤ a0) :
   · nlinarith [mul_nonneg (sub_nonneg.2 ha) (sub_nonneg.2 hr)]
   · exact (mul_pos h1 h2).le
 
-/-- A Hill operator with nonnegative levels keeps a nonnegative input nonnegative — so cascaded stages
+/-- A Hill operator with nonnegative levels keeps a nonnegative input nonnegative, so cascaded stages
 stay in the `[0, ∞)` domain. -/
 theorem hill_nonneg (hK : 0 < K) (ha0 : 0 ≤ a0) (ha1 : 0 ≤ a1) (u : ℝ) (hu : 0 ≤ u) :
     0 ≤ hill a0 a1 K n u := by
@@ -79,7 +79,7 @@ theorem hill_nonneg (hK : 0 < K) (ha0 : 0 ≤ a0) (ha1 : 0 ≤ a1) (u : ℝ) (hu
   · linarith
 
 /-- A strictly activating Hill operator (`a0 < a1`, positive coefficient) is strictly monotone on
-`[0, ∞)` — so its dose-response is injective and its EC50 unique. -/
+`[0, ∞)`, so its dose-response is injective and its EC50 unique. -/
 theorem hill_strictMonoOn (hK : 0 < K) (hn : 0 < n) (ha : a0 < a1) :
     StrictMonoOn (hill a0 a1 K n) (Ici 0) := by
   intro u hu v hv huv
@@ -121,7 +121,7 @@ theorem hill_strictAntiOn (hK : 0 < K) (hn : 0 < n) (ha : a1 < a0) :
   · nlinarith [mul_pos (sub_pos.2 ha) (sub_pos.2 hr)]
   · exact mul_pos h1 h2
 
-/-- A Hill operator's response is continuous on `[0, ∞)` — the input to the intermediate-value step that
+/-- A Hill operator's response is continuous on `[0, ∞)`: the input to the intermediate-value step that
 locates the EC50 (T3). -/
 theorem hill_continuousOn (hK : 0 < K) (hn : 0 ≤ n) :
     ContinuousOn (hill a0 a1 K n) (Ici 0) := by

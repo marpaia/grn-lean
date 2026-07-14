@@ -6,7 +6,7 @@ import GRN.Certificate
 
 Parses the JSON a quiver `GRN.to_dict` emits into a `GRN`, and emits a JSON
 report: the signed interaction graph and each structural certificate. This is
-the design/validation handoff — a design tool hands over a candidate network
+the design/validation handoff: a design tool hands over a candidate network
 and gets back a kernel-checkable structural verdict, in the spirit of an EDA
 formal sign-off complementing simulation.
 -/

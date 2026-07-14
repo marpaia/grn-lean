@@ -26,13 +26,13 @@ The stochastic path uses the same rates as propensities (`genetic_network.py:81-
 
 Let `r = (u/K)^n` for input concentration `u`.
 
-- **Hill1** (`hill1.py:53-57`) and **Receiver** (`receiver.py:54-58`) — identical algebra; a receiver's
+- **Hill1** (`hill1.py:53-57`) and **Receiver** (`receiver.py:54-58`): identical algebra; a receiver's
   input is an external supplement:
   ```
   e = (α₀ + α₁·r) / (1 + r)
   ```
   `α₀` is basal (`u=0`), `α₁` the saturating level (`u→∞`). **Activation iff `α₁ > α₀`, repression iff
-  `α₁ < α₀`** — the sign rule `GRN.pairSign` implements.
+  `α₁ < α₀`**: the sign rule `GRN.pairSign` implements.
 
 - **Hill2** (`hill2.py:52-61`), `α` length 4, `K`/`n` length 2, `r₁,r₂` per input, `r₁₂ = r₁·r₂`:
   ```
@@ -61,5 +61,5 @@ with this convention: port 0's sign from `[a₁−a₀, a₃−a₂]`, port 1's 
   globally bounded, so `crnt-lean`'s `exists_flow` (global-bound hypothesis) does not apply directly;
   route existence through a forward-invariant box (Nagumo) plus Mathlib Picard–Lindelöf.
 - A forward-invariant box exists: expression is bounded by `Σ αᵢ,max` and degradation/dilution pulls
-  inward, so the nonnegative box `[0, αmax/(γ+μ)]ⁿ` is invariant — the compact region the certificates'
+  inward, so the nonnegative box `[0, αmax/(γ+μ)]ⁿ` is invariant, the compact region the certificates'
   dynamical claims live on.

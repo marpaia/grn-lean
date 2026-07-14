@@ -12,11 +12,11 @@ field `-F = γ·x − e(x)`, whose diagonal carries the positive degradation rat
 
 This module supplies the analytic objects the univalence bridge consumes:
 
-* **`prodOf-fderiv`** — the assembled Hill production is Fréchet-differentiable at a strictly positive
+* **`prodOf-fderiv`**: the assembled Hill production is Fréchet-differentiable at a strictly positive
   state (differentiating `valuation` / `opRate` / `hill` / `hill2` / `sum`), giving the field derivative.
-* **`jacobian-triangular`** — under a topological enumeration (`GRN.Dynamics.TopoOrder`), `negJac` is
+* **`jacobian-triangular`**: under a topological enumeration (`GRN.Dynamics.TopoOrder`), `negJac` is
   block-triangular with a strictly positive (degradation) diagonal.
-* **`grn-assembled-sensor-unique`** — feeding that triangular Jacobian through
+* **`grn-assembled-sensor-unique`**: feeding that triangular Jacobian through
   `isPMatrix_of_lowerTriangular` and `unique_equilibrium_of_pmatrix`: any acyclic, well-posed GRN has at
   most one steady state on a concentration box.
 -/
@@ -26,7 +26,7 @@ namespace GRN
 open Dynamics CRNT
 open scoped Matrix
 
-/-- The interpreted production reindexed by an enumeration `e : Fin n ≃ Species` — the assembled-ODE
+/-- The interpreted production reindexed by an enumeration `e : Fin n ≃ Species`: the assembled-ODE
 production as a self-map of `Fin n → ℝ`. -/
 noncomputable def assembledProd (g : GRN) (wp : g.WellPosed) {n : ℕ} (e : Fin n ≃ g.Species) :
     (Fin n → ℝ) → (Fin n → ℝ) :=

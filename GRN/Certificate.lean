@@ -9,7 +9,7 @@ condition for a target dynamical regime:
 
 - **Monotonicity** (Angeli–Sontag): a sign-consistent (balanced) interaction
   graph implies a monotone system, whose steady-state input/output response is
-  unique and monotone — so for a sensor the half-maximal crossing (EC50) is
+  unique and monotone, so for a sensor the half-maximal crossing (EC50) is
   well defined.
 - **Thomas' rule** (Soulé; Gouzé; Snoussi): a positive feedback loop is
   necessary for multistationarity (a bistable, two-state switch); a negative

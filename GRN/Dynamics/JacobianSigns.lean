@@ -46,7 +46,7 @@ def graphEdgeSign (g : GRN) (src dst : String) : Int :=
 /-- **Parallel-edge sign consistency.** Any two interaction-graph edges sharing a source and a target
 carry the same sign, so `graphEdgeSign` (which reads the first matching edge) is well-defined: it is the
 sign of *every* edge between that ordered pair. This is the honest minimal condition compatible with the
-negative feedback loops a switch carries — unlike full sign-consistency (balance), which would force
+negative feedback loops a switch carries, unlike full sign-consistency (balance), which would force
 acyclicity and make the switch theorem degenerate. -/
 def EdgeSignConsistent (g : GRN) : Prop :=
   ∀ e₁ ∈ signedInteractionGraph g, ∀ e₂ ∈ signedInteractionGraph g,
@@ -124,8 +124,8 @@ theorem hill_hasDerivAt_sign (a0 a1 K n u : ℝ) (hK : 0 < K) (hn : 0 < n) (hu :
 
 The sign of `∂/∂u₁` is `sign ((a1 − a0) + (a3 − a2)·r₂)` with
 `r₂ = (u₂/K₂)^{n₂} > 0`; a monotone left port makes both coefficients same-signed and one strict, so
-strict positivity of the co-input `u₂` is required for the strict conclusion (a non-monotone port —
-excluded by `hmono` — would give a mixed sign). -/
+strict positivity of the co-input `u₂` is required for the strict conclusion (a non-monotone port,
+excluded by `hmono`, would give a mixed sign). -/
 theorem hill2_hasDerivAt_left_sign (a0 a1 a2 a3 K1 K2 n1 n2 u1 u2 : ℝ)
     (hK1 : 0 < K1) (hK2 : 0 < K2) (hn1 : 0 < n1) (hu1 : 0 < u1) (hu2 : 0 < u2) :
     ∃ d : ℝ, HasDerivAt (fun t => hill2 a0 a1 a2 a3 K1 K2 n1 n2 t u2) d u1 ∧
@@ -686,8 +686,8 @@ private lemma ent_valuation_perturb (g : GRN) (inducer : String → ℝ) {n : �
     simp only [dif_neg hid, if_neg hne, mul_zero, add_zero]
 
 /-- **The production Jacobian entry's sign matches the interaction-graph edge sign.** At a strictly
-positive state and under `hmono`, the entry `jacobianMatrix E r c` — the `c`-directional derivative of
-the `r`-coordinate of the assembled production — carries the sign of the graph edge from `e c` to `e r`:
+positive state and under `hmono`, the entry `jacobianMatrix E r c`, the `c`-directional derivative of
+the `r`-coordinate of the assembled production, carries the sign of the graph edge from `e c` to `e r`:
 nonnegative for an activating edge (`+1`), nonpositive for a repressing edge (`−1`), and zero for an
 absent edge (`0`). Parallel-edge consistency (`hconsist`) pins the shared sign of every edge between the
 pair, and `hmono` excludes non-monotone ports; weak inequalities absorb vanishing summands. -/

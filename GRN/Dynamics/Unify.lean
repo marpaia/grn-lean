@@ -17,7 +17,7 @@ open Dynamics
 
 /-- **The assembled equilibrium is the constructive steady point.** For an acyclic, well-posed GRN, any
 zero of the assembled field (reindexed by `e : Fin n ≃ Species`) coincides with the constructive
-forward-substitution `steadyPoint` — the two steady-state engines agree. -/
+forward-substitution `steadyPoint`: the two steady-state engines agree. -/
 theorem steadyPoint_eq_equilibrium (g : GRN) (hac : g.Acyclic) (wp : g.WellPosed)
     {n : ℕ} (e : Fin n ≃ g.Species) (x : Fin n → ℝ)
     (hx : Dynamics.field (fun k => wp.γ (e k)) (g.assembledProd wp e) x = 0) :

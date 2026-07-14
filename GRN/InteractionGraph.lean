@@ -75,7 +75,7 @@ def edgesFrom : List (Option Int) → List String → List String → List Signe
   | _, _, _ => []
 
 /-- The per-port signs from which an operator's edges are built. A `sum` operator adds its inputs, so every
-actual input species (`g.inputsOf op.id`) carries a `+1` sign — matching the number of inputs the edge
+actual input species (`g.inputsOf op.id`) carries a `+1` sign, matching the number of inputs the edge
 walk consumes, rather than the declared `nInputs`. Other kinds read `operatorInputSigns`. -/
 def opEdgeSigns (g : GRN) (op : Node) : List (Option Int) :=
   match op.kind with

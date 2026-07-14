@@ -27,7 +27,7 @@ state coordinates. -/
 def regIds (g : GRN) : Finset String :=
   ((g.nodes.filter (fun n => decide (n.kind = .regulator ∨ n.kind = .reporter))).map (·.id)).toFinset
 
-/-- The regulated-species carrier — the state coordinates of the assembled ODE. -/
+/-- The regulated-species carrier: the state coordinates of the assembled ODE. -/
 abbrev Species (g : GRN) : Type := {s : String // s ∈ g.regIds}
 
 /-- `j` directly regulates `i`: `j` is an input to an operator that produces `i`. -/
@@ -37,7 +37,7 @@ def regulates (g : GRN) (j i : g.Species) : Prop :=
 /-- Acyclicity: no species transitively regulates itself. -/
 def Acyclic (g : GRN) : Prop := ∀ i : g.Species, ¬ Relation.TransGen g.regulates i i
 
-/-- The regulation relation is well-founded when the circuit is acyclic — the hypothesis a sensor GRN
+/-- The regulation relation is well-founded when the circuit is acyclic: the hypothesis a sensor GRN
 supplies to the `FeedforwardSystem` IR. -/
 theorem regulates_wf (g : GRN) (h : g.Acyclic) : WellFounded g.regulates :=
   Dynamics.wellFounded_of_acyclic h
@@ -146,7 +146,7 @@ theorem hill2_monotoneOn_right {a0 a1 a2 a3 K1 K2 n1 n2 u1 : ℝ}
       mul_nonneg (mul_nonneg (mul_nonneg (sub_nonneg.2 ha') hr1) hr1) (sub_nonneg.2 hrle)]
   · exact (mul_pos hdv hdu).le
 
-/-- The two-input Hill response is jointly monotone when it activates in every context — raising either
+/-- The two-input Hill response is jointly monotone when it activates in every context: raising either
 input does not decrease the output. -/
 theorem hill2_mono {a0 a1 a2 a3 K1 K2 n1 n2 u1 u2 u1' u2' : ℝ}
     (hK1 : 0 < K1) (hK2 : 0 < K2) (hn1 : 0 ≤ n1) (hn2 : 0 ≤ n2)
@@ -248,7 +248,7 @@ structure WellPosed (g : GRN) where
     ((op.kind = .receiver ∨ op.kind = .hill1) → 2 ≤ op.alphaNums.length) ∧
     (op.kind = .hill2 → 4 ≤ op.alphaNums.length)
 
-/-- Production reads only direct regulators — the `local'` obligation. -/
+/-- Production reads only direct regulators: the `local'` obligation. -/
 theorem prodOf_local (g : GRN) (inducer : String → ℝ) (i : g.Species) (x y : g.Species → ℝ)
     (hxy : ∀ j, g.regulates j i → x j = y j) :
     g.prodOf inducer i x = g.prodOf inducer i y := by
@@ -263,7 +263,7 @@ theorem prodOf_local (g : GRN) (inducer : String → ℝ) (i : g.Species) (x y :
       have := List.of_mem_filter hop; simpa using this⟩
   · rfl
 
-/-- Production is nonnegative on nonnegative states — the `nonneg` obligation. -/
+/-- Production is nonnegative on nonnegative states: the `nonneg` obligation. -/
 theorem prodOf_nonneg (g : GRN) (wp : g.WellPosed) (i : g.Species) (x : g.Species → ℝ)
     (hx : ∀ j, 0 ≤ x j) : 0 ≤ g.prodOf wp.inducer i x := by
   unfold prodOf
@@ -301,7 +301,7 @@ noncomputable def toSystem (g : GRN) (h : g.Acyclic) (wp : g.WellPosed) :
   local' := g.prodOf_local wp.inducer
   nonneg := g.prodOf_nonneg wp
 
-/-- **The functor's payoff: an acyclic, well-posed GRN has a unique steady state** — obtained end to end
+/-- **The functor's payoff: an acyclic, well-posed GRN has a unique steady state**, obtained end to end
 from the `GRN` datatype through the interpretation and the constructive IR. -/
 theorem grn_unique_steady (g : GRN) (h : g.Acyclic) (wp : g.WellPosed) :
     ∃! x, (g.toSystem h wp).IsSteady x :=
@@ -386,7 +386,7 @@ theorem opRate_mono (g : GRN) (op : Node) {val₁ val₂ : String → ℝ}
       (getD_map_nonneg' h01 0) (getD_map_nonneg' h01 1) (getD_map_mono hle 0) (getD_map_mono hle 1)
 
 /-- **Monotone dose-response through the functor** (activating case). Raising the inducer levels of an
-acyclic, well-posed GRN whose operators are all activating does not decrease any species' steady state —
+acyclic, well-posed GRN whose operators are all activating does not decrease any species' steady state,
 so the reporter's dose-response is monotone. Obtained by instantiating `steady_le` on the interpreted
 production. -/
 theorem grn_doseResponse_mono (g : GRN) (hac : g.Acyclic) (wp wp' : g.WellPosed)

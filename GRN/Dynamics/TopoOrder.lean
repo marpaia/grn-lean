@@ -81,7 +81,7 @@ theorem topoEquiv_regulates_lt (g : GRN) (h : g.Acyclic)
   push_neg at hlk
   exact absurd (hmono hlk) (not_le.mpr hkeylt)
 
-/-- The regulation edges of a GRN, every input-to-output pair carried with a placeholder `+1` sign — the
+/-- The regulation edges of a GRN, every input-to-output pair carried with a placeholder `+1` sign: the
 directed graph on which `acyclicBool` searches for cycles (unlike `signedInteractionGraph`, it keeps every
 regulation edge, including non-monotone ones). -/
 def regEdges (g : GRN) : List SignedEdge :=

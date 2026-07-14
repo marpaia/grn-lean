@@ -5,7 +5,7 @@ import GRN.Dynamics.Feedforward
 /-!
 # EC50 through the functor (direct sensor)
 
-The dose-response of a direct sensor — a reporter driven straight from the inducer — is its steady
+The dose-response of a direct sensor (a reporter driven straight from the inducer) is its steady
 reporter level as a function of the inducer, `hill(inducer)/γ`. This file shows that map *is* the
 constructive steady state (`directSensor_steady`) and that it has a **unique EC50**
 (`doseResponse_ec50`): a continuous, strictly monotone dose-response meets every intermediate level at
@@ -139,7 +139,7 @@ theorem stageMap_mapsTo_sign (s : StageParams) (hs : s.SignActivating) :
   obtain ⟨hK, _, hγ, ha0, ha1, _⟩ := hs
   exact fun v hv => mem_Ici.mpr (div_nonneg (hill_nonneg hK ha0 ha1 v (mem_Ici.mp hv)) hγ.le)
 
-/-- Each sign-consistent stage map is injective on `[0, ∞)` — strictly monotone or strictly antitone. -/
+/-- Each sign-consistent stage map is injective on `[0, ∞)`: strictly monotone or strictly antitone. -/
 theorem stageMap_injOn (s : StageParams) (hs : s.SignActivating) : InjOn (stageMap s) (Ici 0) := by
   obtain ⟨hK, hn, hγ, _, _, hdir⟩ := hs
   rcases hdir with h | h
@@ -159,7 +159,7 @@ theorem cascadeResponse_injOn : ∀ (stages : List StageParams),
     exact (cascadeResponse_injOn rest hrest).comp (stageMap_injOn s hs) (stageMap_mapsTo_sign s hs)
 
 /-- **A sign-consistent cascade has a unique EC50** (at most one): with each stage strictly activating or
-repressing, the dose-response is injective, so any level is reached at one inducer value at most —
+repressing, the dose-response is injective, so any level is reached at one inducer value at most,
 repressors and mixed-sign cascades included. -/
 theorem cascade_ec50_unique (stages : List StageParams) (h : ∀ s ∈ stages, s.SignActivating)
     {lo hi : ℝ} (hlo : 0 ≤ lo) {L u v : ℝ} (hu : u ∈ Icc lo hi) (hv : v ∈ Icc lo hi)
@@ -172,7 +172,7 @@ theorem cascade_ec50_unique (stages : List StageParams) (h : ∀ s ∈ stages, s
 A linear cascade instantiates the feedforward IR directly: species `Fin n`, species `k` produced by
 stage `k` driven by species `k-1` (or the inducer at the head). `linearChain_steady` shows the functor's
 own `steadyPoint` at each species equals the cascade dose-response of the stages up to it, so
-`linearChain_reporter` identifies the reporter's steady level with `cascadeResponse` — the EC50 of which is
+`linearChain_reporter` identifies the reporter's steady level with `cascadeResponse`, the EC50 of which is
 already `cascade_ec50`. This closes "EC50 through the WF-recursion `steadyPoint`" for the cascade class. -/
 
 /-- Appending a stage post-composes its map onto the cascade response. -/
@@ -257,7 +257,7 @@ theorem linearChain_reporter (stages : List StageParams) (u : ℝ) (hu : 0 ≤ u
 
 Any acyclic feedforward system whose reporter dose-response is continuous on
 `[0,∞)` (`steadyFam_continuousOn`) and strictly monotone in the inducer (chained from `steadyFam_lt_base`
-and `steadyFam_lt_step`) has a **unique EC50** — every intermediate reporter level is reached at exactly one
+and `steadyFam_lt_step`) has a **unique EC50**: every intermediate reporter level is reached at exactly one
 inducer value. This lifts `ec50_exists_unique` onto the functor's real WF-recursion `steadyPoint` for
 arbitrary acyclic topologies, not just linear cascades. -/
 
@@ -279,7 +279,7 @@ noncomputable def paramDirect (a0 a1 K n : ℝ) : ℝ → Fin 1 → (Fin 1 → �
   fun u _ _ => hill a0 a1 K n u
 
 /-- **The dose-response pipeline, end to end on Hill kinetics.** The parameterized direct sensor's steady
-reporter level has a unique EC50 — continuity from `steadyFam_continuousOn`, strict monotonicity from
+reporter level has a unique EC50: continuity from `steadyFam_continuousOn`, strict monotonicity from
 `steadyFam_lt_base` (with `steadyFam_mono` for the ambient order), assembled by `steadyFam_ec50`. This
 runs the full pipeline against the real Hill response rather than an abstract hypothesis. -/
 theorem paramDirect_ec50 {a0 a1 K n γ lo hi : ℝ}

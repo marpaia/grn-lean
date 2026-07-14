@@ -12,7 +12,7 @@ by quiver round-trips into Lean (see `GRN.Interop`). It is the candidate a
 design search proposes and hands here for a machine-checked structural verdict.
 
 Kinetics are exact rationals (`ℚ`): quiver's JSON numbers are decimal literals,
-so they parse without loss, and `ℚ` comparisons reduce in the Lean kernel — so
+so they parse without loss, and `ℚ` comparisons reduce in the Lean kernel, so
 the sign of a regulatory edge, and hence every certificate, is decidable by
 `decide` rather than stranded behind an opaque `Float`.
 

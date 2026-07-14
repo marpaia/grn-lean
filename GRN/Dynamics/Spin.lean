@@ -60,7 +60,7 @@ theorem spinAssignment_mem (edges : List SignedEdge) (h : isMonotoneEdges edges 
 The relaxation `spinFix` builds the `±1` assignment; `balance` records that it balances every edge.
 The proof rests on: (1) all assigned values are `±1`; (2) a successful relaxation reaches a genuine
 fixed point (a fuel-measure argument), which certifies `vb = s·va` on every both-assigned edge; and
-(3) completeness — under `colorable` every vertex is assigned, so both endpoints of every edge are. -/
+(3) completeness: under `colorable` every vertex is assigned, so both endpoints of every edge are. -/
 
 /-- The single-edge propagation step folded by `relaxPass`. -/
 private def stepf (st : Option (List (String × Int) × Bool)) (e : SignedEdge) :
