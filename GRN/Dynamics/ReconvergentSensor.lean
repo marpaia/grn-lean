@@ -401,4 +401,64 @@ theorem grn_reconvergent_doseResponse (g : GRN) (hac : g.Acyclic) (σ : String �
     rw [conj p reporter, conj q reporter, hrep] at hmono
     linarith
 
+/-- The balancing spin as a real-valued function on species names, read off the monotonicity
+certificate: the `±1` assignment `spinAssignment` builds over the signed interaction graph, cast to `ℝ`. -/
+noncomputable def grnSpin (g : GRN) : String → ℝ :=
+  fun v => ((spinAssignment (signedInteractionGraph g) v : Int) : ℝ)
+
+/-- On a graph-monotone GRN the balancing spin takes values `±1` on every regulated species: a vertex of
+the signed interaction graph is `±1` by `spinAssignment_mem`, and off the graph `spinAssignment` is its
+default `1`. -/
+theorem grnSpin_isSpin (g : GRN) (h : isMonotone g = true) : IsSpin (grnSpin g) g := by
+  unfold isMonotone at h
+  intro i
+  have hpm : spinAssignment (signedInteractionGraph g) i.1 = 1 ∨
+      spinAssignment (signedInteractionGraph g) i.1 = -1 := by
+    by_cases hv : i.1 ∈ verticesOf (signedInteractionGraph g)
+    · exact spinAssignment_mem (signedInteractionGraph g) h hv
+    · unfold spinAssignment
+      split
+      · split
+        · exact Or.inl rfl
+        · exact Or.inr rfl
+      · exact Or.inl rfl
+  simp only [grnSpin]
+  rcases hpm with h1 | h1 <;> rw [h1]
+  · exact Or.inl (by norm_num)
+  · exact Or.inr (by norm_num)
+
+/-- On a graph-monotone GRN the balancing spin balances the signed interaction graph: each edge
+`(j, i, s)` satisfies `grnSpin i = s · grnSpin j`, the real-valued cast of `balance`. -/
+theorem grnSpin_balances (g : GRN) (h : isMonotone g = true) : Balances (grnSpin g) g := by
+  unfold isMonotone at h
+  intro e he
+  have hb := balance (signedInteractionGraph g) h he
+  simp only [grnSpin]
+  rw [hb]
+  push_cast
+  ring
+
+/-- **The reconvergent dose-response from the certificate alone.** For an acyclic, well-posed,
+graph-monotone GRN the balancing spin `grnSpin g` is constructed from the certificate, so its spin and
+balance obligations are discharged automatically: the reporter's steady level is monotone in the chosen
+inducer's level when `grnSpin g reporter = 1` and antitone when `grnSpin g reporter = -1`. -/
+theorem grn_reconvergent_doseResponse_of_monotone (g : GRN) (hac : g.Acyclic) (wp : g.WellPosed)
+    (s : String) (reporter : g.Species) (hmono : isMonotone g = true)
+    (hsigned : ∀ op ∈ g.operators, op.MonoSigned)
+    (hkind : ∀ op ∈ g.operators, op.kind = .source ∨ op.kind = .receiver ∨ op.kind = .hill1)
+    (hlen : ∀ op ∈ g.operators, 2 ≤ op.alphaNums.length)
+    (hdrive : FlipDrive g (grnSpin g) wp.inducer s) {p q : ℝ} (hp : 0 ≤ p) (hpq : p ≤ q) :
+    (grnSpin g reporter.1 = 1 →
+      steadyFam (g.regulates_wf hac) wp.γ
+          (fun u i x => g.prodOf (inducerAt wp.inducer s u) i x) p reporter
+        ≤ steadyFam (g.regulates_wf hac) wp.γ
+          (fun u i x => g.prodOf (inducerAt wp.inducer s u) i x) q reporter) ∧
+    (grnSpin g reporter.1 = -1 →
+      steadyFam (g.regulates_wf hac) wp.γ
+          (fun u i x => g.prodOf (inducerAt wp.inducer s u) i x) q reporter
+        ≤ steadyFam (g.regulates_wf hac) wp.γ
+          (fun u i x => g.prodOf (inducerAt wp.inducer s u) i x) p reporter) :=
+  grn_reconvergent_doseResponse g hac (grnSpin g) wp s reporter
+    (grnSpin_isSpin g hmono) (grnSpin_balances g hmono) hsigned hkind hlen hdrive hp hpq
+
 end GRN

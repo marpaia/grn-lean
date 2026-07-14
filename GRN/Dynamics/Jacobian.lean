@@ -346,4 +346,20 @@ theorem grn_assembled_sensor_unique (g : GRN) (hac : g.Acyclic) (wp : g.WellPose
     (F := Dynamics.negField (fun k => wp.γ (e k)) (g.assembledProd wp e))
     (F' := fun z => Dynamics.degCLM (fun k => wp.γ (e k)) - E z) hF hP ha hb hnab
 
+/-- **The assembled sensor of an acyclic GRN has a unique equilibrium.** The topological enumeration
+`topoEquiv` and its regulation-monotonicity `topoEquiv_regulates_lt` discharge the enumeration
+hypotheses of `grn_assembled_sensor_unique`, so an acyclic, well-posed, regular GRN has at most one
+steady state on any concentration box. -/
+theorem grn_assembled_sensor_unique_acyclic (g : GRN) (hac : g.Acyclic) (wp : g.WellPosed)
+    (hreg : ∀ op ∈ g.operators, op.Regular)
+    (lo hi : Fin (Fintype.card g.Species) → ℝ) (hlo : ∀ k, 0 < lo k)
+    {a b : Fin (Fintype.card g.Species) → ℝ}
+    (ha : a ∈ Set.Icc lo hi) (hb : b ∈ Set.Icc lo hi)
+    (hab : Dynamics.field (fun k => wp.γ (g.topoEquiv hac k)) (g.assembledProd wp (g.topoEquiv hac)) a
+         = Dynamics.field (fun k => wp.γ (g.topoEquiv hac k))
+             (g.assembledProd wp (g.topoEquiv hac)) b) :
+    a = b :=
+  g.grn_assembled_sensor_unique hac wp hreg (g.topoEquiv hac) (g.topoEquiv_regulates_lt hac)
+    lo hi hlo ha hb hab
+
 end GRN

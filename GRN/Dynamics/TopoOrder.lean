@@ -35,6 +35,52 @@ theorem topoOrder_lt (g : GRN) (h : g.Acyclic) {j i : g.Species} (hr : g.regulat
   have hfj : f j = topoOrder g h j + 1 := by rw [hf]; exact dif_pos hr
   omega
 
+/-! ## A topological enumeration by `Fin (card Species)` -/
+
+/-- An injective ranking key: the topological rank paired lexicographically with the canonical finite
+index of `Fintype.equivFin`. The index component breaks ties among species that do not regulate one
+another, so the key is injective while keeping the topological rank primary. -/
+noncomputable def speciesKey (g : GRN) (h : g.Acyclic) (i : g.Species) : ℕ ×ₗ ℕ :=
+  toLex (topoOrder g h i, (Fintype.equivFin g.Species i).val)
+
+/-- The topological key is injective, since its index component already separates distinct species. -/
+theorem speciesKey_injective (g : GRN) (h : g.Acyclic) :
+    Function.Injective (g.speciesKey h) := by
+  intro a b hab
+  have hidx : (Fintype.equivFin g.Species a).val = (Fintype.equivFin g.Species b).val := by
+    have h2 := congrArg (fun p => (ofLex p).2) hab
+    simpa [speciesKey] using h2
+  exact (Fintype.equivFin g.Species).injective (Fin.val_injective hidx)
+
+/-- A topological enumeration of the regulated species of an acyclic GRN: the bijection
+`Fin (Fintype.card g.Species) ≃ g.Species` obtained by sorting the canonical `Fintype.equivFin`
+indexing along the lexicographic key. Regulation edges run from lower to higher indices
+(`topoEquiv_regulates_lt`), so the assembled Jacobian is triangular in this enumeration. -/
+noncomputable def topoEquiv (g : GRN) (h : g.Acyclic) :
+    Fin (Fintype.card g.Species) ≃ g.Species :=
+  (Tuple.sort (fun j => g.speciesKey h ((Fintype.equivFin g.Species).symm j))).trans
+    (Fintype.equivFin g.Species).symm
+
+/-- Regulation respects the topological enumeration: if `topoEquiv g h k` regulates `topoEquiv g h l`,
+then `k < l`. A regulation edge forces a strictly larger topological rank (`topoOrder_lt`), hence a
+strictly larger key; the sorted enumeration is key-monotone, so its index strictly increases. -/
+theorem topoEquiv_regulates_lt (g : GRN) (h : g.Acyclic)
+    (k l : Fin (Fintype.card g.Species))
+    (hr : g.regulates (g.topoEquiv h k) (g.topoEquiv h l)) : k < l := by
+  set key : Fin (Fintype.card g.Species) → ℕ ×ₗ ℕ :=
+    fun j => g.speciesKey h ((Fintype.equivFin g.Species).symm j) with hkeydef
+  have hmono : Monotone (key ∘ Tuple.sort key) := Tuple.monotone_sort key
+  have hval : ∀ m, g.speciesKey h (g.topoEquiv h m) = (key ∘ Tuple.sort key) m := fun _ => rfl
+  have hto : topoOrder g h (g.topoEquiv h k) < topoOrder g h (g.topoEquiv h l) :=
+    topoOrder_lt g h hr
+  have hkeylt : (key ∘ Tuple.sort key) k < (key ∘ Tuple.sort key) l := by
+    rw [← hval k, ← hval l]
+    unfold GRN.speciesKey
+    exact Prod.Lex.toLex_lt_toLex.mpr (Or.inl hto)
+  by_contra hlk
+  push_neg at hlk
+  exact absurd (hmono hlk) (not_le.mpr hkeylt)
+
 /-- The regulation edges of a GRN, every input-to-output pair carried with a placeholder `+1` sign — the
 directed graph on which `acyclicBool` searches for cycles (unlike `signedInteractionGraph`, it keeps every
 regulation edge, including non-monotone ones). -/
