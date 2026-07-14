@@ -9,7 +9,7 @@ condition for a target dynamical regime:
 
 - **Monotonicity** (Angeli–Sontag): a sign-consistent (balanced) interaction
   graph implies a monotone system, whose steady-state input/output response is
-  unique and monotone — so for a sensor the half-maximal crossing (EC50) is
+  unique and monotone, so for a sensor the half-maximal crossing (EC50) is
   well defined.
 - **Thomas' rule** (Soulé; Gouzé; Snoussi): a positive feedback loop is
   necessary for multistationarity (a bistable, two-state switch); a negative
@@ -83,9 +83,10 @@ def colorable (edges : List SignedEdge) (verts : List String) : Bool :=
   go (verts.length + 1) []
 
 /-- The Angeli–Sontag monotonicity certificate on a signed graph: sign-consistent
-(balanced), with no non-monotone (`0`-sign) edge. -/
+(balanced), with every edge carrying a monotone `±1` sign (no `0`-sign or other
+non-monotone edge). -/
 def isMonotoneEdges (edges : List SignedEdge) : Bool :=
-  if edges.any (fun e => e.2.2 == 0) then false
+  if edges.any (fun e => e.2.2 != 1 && e.2.2 != -1) then false
   else colorable edges (verticesOf edges)
 
 /-- The signed out-neighbours of a vertex in the directed graph. -/

@@ -2,15 +2,15 @@ import Mathlib
 import GRN.Dynamics.Assembled
 
 /-!
-# Tier 2 — a concrete sensor carried end-to-end
+# A concrete sensor carried end-to-end
 
 Instantiates the assembled-ODE machinery on a concrete sensor field, validating that the pipeline
 `field → hasFDerivAt → acyclic ⟹ P-matrix Jacobian ⟹ Gale–Nikaido` runs all the way to a
 unique-steady-state conclusion for a real circuit.
 
-The *general* functor — an arbitrary `GRN` value mapped to this field by interpreting its operators,
+The *general* functor (an arbitrary `GRN` value mapped to this field by interpreting its operators,
 differentiating the assembled Hill kinetics, and reading a topological order off the acyclic interaction
-graph — is a separate, larger construction. This file exercises the dynamical core on an explicit field.
+graph) is a separate, larger construction. This file exercises the dynamical core on an explicit field.
 -/
 
 open CRNT
@@ -20,7 +20,7 @@ namespace GRN.Dynamics
 
 /-- A concrete minimal sensor: one reporter species produced at a constant inducer-set rate `c` and
 degraded at rate `γ > 0`. Through the general `field` / `assembled_sensor_unique` machinery, its assembled
-ODE `ẋ = c − γ·x` has a unique steady state on any concentration box — the dose-response has a single
+ODE `ẋ = c − γ·x` has a unique steady state on any concentration box: the dose-response has a single
 operating point. -/
 theorem sensor_const_unique {c γ : ℝ} (hγ : 0 < γ) {lo hi : Fin 1 → ℝ}
     {a b : Fin 1 → ℝ} (ha : a ∈ Set.Icc lo hi) (hb : b ∈ Set.Icc lo hi)

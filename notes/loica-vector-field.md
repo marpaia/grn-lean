@@ -1,6 +1,6 @@
-# The LOICA vector field (Tier-2 reference)
+# The LOICA vector field (reference)
 
-The exact ODE LOICA integrates, transcribed from `~/git/RudgeLab/LOICA` so the Tier-2 Lean vector
+The exact ODE LOICA integrates, transcribed from `~/git/RudgeLab/LOICA` so the Lean vector
 field matches the simulator that scores quiver designs. Sign conventions here are the source of truth
 for `GRN.InteractionGraph`.
 
@@ -26,13 +26,13 @@ The stochastic path uses the same rates as propensities (`genetic_network.py:81-
 
 Let `r = (u/K)^n` for input concentration `u`.
 
-- **Hill1** (`hill1.py:53-57`) and **Receiver** (`receiver.py:54-58`) — identical algebra; a receiver's
+- **Hill1** (`hill1.py:53-57`) and **Receiver** (`receiver.py:54-58`): identical algebra; a receiver's
   input is an external supplement:
   ```
   e = (α₀ + α₁·r) / (1 + r)
   ```
   `α₀` is basal (`u=0`), `α₁` the saturating level (`u→∞`). **Activation iff `α₁ > α₀`, repression iff
-  `α₁ < α₀`** — the sign rule `GRN.pairSign` implements.
+  `α₁ < α₀`**: the sign rule `GRN.pairSign` implements.
 
 - **Hill2** (`hill2.py:52-61`), `α` length 4, `K`/`n` length 2, `r₁,r₂` per input, `r₁₂ = r₁·r₂`:
   ```
@@ -48,23 +48,18 @@ Let `r = (u/K)^n` for input concentration `u`.
 
 - **Source** (`source.py:41-42`): a constant `e = rate`.
 
-## Hill2 index convention (fixed)
+## Hill2 index convention
 
 LOICA wires `hill2` inputs in port order (`simulate.py:151-159`): port 0 → `input_repressor1` (r₁),
 port 1 → r₂, and integrates `a₀ + a₁·r₁ + a₂·r₂ + a₃·r₁·r₂`. So `a₁` is port 0's solo coefficient and
 `a₂` is port 1's. Both quiver's `certificate.py` and `grn-lean`'s `operatorInputSigns` read the vector
 with this convention: port 0's sign from `[a₁−a₀, a₃−a₂]`, port 1's from `[a₂−a₀, a₃−a₁]`.
 
-An earlier reading in quiver used the opposite bit assignment (port 0 as the high bit), transposing the
-two inputs — e.g. `alpha=[0,100,0,100]` (a port-0 pass-through) was credited to port 1. Corrected in both
-repos. Any monotonicity statistic computed over `hill2`-containing topologies before the fix (the
-unconstrained-topology non-monotone fraction) should be recomputed.
-
-## Consequences for the Tier-2 theorems
+## Consequences for the dynamical theorems
 
 - The field is smooth and globally Lipschitz (bounded Hill terms plus the linear `−(γ+μ)x`), but not
   globally bounded, so `crnt-lean`'s `exists_flow` (global-bound hypothesis) does not apply directly;
   route existence through a forward-invariant box (Nagumo) plus Mathlib Picard–Lindelöf.
 - A forward-invariant box exists: expression is bounded by `Σ αᵢ,max` and degradation/dilution pulls
-  inward, so the nonnegative box `[0, αmax/(γ+μ)]ⁿ` is invariant — the compact region the certificates'
+  inward, so the nonnegative box `[0, αmax/(γ+μ)]ⁿ` is invariant, the compact region the certificates'
   dynamical claims live on.

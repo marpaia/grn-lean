@@ -3,13 +3,13 @@ import GRN.Dynamics.Univalence
 import CRNT.Dynamics.Nagumo
 
 /-!
-# Tier 2 — the assembled gene-regulatory vector field
+# The assembled gene-regulatory vector field
 
 The species-indexed assembled field `F x = e(x) − (γ+μ)·x`: production `e` minus first-order
 degradation/dilution `γ` (LOICA's `dxₛ/dt = eₛ(x) − (γₛ+μ)xₛ`). Here the state is `Fin n → ℝ`, one
 coordinate per regulated species. This file supplies the analytic objects the univalence bridges in
-`GRN.Dynamics.Univalence` consume: the field, its Fréchet derivative, and — under a feedforward/acyclic
-hypothesis — the P-matrix Jacobian that yields a unique steady state.
+`GRN.Dynamics.Univalence` consume: the field, its Fréchet derivative, and (under a feedforward/acyclic
+hypothesis) the P-matrix Jacobian that yields a unique steady state.
 -/
 
 open CRNT
@@ -42,7 +42,7 @@ theorem hasFDerivAt_field {γ : Fin n → ℝ} {e : (Fin n → ℝ) → (Fin n �
   he.sub (degCLM γ).hasFDerivAt
 
 /-- The negated field, whose zeros coincide with the field's steady states but whose Jacobian carries the
-degradation on its (positive) diagonal — the orientation Gale–Nikaido needs. -/
+degradation on its (positive) diagonal, the orientation Gale–Nikaido needs. -/
 def negField (γ : Fin n → ℝ) (e : (Fin n → ℝ) → (Fin n → ℝ)) : (Fin n → ℝ) → (Fin n → ℝ) :=
   fun y => degCLM γ y - e y
 
@@ -64,9 +64,9 @@ theorem jacobianMatrix_degCLM (γ : Fin n → ℝ) : jacobianMatrix (degCLM γ) 
   simp only [jacobianMatrix, LinearMap.toMatrix'_apply, ContinuousLinearMap.coe_coe, degCLM_apply,
     Pi.single_apply, Matrix.diagonal_apply, mul_ite, mul_one, mul_zero]
 
-/-- **Assembled-ODE sensor (Gale–Nikaido).** For a feedforward (acyclic) production — species `i`
+/-- **Assembled-ODE sensor (Gale–Nikaido).** For a feedforward (acyclic) production (species `i`
 produced only by strictly earlier species `j < i`, encoded as the production Jacobian vanishing on and
-above the diagonal — the assembled field has at most one steady state on any concentration box: its
+above the diagonal), the assembled field has at most one steady state on any concentration box: its
 dose-response has a unique operating point, for all parameterizations. -/
 theorem assembled_sensor_unique {γ : Fin n → ℝ} {e : (Fin n → ℝ) → (Fin n → ℝ)}
     {E : (Fin n → ℝ) → ((Fin n → ℝ) →L[ℝ] (Fin n → ℝ))} {lo hi : Fin n → ℝ}
@@ -97,7 +97,7 @@ theorem assembled_sensor_unique {γ : Fin n → ℝ} {e : (Fin n → ℝ) → (F
   exact unique_equilibrium_of_pmatrix hF hP ha hb hnab
 
 /-- **Forward-invariant concentration orthant (Nagumo).** With nonnegative production, any solution of
-the assembled field that starts with all species nonnegative stays nonnegative for all forward time — the
+the assembled field that starts with all species nonnegative stays nonnegative for all forward time. The
 concentrations never leave the physical region. Proved per coordinate from crnt-lean's scalar Nagumo
 half-space lemma: where a species hits zero, degradation cannot push it negative because production is
 nonnegative. -/

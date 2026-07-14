@@ -1,20 +1,20 @@
 import Mathlib
 
 /-!
-# Tier 2 — the feedforward IR and its unique steady state
+# The feedforward IR and its unique steady state
 
 A `FeedforwardSystem` is the intermediate representation the sensor functor targets: a type of species
 `ι` with a **well-founded** "is-regulated-by" relation `r`, each species produced only from `r`-earlier
-species, with positive degradation. `local'` — species `i`'s production reads only `r`-earlier coordinates
-— is the entire feedforward content and exactly what forward substitution needs.
+species, with positive degradation. `local'` (species `i`'s production reads only `r`-earlier coordinates)
+is the entire feedforward content and exactly what forward substitution needs.
 
 Indexing by a well-founded relation rather than `Fin n` is deliberate: the interaction graph's regulation
 relation is well-founded precisely when the circuit is acyclic, so a sensor GRN instantiates this IR
-directly — no topological sort or `Fin n` reindexing required.
+directly, with no topological sort or `Fin n` reindexing required.
 
 The steady state (where the assembled field `prodᵢ − γᵢ·xᵢ` vanishes) is **unique and constructive**:
-solved species by species down the well-founded order, with no Fréchet derivatives, P-matrices, or
-fixed-point theorems (see `notes/functor-plan.md`).
+solved by forward substitution species by species down the well-founded order, with no Fréchet
+derivatives, P-matrices, or fixed-point theorems.
 -/
 
 namespace GRN.Dynamics
@@ -24,7 +24,7 @@ open scoped Classical
 variable {ι : Type*} {r : ι → ι → Prop}
 
 /-- **Acyclic ⟹ well-founded** for a finite regulation relation: if no species transitively regulates
-itself, the relation is well-founded, so a sensor GRN instantiates `FeedforwardSystem` directly — this is
+itself, the relation is well-founded, so a sensor GRN instantiates `FeedforwardSystem` directly. This is
 what replaces a topological sort. -/
 theorem wellFounded_of_acyclic [Finite ι] (h : ∀ i, ¬ Relation.TransGen r i i) : WellFounded r := by
   haveI : Std.Irrefl (Relation.TransGen r) := ⟨h⟩
@@ -87,11 +87,11 @@ theorem prod_steadyPoint (S : FeedforwardSystem ι r) (i : ι) :
 theorem steadyPoint_isSteady (S : FeedforwardSystem ι r) : S.IsSteady S.steadyPoint :=
   fun i => S.prod_steadyPoint i
 
-/-- **The feedforward sensor has a unique steady state** — constructively. -/
+/-- **The feedforward sensor has a unique steady state**, constructively. -/
 theorem exists_unique_steady (S : FeedforwardSystem ι r) : ∃! x, S.IsSteady x :=
   ⟨S.steadyPoint, S.steadyPoint_isSteady, fun _ hy => S.steady_unique hy S.steadyPoint_isSteady⟩
 
-/-- The steady state is nonnegative — by induction down the regulation order. -/
+/-- The steady state is nonnegative, by induction down the regulation order. -/
 theorem steadyPoint_nonneg (S : FeedforwardSystem ι r) (i : ι) : 0 ≤ S.steadyPoint i := by
   refine S.wf.induction (C := fun i => 0 ≤ S.steadyPoint i) i (fun i ih => ?_)
   rw [steadyPoint_eq]
@@ -100,7 +100,7 @@ theorem steadyPoint_nonneg (S : FeedforwardSystem ι r) (i : ι) : 0 ≤ S.stead
   · rw [dif_pos hj]; exact ih j hj
   · simp [dif_neg hj]
 
-/-- **Monotone comparison of steady states** — the dose-response monotonicity engine (T2). If two systems
+/-- **Monotone comparison of steady states**: the dose-response monotonicity engine (T2). If two systems
 share degradation, the second's production dominates the first's on nonnegative states, and the second's
 production is monotone in `r`-earlier species, then the second's steady state dominates coordinatewise. -/
 theorem steady_le (S T : FeedforwardSystem ι r) (hγ : ∀ i, S.γ i = T.γ i)
@@ -124,7 +124,7 @@ end FeedforwardSystem
 For dose-response and EC50 we need the steady state as a function of the inducer level. Modelling the
 inducer as a parameter `p` entering the production, `steadyFam` is the forward-substitution steady point
 with a parameterized production, and `steadyFam_continuous` shows it is continuous in `p`. The proof is
-well-founded induction on the species using the recursion's own defining equation (`steadyFam_eq`) — there
+well-founded induction on the species using the recursion's own defining equation (`steadyFam_eq`); there
 is no appeal to a general continuity theorem for `WellFounded.fix`. -/
 
 /-- The forward-substitution steady point with a **parameterized** production: fixed relation, well-founded
@@ -141,7 +141,7 @@ theorem steadyFam_eq {P : Type*} (wf : WellFounded r) (γ : ι → ℝ) (prod : 
   rw [WellFounded.fix_eq]
 
 /-- **The steady state is continuous in the parameter.** If the production is jointly continuous in the
-parameter and the state, then `p ↦ steadyFam … p i` is continuous — by well-founded induction on `i`,
+parameter and the state, then `p ↦ steadyFam … p i` is continuous, by well-founded induction on `i`,
 rewriting one level with `steadyFam_eq` and propagating continuity through the (finite or infinite) state
 vector coordinatewise. -/
 theorem steadyFam_continuous {P : Type*} [TopologicalSpace P] (wf : WellFounded r) (γ : ι → ℝ)
@@ -213,7 +213,7 @@ theorem steadyFam_continuousOn (wf : WellFounded r) (γ : ι → ℝ) (hγ : ∀
 
 /-- **The steady state is monotone in the parameter** (the dose-response monotonicity engine through the
 real `steadyPoint`): if raising the parameter does not lower any production, and the higher parameter's
-production is monotone in `r`-earlier species, then `steadyFam … p i ≤ steadyFam … q i` — by well-founded
+production is monotone in `r`-earlier species, then `steadyFam … p i ≤ steadyFam … q i`, by well-founded
 induction, cancelling the shared degradation. -/
 theorem steadyFam_mono {P : Type*} (wf : WellFounded r) {γ : ι → ℝ} (hγ : ∀ i, 0 < γ i)
     {prod : P → ι → (ι → ℝ) → ℝ} {p q : P}
@@ -239,7 +239,7 @@ theorem steadyFam_mono {P : Type*} (wf : WellFounded r) {γ : ι → ℝ} (hγ :
   rw [steadyFam_eq wf γ prod p i, steadyFam_eq wf γ prod q i, div_eq_mul_inv, div_eq_mul_inv]
   exact mul_le_mul_of_nonneg_right hnum (inv_nonneg.2 (hγ i).le)
 
-/-! ### Strict monotonicity — the EC50-uniqueness engine
+/-! ### Strict monotonicity: the EC50-uniqueness engine
 
 For a *unique* EC50 the reporter's dose-response must be injective, i.e. strictly monotone in the inducer.
 Strictness enters at a species that directly feels the parameter (`steadyFam_lt_base`) and propagates along

@@ -3,12 +3,12 @@ import GRN.Dynamics.Feedforward
 import GRN.Dynamics.Sensor
 
 /-!
-# Tier 2 — a real two-stage Hill cascade through the constructive machinery
+# A real two-stage Hill cascade through the constructive machinery
 
 Validates the `FeedforwardSystem` IR on an actual Hill-kinetic sensor cascade (not a constant production):
 an external inducer drives species 0 via a Hill response, which drives the reporter species 1 via another.
 It discharges the `local'` and `nonneg` obligations from genuine `hill` kinetics and concludes a unique
-steady state through `exists_unique_steady` — the constructive functor's target, exercised end to end.
+steady state through `exists_unique_steady`: the constructive functor's target, exercised end to end.
 -/
 
 namespace GRN.Dynamics
@@ -58,7 +58,7 @@ noncomputable def Cascade2.toSystem (C : Cascade2) : FeedforwardSystem (Fin 2) (
     · simpa using hill_nonneg C.hK0 C.ha0 C.ha1 C.ind C.hind
     · simpa using hill_nonneg C.hK1 C.hb0 C.hb1 (x 0) (hx 0)
 
-/-- **A two-stage Hill sensor cascade has a unique steady state** — through the constructive IR. -/
+/-- **A two-stage Hill sensor cascade has a unique steady state**, through the constructive IR. -/
 theorem Cascade2.unique_steady (C : Cascade2) : ∃! x, C.toSystem.IsSteady x :=
   C.toSystem.exists_unique_steady
 

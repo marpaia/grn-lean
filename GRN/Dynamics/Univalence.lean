@@ -3,18 +3,18 @@ import CRNT.Multistationarity.GaleNikaidoUniv
 import CRNT.Multistationarity.JacobianDeterminantSign
 
 /-!
-# Tier 2 — assembled-ODE univalence: the sensor and switch bridges
+# Assembled-ODE univalence: the sensor and switch bridges
 
 This module connects the assembled multi-species vector field to crnt-lean's field-agnostic
-dynamical-systems substrate, giving the two guarantees Tier-1 certificates promise for the *full*
+dynamical-systems substrate, giving the two guarantees the structural certificates promise for the *full*
 (reconvergent) ODE, not just the feedforward composition proved in `GRN.Dynamics.Sensor`.
 
 * **Sensor.** `unique_equilibrium_of_pmatrix`: if the vector field's Jacobian is a P-matrix on a
-  concentration box, the field is injective there (Gale–Nikaido), so there is at most one steady state —
-  the dose-response has a single operating point. `isPMatrix_diagonal` discharges the P-matrix hypothesis
+  concentration box, the field is injective there (Gale–Nikaido), so there is at most one steady state.
+  The dose-response has a single operating point. `isPMatrix_diagonal` discharges the P-matrix hypothesis
   in the base case (a diagonal Jacobian: degradation with no cross-regulation).
 * **Switch.** `jacobian_nonsingular_of_signDefinite`: if every cycle-cover term of the Jacobian shares the
-  diagonal's sign — the absence of a positive feedback cycle — the Jacobian is nonsingular, so the steady
+  diagonal's sign (the absence of a positive feedback cycle), the Jacobian is nonsingular, so the steady
   state is locally isolated. Multistationarity (a bistable switch) therefore *requires* a positive
   feedback cycle (Thomas / Soulé).
 
@@ -38,7 +38,7 @@ theorem unique_equilibrium_of_pmatrix {n : ℕ} {F : (Fin n → ℝ) → (Fin n 
     (hFab : F a = F b) : a = b :=
   injOn_of_pmatrix_fderiv hF hP ha hb hFab
 
-/-- A diagonal matrix with a positive diagonal is a P-matrix — the assembled sensor Jacobian's base case,
+/-- A diagonal matrix with a positive diagonal is a P-matrix, the assembled sensor Jacobian's base case,
 where degradation gives the (sign-flipped) diagonal and there is no cross-regulation. -/
 theorem isPMatrix_diagonal {n : ℕ} {d : Fin n → ℝ} (hd : ∀ i, 0 < d i) :
     (Matrix.diagonal d).IsPMatrix := by
@@ -50,7 +50,7 @@ theorem isPMatrix_diagonal {n : ℕ} {d : Fin n → ℝ} (hd : ∀ i, 0 < d i) :
   rw [hsub, Matrix.det_diagonal]
   exact Finset.prod_pos (fun i _ => hd (i : Fin n))
 
-/-- An upper-triangular matrix with positive diagonal is a P-matrix — the feedforward (acyclic) sensor
+/-- An upper-triangular matrix with positive diagonal is a P-matrix, the feedforward (acyclic) sensor
 case, where a topological order makes the assembled Jacobian triangular and degradation makes its
 (sign-flipped) diagonal positive. Every principal submatrix inherits triangularity, so its determinant
 is the product of positive diagonal entries. -/
@@ -64,7 +64,7 @@ theorem isPMatrix_of_upperTriangular {n : ℕ} {M : Matrix (Fin n) (Fin n) ℝ}
   rw [Matrix.det_of_upperTriangular hUT']
   exact Finset.prod_pos (fun i _ => hpos _)
 
-/-- A lower-triangular matrix with positive diagonal is a P-matrix — the orientation the assembled
+/-- A lower-triangular matrix with positive diagonal is a P-matrix, the orientation the assembled
 Jacobian actually takes (species `i` is produced by strictly earlier species `j < i`), obtained from the
 upper-triangular lemma by transposition. -/
 theorem isPMatrix_of_lowerTriangular {n : ℕ} {M : Matrix (Fin n) (Fin n) ℝ}
@@ -74,7 +74,7 @@ theorem isPMatrix_of_lowerTriangular {n : ℕ} {M : Matrix (Fin n) (Fin n) ℝ}
   exact (isPMatrix_of_upperTriangular hLT hposT).transpose
 
 /-- **Switch (Thomas / Soulé).** If every cycle-cover term of the Jacobian shares the diagonal term's
-sign — no positive feedback cycle contributes an opposing term — the Jacobian is nonsingular. Hence a
+sign (no positive feedback cycle contributes an opposing term), the Jacobian is nonsingular. Hence a
 locally isolated steady state, and multistationarity requires a positive feedback cycle. -/
 theorem jacobian_nonsingular_of_signDefinite {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ)
     (hnn : ∀ σ : Equiv.Perm (Fin n), 0 ≤ coverTerm M σ) (hdiag : 0 < coverTerm M 1) :
@@ -83,19 +83,19 @@ theorem jacobian_nonsingular_of_signDefinite {n : ℕ} (M : Matrix (Fin n) (Fin 
 
 /-- The sign-definite-negative companion: if every cycle-cover term is nonpositive with a negative
 diagonal term, the Jacobian determinant is negative. A structural building block (equilibrium index /
-parity), *not* an oscillation criterion — see the oscillator note. -/
+parity), *not* an oscillation criterion. See the oscillator note. -/
 theorem jacobian_det_neg_of_signDefinite {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ)
     (hnp : ∀ σ : Equiv.Perm (Fin n), coverTerm M σ ≤ 0) (hdiag : coverTerm M 1 < 0) :
     M.det < 0 :=
   det_neg_of_coverTerm_nonpos M hnp hdiag
 
 /-!
-## Oscillator — why the determinant engine does not reach it
+## Oscillator: why the determinant engine does not reach it
 
-The Tier-1 oscillator certificate requires a *negative* feedback cycle (Thomas / Snoussi: necessary for
+The oscillator certificate requires a *negative* feedback cycle (Thomas / Snoussi: necessary for
 sustained oscillation). This is not a determinant/injectivity fact: the determinant-cycle-sign engine
 above certifies uniqueness of equilibria (multistationarity), and oscillation is independent of
-equilibrium count — the repressilator has a *unique* equilibrium yet oscillates, so no injectivity or
+equilibrium count. The repressilator has a *unique* equilibrium yet oscillates, so no injectivity or
 `det ≠ 0` argument can preclude a limit cycle.
 
 The "no negative cycle ⟹ no sustained oscillation" theorem is spectral: it goes through the Jacobian's

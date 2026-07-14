@@ -3,17 +3,16 @@ import GRN.Dynamics.Interpret
 import GRN.Dynamics.EC50
 
 /-!
-# Tier 2 — general-GRN EC50 through the interpreter
+# General-GRN EC50 through the interpreter
 
-The comprehensive close of Frontier A: for an arbitrary acyclic, well-posed `GRN`, the reporter's steady
-level as a function of a chosen inducer's level has a **unique EC50**, obtained through the functor's real
-WF-recursion `steadyPoint`.
+For an arbitrary acyclic, well-posed `GRN`, the reporter's steady level as a function of a chosen
+inducer's level has a **unique EC50**, obtained through the functor's real WF-recursion `steadyPoint`.
 
-The work is discharging the abstract hypotheses of `steadyFam_ec50` for the interpreted production:
-* **continuity** — `prodOf` is jointly continuous in `(inducer level, state)` on the nonnegative orthant,
+This discharges the abstract hypotheses of `steadyFam_ec50` for the interpreted production:
+* **continuity**: `prodOf` is jointly continuous in `(inducer level, state)` on the nonnegative orthant,
   for every operator kind (`prodOf_param_continuousOn`);
-* **monotonicity** — raising the inducer does not lower any steady value (via `opRate_mono` / `steady_le`);
-* **strictness** — a strictly-activating drive from the inducer to the reporter makes the dose-response
+* **monotonicity**: raising the inducer does not lower any steady value (via `opRate_mono` / `steady_le`);
+* **strictness**: a strictly-activating drive from the inducer to the reporter makes the dose-response
   injective (the `steadyFam_lt_base` / `steadyFam_lt_step` engine).
 -/
 
@@ -67,7 +66,7 @@ theorem hill2_continuousOn {a0 a1 a2 a3 K1 K2 n1 n2 : ℝ}
   simp only [hill2]
   exact hnum.div hden (fun p hp => ne_of_gt (hdenpos p hp))
 
-/-- Continuity of a two-input Hill response fed by two nonnegative continuous inputs — the composition
+/-- Continuity of a two-input Hill response fed by two nonnegative continuous inputs, the composition
 form, stated directly (no product-map composition) to keep definitional checking cheap. -/
 theorem hill2_comp_continuousOn {X : Type*} [TopologicalSpace X] {D : Set X}
     {a0 a1 a2 a3 K1 K2 n1 n2 : ℝ} (hK1 : 0 < K1) (hK2 : 0 < K2) (hn1 : 0 ≤ n1) (hn2 : 0 ≤ n2)
@@ -126,7 +125,7 @@ def _root_.Node.Regular (op : Node) : Prop :=
 /-! ## Production is continuous in the inducer level -/
 
 /-- An operator's rate is jointly continuous in the inducer level and the state, on the nonnegative
-orthant — for every operator kind. -/
+orthant, for every operator kind. -/
 theorem opRate_param_continuousOn (g : GRN) (base : String → ℝ) (s : String) (hbase : ∀ id, 0 ≤ base id)
     (op : Node) (hreg : op.Regular) :
     ContinuousOn (fun v : ℝ × (g.Species → ℝ) =>
@@ -216,7 +215,7 @@ def _root_.GRN.WellPosed.setInducer {g : GRN} (wp : g.WellPosed) (s : String) (u
 /-- **General-GRN EC50 through the real `steadyPoint`.** For an acyclic, well-posed GRN whose operators are
 `Regular`, if the reporter's steady level is strictly monotone in a chosen inducer's level on `[lo, hi]`,
 then it has a unique EC50. Continuity is discharged automatically (`prodOf_param_continuousOn` +
-`steadyFam_continuousOn`); strict monotonicity — which depends on the drive from inducer to reporter — is
+`steadyFam_continuousOn`); strict monotonicity, which depends on the drive from inducer to reporter, is
 the one hypothesis, dischargeable via the `steadyFam_lt_base` / `steadyFam_lt_step` engine. -/
 theorem grn_reporter_ec50 (g : GRN) (hac : g.Acyclic) (wp : g.WellPosed) (s : String) (top : g.Species)
     (hreg : ∀ op ∈ g.operators, op.Regular) {lo hi : ℝ} (hlo : 0 ≤ lo) (hle : lo ≤ hi)
@@ -236,5 +235,80 @@ theorem grn_reporter_ec50 (g : GRN) (hac : g.Acyclic) (wp : g.WellPosed) (s : St
     · exact prodOf_param_continuousOn g wp.inducer s wp.inducer_nonneg hreg i
   exact steadyFam_ec50 (g.regulates_wf hac) wp.γ
     (fun u i x => g.prodOf (inducerAt wp.inducer s u) i x) top hle hcont hstrict hL
+
+/-! ## `MonoActivating` from graph sign data -/
+
+/-- **`MonoActivating` from the interaction graph.** For a well-posed GRN whose operators are `Regular`,
+carry no `sum`, and whose per-port interaction-graph signs are all `+1` (pure activation), every operator
+is `MonoActivating`. This discharges the per-operator hypotheses of `grn_reporter_ec50` and
+`grn_doseResponse_mono` directly from the graph, with no hand-supplied kinetic inequalities. -/
+theorem monoActivating_of_graph (g : GRN) (wp : g.WellPosed)
+    (hreg : ∀ op ∈ g.operators, op.Regular)
+    (hnosum : ∀ op ∈ g.operators, op.kind ≠ NodeKind.sum)
+    (hsign : ∀ op ∈ g.operators, ∀ sgn ∈ operatorInputSigns op, sgn = some (1 : Int))
+    (op : Node) (hop : op ∈ g.operators) : op.MonoActivating := by
+  have hS := hsign op hop
+  have pairSign_lt : ∀ {a b : ℚ}, pairSign a b = some 1 → a < b := by
+    intro a b h
+    simp only [pairSign] at h
+    split_ifs at h with h1 h2 <;> first | exact h1 | simp_all
+  have sign_le : ∀ {pairs : List (ℚ × ℚ)}, signFromPairs pairs = some 1 →
+      ∀ p ∈ pairs, p.1 ≤ p.2 := by
+    intro pairs h p hp
+    by_contra hc
+    rw [not_le] at hc
+    have hneg : pairs.any (fun q => decide (q.2 < q.1)) = true :=
+      List.any_eq_true.2 ⟨p, hp, by simpa using hc⟩
+    simp only [signFromPairs, hneg, Bool.and_true] at h
+    split_ifs at h <;> simp_all
+  rcases hk : op.kind with _ | _ | _ | _ | _ | _ | _ | _
+  · simp only [Node.MonoActivating, hk]
+  · simp only [Node.MonoActivating, hk]
+  · simp only [Node.MonoActivating, hk]
+  · simp only [Node.MonoActivating, hk]
+  · -- receiver
+    have hRr := hreg op hop
+    simp only [Node.Regular, hk] at hRr
+    simp only [Node.MonoActivating, hk]
+    refine ⟨hRr.1, hRr.2, ?_⟩
+    rcases halpha : op.alphaNums with _ | ⟨a0, _ | ⟨a1, rest⟩⟩
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · have hps := hS (pairSign a0 a1) (by simp [operatorInputSigns, hk, halpha])
+      show (a0 : ℝ) ≤ (a1 : ℝ)
+      exact_mod_cast (pairSign_lt hps).le
+  · -- hill1
+    have hRr := hreg op hop
+    simp only [Node.Regular, hk] at hRr
+    simp only [Node.MonoActivating, hk]
+    refine ⟨hRr.1, hRr.2, ?_⟩
+    rcases halpha : op.alphaNums with _ | ⟨a0, _ | ⟨a1, rest⟩⟩
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · have hps := hS (pairSign a0 a1) (by simp [operatorInputSigns, hk, halpha])
+      show (a0 : ℝ) ≤ (a1 : ℝ)
+      exact_mod_cast (pairSign_lt hps).le
+  · -- hill2
+    have hRr := hreg op hop
+    simp only [Node.Regular, hk] at hRr
+    simp only [Node.MonoActivating, hk]
+    rcases halpha : op.alphaNums with _ | ⟨a0, _ | ⟨a1, _ | ⟨a2, _ | ⟨a3, rest⟩⟩⟩⟩
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · exact absurd (hS none (by simp [operatorInputSigns, hk, halpha])) (by simp)
+    · have h1 := hS (signFromPairs [(a0, a1), (a2, a3)]) (by simp [operatorInputSigns, hk, halpha])
+      have h2 := hS (signFromPairs [(a0, a2), (a1, a3)]) (by simp [operatorInputSigns, hk, halpha])
+      have e1 : a0 ≤ a1 := sign_le h1 (a0, a1) (by simp)
+      have e2 : a2 ≤ a3 := sign_le h1 (a2, a3) (by simp)
+      have e3 : a0 ≤ a2 := sign_le h2 (a0, a2) (by simp)
+      have e4 : a1 ≤ a3 := sign_le h2 (a1, a3) (by simp)
+      refine ⟨hRr.1, hRr.2.1, hRr.2.2.1, hRr.2.2.2, ?_, ?_, ?_, ?_⟩
+      · show (a0 : ℝ) ≤ (a1 : ℝ); exact_mod_cast e1
+      · show (a2 : ℝ) ≤ (a3 : ℝ); exact_mod_cast e2
+      · show (a0 : ℝ) ≤ (a2 : ℝ); exact_mod_cast e3
+      · show (a1 : ℝ) ≤ (a3 : ℝ); exact_mod_cast e4
+  · -- sum
+    exact absurd hk (hnosum op hop)
 
 end GRN

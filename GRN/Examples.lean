@@ -18,7 +18,7 @@ open GRN
 /-! ## Edge-level certificates (kernel-checked) -/
 
 /-- A two-stage inducible relay: an inducer activates TF1, which represses GFP.
-A feedforward tree — monotone, no loops. -/
+A feedforward tree: monotone, no loops. -/
 def sensorEdges : List SignedEdge := [("aTc", "TF1", 1), ("TF1", "GFP", -1)]
 
 /-- Incoherent reconvergence: one species both activates and represses another.
@@ -89,7 +89,7 @@ def toggle : GRN :=
 #eval certifies toggle .switch        -- true
 
 /-- A `hill2` gate `alpha = [0, 100, 0, 100]`: a pass-through of its port-0 input (`X`), inert in
-port-1 (`Y`). Locks the LOICA port convention — the edge lands on `X`, not `Y`. -/
+port-1 (`Y`). Locks the LOICA port convention: the edge lands on `X`, not `Y`. -/
 def hill2Pass : Node :=
   { id := "G", kind := .hill2, nInputs := 2,
     params := [("alpha", .list [.num 0, .num 100, .num 0, .num 100])] }
@@ -98,12 +98,12 @@ def logicGate : GRN :=
   { nodes := [ species "X" .regulator, species "Y" .regulator, hill2Pass, species "Z" .reporter ],
     edges := [ ⟨"X", "G", 0⟩, ⟨"Y", "G", 1⟩, ⟨"G", "Z", 0⟩ ] }
 
-#eval signedInteractionGraph logicGate  -- [("X", "Z", 1)] — port-0 (X) drives, port-1 (Y) inert
+#eval signedInteractionGraph logicGate  -- [("X", "Z", 1)]: port-0 (X) drives, port-1 (Y) inert
 
 /-! ### GRN-level certificates, kernel-checked
 
 With rational kinetics the sign extraction reduces in the kernel, so a certificate holds by `decide`
-directly on the `GRN` — not merely on its precomputed signed graph. -/
+directly on the `GRN`, not merely on its precomputed signed graph. -/
 
 example : signedInteractionGraph logicGate = [("X", "Z", 1)] := by decide
 example : isMonotone sensor = true := by decide

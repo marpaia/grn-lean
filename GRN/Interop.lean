@@ -6,7 +6,7 @@ import GRN.Certificate
 
 Parses the JSON a quiver `GRN.to_dict` emits into a `GRN`, and emits a JSON
 report: the signed interaction graph and each structural certificate. This is
-the design/validation handoff — a design tool hands over a candidate network
+the design/validation handoff: a design tool hands over a candidate network
 and gets back a kernel-checkable structural verdict, in the spirit of an EDA
 formal sign-off complementing simulation.
 -/
@@ -41,7 +41,7 @@ def parseKind : String → Except String NodeKind
   | k            => .error s!"unknown node kind: {k}"
 
 /-- Read the `alpha` parameter (the sign-bearing one) from a params object.
-Other parameters are threaded in when the Tier-2 vector field needs them. -/
+Other parameters are threaded in when the Hill-kinetic vector field needs them. -/
 def paramsFromJson (j : Json) : List (String × ParamValue) :=
   match j.getObjVal? "alpha" with
   | .ok a  => [("alpha", jsonToParam a)]
