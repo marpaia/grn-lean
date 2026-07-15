@@ -101,10 +101,14 @@ Every result below is sorry-free.
 - **Sensor: the functor, end to end.** An arbitrary acyclic, well-posed `GRN` is interpreted into a
   feedforward system whose steady state is unique and constructive (`grn_unique_steady`), nonnegative, and
   monotone in the inducer (`grn_doseResponse_mono`). Through the actual well-founded-recursion steady state
-  the reporter's dose-response has a **unique EC50** (`grn_reporter_ec50`); for a mixed
-  activation/repression (reconvergent) circuit the balancing spin read off the monotonicity certificate
-  gives a directional dose-response (`grn_reconvergent_doseResponse_of_monotone`). The analytic content
-  (Hill monotonicity and strictness, cascade composition, EC50 uniqueness) is in `GRN.Dynamics.Sensor`.
+  the reporter's dose-response has a **unique EC50** (`grn_reporter_ec50`); a strict monotone path from the
+  inducer to the reporter, a chain of strictly-activating regulation edges read off the graph, discharges
+  the strict-monotonicity side condition, so the unique EC50 follows from the wiring alone
+  (`grn_reporter_ec50_of_strictPath`, in `GRN.Dynamics.Reachability`, with a fully concrete activating
+  cascade worked in `GRN.Dynamics.ReachabilityExample`). For a mixed activation/repression
+  (reconvergent) circuit the balancing spin read off the monotonicity certificate gives a directional
+  dose-response (`grn_reconvergent_doseResponse_of_monotone`). The analytic content (Hill monotonicity and
+  strictness, cascade composition, EC50 uniqueness) is in `GRN.Dynamics.Sensor`.
 - **Sensor: assembled ODE.** For the full coupled field `F x = e(x) − γ·x`, a topological enumeration read
   off the acyclic interaction graph (`topoEquiv`) makes the negated-field Jacobian triangular with positive
   diagonal, hence a P-matrix, so Gale–Nikaido gives **at most one steady state on any concentration box**
@@ -117,8 +121,12 @@ Every result below is sorry-free.
   Soulé). The cover-sign core (`GRN.Dynamics.JacobianSigns`) reuses crnt-lean's determinant engine.
 - **Oscillator: open.** The negative-cycle-for-oscillation rule is _not_ a determinant/injectivity fact
   (the repressilator has a unique equilibrium yet oscillates), so the determinant machinery does not reach
-  it; it needs Hopf / monotone-cyclic-systems (Mallet-Paret–Smith, Hirsch) theory absent from crnt-lean.
-  Left unasserted, with the determinant companion (`jacobian_det_neg_of_signDefinite`) as a building block.
+  it. It splits into two guarantees needing disjoint machinery: the _necessary-condition_ direction
+  ("no negative cycle ⟹ no attracting oscillation") is monotone-cyclic-feedback theory (Mallet-Paret–Smith,
+  Hirsch), absent from crnt-lean; the _realization_ direction (a negative-loop design does oscillate) is a
+  Hopf bifurcation, whose spectral stack (Routh–Hurwitz, crossing gates, center-manifold reduction,
+  normal-form limit cycle) does live in crnt-lean, gated on differentiable flow-dependence. Neither is
+  asserted; the determinant companion (`jacobian_det_neg_of_signDefinite`) is a structural building block.
 
 These theorems assume well-formedness of the design: `WellPosed` (positive degradation and rate
 constants, alpha vectors carrying their levels) and `Node.Regular`. The switch additionally assumes
