@@ -98,11 +98,19 @@ above certifies uniqueness of equilibria (multistationarity), and oscillation is
 equilibrium count. The repressilator has a *unique* equilibrium yet oscillates, so no injectivity or
 `det ≠ 0` argument can preclude a limit cycle.
 
-The "no negative cycle ⟹ no sustained oscillation" theorem is spectral: it goes through the Jacobian's
-eigenvalues (a Hopf bifurcation needs a complex-conjugate pair crossing the imaginary axis) or through
-the monotone-cyclic-systems theory of Mallet-Paret–Smith and Hirsch. That machinery lives outside this
-library and crnt-lean, so there is no oscillator guarantee here. The determinant companion above is a
-structural building block, not a stand-in for it.
+Two independent guarantees, needing disjoint machinery, sit beyond the determinant engine:
+
+* The *necessary-condition* direction "no negative cycle ⟹ no sustained oscillation" is the
+  monotone-cyclic-feedback theory of Mallet-Paret–Smith and Hirsch (a system with no negative cycle is
+  cooperative after a gauge flip, hence has no attracting periodic orbit). That order-theoretic
+  machinery is absent from Mathlib and crnt-lean.
+* The *realization* direction — a negative-loop design does oscillate — is spectral: a Hopf
+  bifurcation, a complex-conjugate eigenvalue pair crossing the imaginary axis. That stack does live in
+  crnt-lean (Routh–Hurwitz, the Hopf crossing gates, center-manifold reduction, the normal-form limit
+  cycle), gated only on the differentiable dependence of the flow on its initial condition.
+
+Neither is asserted here. The determinant companion above is a structural building block for the
+equilibrium count, not a stand-in for either.
 -/
 
 end GRN.Dynamics
