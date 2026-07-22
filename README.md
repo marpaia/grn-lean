@@ -12,10 +12,9 @@ structural certificates that validate a design.**
 
 Electronic design automation pairs a _synthesis_ tool with a _formal verification_ tool, because
 simulation only exercises the inputs you sample. Genetic circuit design has the same split. A
-generator like [quiver](https://github.com/marpaia/quiver) proposes topologies and a simulator (LOICA)
-scores a _sampled_ parameter ensemble: the SPICE half. `grn-lean` is the other half: a design is
-handed over and gets back a **kernel-checked structural certificate**, a guarantee that holds for _every_
-parameterization by the wiring alone.
+generator proposes topologies and a simulator (LOICA) scores a _sampled_ parameter ensemble: the
+SPICE half. `grn-lean` is the other half: a design is handed over and gets back a **kernel-checked
+structural certificate**, a guarantee that holds for _every_ parameterization by the wiring alone.
 
 A certificate is a graph-theoretic predicate that is a proven _necessary_ condition for a target
 dynamical regime, read from the topology with no simulation:
@@ -28,12 +27,12 @@ dynamical regime, read from the topology with no simulation:
 
 ## The design/validation handoff
 
-quiver serializes a design; `grn-lean` reads it and returns the signed interaction graph and each
-certificate.
+A design tool serializes a candidate; `grn-lean` reads it and returns the signed interaction graph and
+each certificate.
 
 ```bash
-# a quiver design in, a machine-checked structural verdict out
-python -c 'import json,quiver.grn as g; ...' | lake exe analyze
+# a serialized design in, a machine-checked structural verdict out
+lake exe analyze design.json
 ```
 
 ```json
@@ -49,7 +48,7 @@ python -c 'import json,quiver.grn as g; ...' | lake exe analyze
 }
 ```
 
-The same design object round-trips field-for-field from quiver's `GRN.to_dict` (see `GRN.Interop`).
+The JSON encoding of the design object round-trips field-for-field (see `GRN.Interop`).
 
 ## What is checked, and the one boundary
 
@@ -63,8 +62,8 @@ example : isMonotone sensor = true := by decide                         -- and d
 example : certifies toggle .switch = true := by decide
 ```
 
-Kinetics are exact rationals (`ℚ`), so the check runs end-to-end in the kernel: quiver's JSON decimals
-parse to `ℚ` without loss, and the edge sign is read by _comparing_ alpha entries (`α₀ < α₁`), which
+Kinetics are exact rationals (`ℚ`), so the check runs end-to-end in the kernel: the JSON decimals of a
+serialized design parse to `ℚ` without loss, and the edge sign is read by _comparing_ alpha entries (`α₀ < α₁`), which
 reduces in the kernel, where subtracting would not, since `ℚ` normalizes via `Nat.gcd`. The only
 residual trust is that the rational parsed from a datum equals the intended measured value; that is data
 provenance, not a gap in the proof.
@@ -72,7 +71,7 @@ provenance, not a gap in the proof.
 ## Layout
 
 - `GRN.Basic`, the design object: species (`regulator`/`reporter`/`supplement`) and operators
-  (`source`/`receiver`/`hill1`/`hill2`/`sum`), mirroring quiver's `quiver.grn`.
+  (`source`/`receiver`/`hill1`/`hill2`/`sum`).
 - `GRN.InteractionGraph`: the signed species-to-species graph and the edge-sign rule.
 - `GRN.Certificate`: the decidable monotonicity, positive-loop, and negative-loop certificates.
 - `GRN.Examples`: worked circuits (sensor, toggle, repressilator) with kernel-checked certificates.
@@ -140,13 +139,10 @@ at that point. The interaction-graph and Thomas-circuit content is new: `crnt-le
 mass-action reaction networks, whose kinetics cannot represent repression, so the Hill-kinetic view is
 formalized here.
 
-## Relationship to the neighbours
+## Relationship to crnt-lean
 
-- **quiver**: the design tool. It proposes diverse topologies and scores them by simulation; `grn-lean`
-  signs the delivered portfolio off. Portfolio diversity hedges the simulation proxy; a certificate
-  eliminates the proxy for the property it proves.
-- **crnt-lean**: the mass-action reaction-network theory `grn-lean` borrows general dynamics and
-  fixed-point math from.
+`crnt-lean` is the mass-action reaction-network theory `grn-lean` borrows general dynamics and
+fixed-point math from.
 
 ## License
 

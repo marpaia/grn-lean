@@ -7,8 +7,7 @@ Collapses a GRN's operators to a signed, directed species-to-species
 interaction graph: an edge `(src, dst, sign)` records that `src` regulates
 `dst` with the given sign (`+1` activation, `-1` repression, `0` non-monotone).
 
-Edge signs are read from operator kinetics, matching quiver's
-`quiver.objective.certificate.signed_interaction_graph`. A single-input Hill or
+Edge signs are read from operator kinetics. A single-input Hill or
 receiver operator with `alpha = [a0, a1]` activates when `a1 > a0` and represses
 when `a1 < a0`. A two-input `hill2` operator contributes a per-input sign read
 from its four-entry response vector.

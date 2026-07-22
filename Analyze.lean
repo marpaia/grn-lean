@@ -3,13 +3,13 @@ import GRN.Interop
 /-!
 # `analyze` — the design/validation sign-off tool
 
-Reads a quiver `GRN` as JSON (from a file argument or stdin) and prints its
-structural report: the signed interaction graph and each certificate. This is
-the executable half of the quiver ↔ grn-lean bridge.
+Reads a `GRN` as JSON (from a file argument or stdin) and prints its structural
+report: the signed interaction graph and each certificate. This is the
+executable half of the design/validation bridge.
 
 ```
 lake exe analyze design.json
-quiver-emit | lake exe analyze
+cat design.json | lake exe analyze
 ```
 -/
 

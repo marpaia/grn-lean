@@ -2,9 +2,9 @@ import Lean.Data.Json
 import GRN.Certificate
 
 /-!
-# quiver ↔ grn-lean interop
+# JSON interop
 
-Parses the JSON a quiver `GRN.to_dict` emits into a `GRN`, and emits a JSON
+Parses a serialized design into a `GRN`, and emits a JSON
 report: the signed interaction graph and each structural certificate. This is
 the design/validation handoff: a design tool hands over a candidate network
 and gets back a kernel-checkable structural verdict, in the spirit of an EDA
@@ -65,7 +65,7 @@ def edgeFromJson (j : Json) : Except String Edge := do
   let port := (j.getObjValAs? Nat "port").toOption.getD 0
   return { source := source, target := target, port := port }
 
-/-- Parse a whole GRN from the JSON quiver emits. -/
+/-- Parse a whole GRN from its JSON encoding. -/
 def grnFromJson (j : Json) : Except String GRN := do
   let nodesArr ← (← j.getObjVal? "nodes").getArr?
   let edgesArr ← (← j.getObjVal? "edges").getArr?

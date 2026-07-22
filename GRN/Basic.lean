@@ -7,11 +7,11 @@ A gene-regulatory network as a bipartite graph of genetic *species*
 (`regulator`, `reporter`, `supplement`) and regulatory *operators*
 (`source`, `receiver`, `hill1`, `hill2`, `sum`), wired by directed edges.
 
-This mirrors quiver's `quiver.grn.GRN` field-for-field so a design serialized
-by quiver round-trips into Lean (see `GRN.Interop`). It is the candidate a
-design search proposes and hands here for a machine-checked structural verdict.
+A design serialized as JSON round-trips into Lean field-for-field (see
+`GRN.Interop`). It is the candidate a design search proposes and hands here for
+a machine-checked structural verdict.
 
-Kinetics are exact rationals (`ℚ`): quiver's JSON numbers are decimal literals,
+Kinetics are exact rationals (`ℚ`): the JSON numbers are decimal literals,
 so they parse without loss, and `ℚ` comparisons reduce in the Lean kernel, so
 the sign of a regulatory edge, and hence every certificate, is decidable by
 `decide` rather than stranded behind an opaque `Float`.
@@ -20,7 +20,7 @@ The datatypes are top-level; their operations live in the `GRN` namespace.
 -/
 
 /-- A node parameter value: a rational, a string, or a (possibly nested) list,
-mirroring the JSON shapes quiver emits for `alpha`, `K`, `n`, etc. -/
+mirroring the JSON shapes of `alpha`, `K`, `n`, etc. -/
 inductive ParamValue where
   | num  : ℚ → ParamValue
   | str  : String → ParamValue

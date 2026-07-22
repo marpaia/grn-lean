@@ -1,7 +1,7 @@
 # The LOICA vector field (reference)
 
 The exact ODE LOICA integrates, transcribed from `~/git/RudgeLab/LOICA` so the Lean vector
-field matches the simulator that scores quiver designs. Sign conventions here are the source of truth
+field matches the simulator that scores candidate designs. Sign conventions here are the source of truth
 for `GRN.InteractionGraph`.
 
 ## Per-species state equation
@@ -52,8 +52,7 @@ Let `r = (u/K)^n` for input concentration `u`.
 
 LOICA wires `hill2` inputs in port order (`simulate.py:151-159`): port 0 → `input_repressor1` (r₁),
 port 1 → r₂, and integrates `a₀ + a₁·r₁ + a₂·r₂ + a₃·r₁·r₂`. So `a₁` is port 0's solo coefficient and
-`a₂` is port 1's. Both quiver's `certificate.py` and `grn-lean`'s `operatorInputSigns` read the vector
-with this convention: port 0's sign from `[a₁−a₀, a₃−a₂]`, port 1's from `[a₂−a₀, a₃−a₁]`.
+`a₂` is port 1's. `grn-lean`'s `operatorInputSigns` reads the vector with this convention: port 0's sign from `[a₁−a₀, a₃−a₂]`, port 1's from `[a₂−a₀, a₃−a₁]`.
 
 ## Consequences for the dynamical theorems
 
