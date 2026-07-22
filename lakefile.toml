@@ -8,7 +8,8 @@ rev = "v4.31.0"
 
 [[require]]
 name = "crnt-lean"
-path = "../crnt-lean"
+git = "https://github.com/marpaia/crnt-lean.git"
+rev = "99137993e729c8add247388718a22a0e0f393dab"
 
 [[lean_lib]]
 name = "GRN"

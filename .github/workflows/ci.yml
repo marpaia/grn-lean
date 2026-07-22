@@ -21,25 +21,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # grn-lean resolves crnt-lean through the sibling path `../crnt-lean` (see lakefile.toml), so
-      # both repositories are checked out side by side under the workspace before the build runs.
-      - name: Checkout crnt-lean (path dependency)
-        uses: actions/checkout@v4
-        with:
-          repository: marpaia/crnt-lean
-          path: crnt-lean
+      - uses: actions/checkout@v4
 
-      - name: Checkout grn-lean
-        uses: actions/checkout@v4
-        with:
-          path: grn-lean
-
-      # Whole-tree backstop: the interaction-graph certificates and the Tier-2 dynamical bridges carry
-      # no `sorry`, and no kernel check uses `native_decide` (every `by decide` emits a real proof term).
+      # Whole-tree backstop: the interaction-graph certificates and the dynamical bridges carry no
+      # `sorry`, and no kernel check uses `native_decide` (every `by decide` emits a real proof term).
       # Each keyword is matched only as a standalone token, so prose ("sorry-free") and backtick-quoted
       # mentions in docstrings do not trip the check.
       - name: No sorry or native_decide in sources
-        working-directory: grn-lean
         run: |
           if grep -rnP '(?<![\w`-])sorry(?![\w`-])' --include='*.lean' GRN Analyze.lean GRN.lean; then
             echo "::error::bare 'sorry' found in sources"; exit 1
@@ -48,11 +36,10 @@ jobs:
             echo "::error::'native_decide' found in sources"; exit 1
           fi
 
-      # Builds the whole GRN library (core certificates plus the Tier-2 Dynamics frontier and the
-      # Interop JSON bridge) and the analyze executable. crnt-lean compiles from source; mathlib is
-      # served from the shared olean cache.
+      # Builds the whole GRN library (core certificates, the Dynamics layer, and the Interop JSON
+      # bridge) and the analyze executable. crnt-lean compiles from source; mathlib is served from
+      # the shared olean cache.
       - uses: leanprover/lean-action@v1
         with:
-          lake-package-directory: grn-lean
           build-args: GRN analyze
           use-mathlib-cache: true
