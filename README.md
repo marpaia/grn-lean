@@ -7,14 +7,19 @@
 ![proofs: sorry-free](https://img.shields.io/badge/proofs-sorry--free-brightgreen)
 [![built on: crnt-lean](https://img.shields.io/badge/built%20on-crnt--lean-8A2BE2)](https://github.com/marpaia/crnt-lean)
 
-**Formalizing gene-regulatory circuits in the Hill-kinetic ODE perspective, and machine-checking the
-structural certificates that validate a design.**
+**Formal verification for [LOICA](https://github.com/RudgeLab/LOICA) circuits: machine-checked
+structural certificates for the Hill-kinetic networks LOICA simulates.**
 
-Electronic design automation pairs a _synthesis_ tool with a _formal verification_ tool, because
-simulation only exercises the inputs you sample. Genetic circuit design has the same split. A
-generator proposes topologies and a simulator (LOICA) scores a _sampled_ parameter ensemble: the
-SPICE half. `grn-lean` is the other half: a design is handed over and gets back a **kernel-checked
-structural certificate**, a guarantee that holds for _every_ parameterization by the wiring alone.
+LOICA is where a genetic circuit gets built and scored. You assemble a `GeneticNetwork` from
+`GeneProduct`s and Hill operators, hand it a parameter set, and integrate. That is the SPICE half of
+the design loop, and it is indispensable. It is also, like SPICE, a _sampling_ argument: it tells you
+what the circuit does at the parameter points you swept, and electronic design automation has never
+shipped on that alone. It pairs the simulator with a formal verification tool that discharges a
+property over the whole space at once.
+
+`grn-lean` is that second tool for LOICA. It reads the same network LOICA would integrate and returns
+a **kernel-checked structural certificate**: a guarantee that follows from the _wiring_ alone, and so
+holds at every parameterization, including the corners an ensemble sweep never reached.
 
 A certificate is a graph-theoretic predicate that is a proven _necessary_ condition for a target
 dynamical regime, read from the topology with no simulation:
@@ -27,8 +32,9 @@ dynamical regime, read from the topology with no simulation:
 
 ## The design/validation handoff
 
-A design tool serializes a candidate; `grn-lean` reads it and returns the signed interaction graph and
-each certificate.
+A LOICA network serializes to JSON; `grn-lean` reads it and returns the signed interaction graph and
+each certificate. Where LOICA hands back trajectories for one parameter set, `analyze` hands back a
+verdict over all of them.
 
 ```bash
 # a serialized design in, a machine-checked structural verdict out
@@ -50,6 +56,21 @@ lake exe analyze examples/design.json
 
 The JSON encoding of the design object round-trips field-for-field (see `GRN.Interop`).
 
+## The same object LOICA integrates
+
+`GRN.Basic` mirrors LOICA's model one for one: the three `GeneProduct` roles (`regulator`, `reporter`,
+`supplement`) and the five operators (`Source`, `Receiver`, `Hill1`, `Hill2`, `Sum`), wired by directed
+edges whose `port` index follows LOICA's own input ordering, so a `hill2` operator's `alpha` vector is
+read with the same convention `simulate.py` integrates it under.
+
+The edge sign is LOICA's own algebra rather than a modeling choice layered on top: `Receiver` and
+`Hill1` both express `e = (α₀ + α₁·r)/(1 + r)`, so the regulation is activating exactly when
+`α₁ > α₀` and repressing exactly when `α₁ < α₀`, which is what `GRN.pairSign` decides.
+`notes/loica-vector-field.md` transcribes the full ODE LOICA integrates, per-operator rates included,
+and that transcription is the specification the Lean vector field is built against. A certificate
+proved here is therefore a claim about the system LOICA actually simulates, not about a nearby
+idealization of it.
+
 ## What is checked, and the one boundary
 
 The certificates in `GRN.Certificate` operate on the integer-signed interaction graph, contain no
@@ -70,7 +91,7 @@ provenance, not a gap in the proof.
 
 ## Layout
 
-- `GRN.Basic`, the design object: species (`regulator`/`reporter`/`supplement`) and operators
+- `GRN.Basic`, the design object: LOICA's species (`regulator`/`reporter`/`supplement`) and operators
   (`source`/`receiver`/`hill1`/`hill2`/`sum`).
 - `GRN.InteractionGraph`: the signed species-to-species graph and the edge-sign rule.
 - `GRN.Certificate`: the decidable monotonicity, positive-loop, and negative-loop certificates.

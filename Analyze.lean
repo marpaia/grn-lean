@@ -8,8 +8,8 @@ report: the signed interaction graph and each certificate. This is the
 executable half of the design/validation bridge.
 
 ```
-lake exe analyze design.json
-cat design.json | lake exe analyze
+lake exe analyze examples/design.json
+cat examples/design.json | lake exe analyze
 ```
 -/
 
