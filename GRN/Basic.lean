@@ -43,13 +43,21 @@ def NodeKind.isOperator : NodeKind → Bool
   | .source | .receiver | .hill1 | .hill2 | .sum => true
   | _ => false
 
-/-- A node: its id, kind, display name, parameters, and (for `sum`) input arity. -/
+/-- A node: its id, kind, display name, parameters, (for `sum`) input arity, and
+the characterized part it is grounded in.
+
+`componentId` names the SBOL Component supplying this node's kinetics, and is
+`none` for an abstract node whose kinetics are tuned rather than measured. It is
+provenance: it travels with the design so a verdict is attributable to a bill of
+parts, and no structural definition reads it (`signedInteractionGraph_regroundNodes`
+in `GRN.InteractionGraph` proves the certificates cannot depend on it). -/
 structure Node where
   id : String
   kind : NodeKind
   name : String := ""
   params : List (String × ParamValue) := []
   nInputs : Nat := 1
+  componentId : Option String := none
   deriving Repr, Inhabited
 
 /-- A directed wire from `source` to `target`; `port` selects the target
@@ -101,5 +109,26 @@ def inputsOf (g : GRN) (opId : String) : List String :=
 /-- The species node ids an operator produces. -/
 def outputsOf (g : GRN) (opId : String) : List String :=
   (g.edges.filter (·.source == opId)).map (·.target)
+
+/-! ## Component grounding
+
+A node is *grounded* when its kinetics come from a characterized part rather than
+from tuning. The bill of parts travels with the design so a structural verdict is
+attributable to the components it was read from. -/
+
+/-- The bill of parts: `(node id, component id)` for every grounded node, in node order. -/
+def billOfParts (g : GRN) : List (String × String) :=
+  g.nodes.filterMap (fun n => n.componentId.map (fun c => (n.id, c)))
+
+/-- Whether every operator carrying a regulatory response is grounded in a characterized part. A
+`source` is constitutive: it reads no input and so contributes no edge to the interaction graph, leaving
+nothing for a part to be attributed to. Species carry no response at all. -/
+def fullyGrounded (g : GRN) : Bool :=
+  g.operators.all (fun n => n.kind == .source || n.componentId.isSome)
+
+/-- Reassign every node's component id by `f`, leaving id, kind, name, parameters, and arity alone.
+This is the most general change of grounding, and the certificates are invariant under it. -/
+def regroundNodes (g : GRN) (f : String → Option String) : GRN :=
+  { g with nodes := g.nodes.map (fun n => { n with componentId := f n.id }) }
 
 end GRN

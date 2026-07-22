@@ -91,4 +91,64 @@ def opEdges (g : GRN) : List Node → List SignedEdge
 every input species to every species an operator produces; inputs with no effect are dropped. -/
 def signedInteractionGraph (g : GRN) : List SignedEdge := opEdges g g.operators
 
+/-! ## Grounding invariance
+
+Which characterized part a node is grounded in is provenance, not structure: a Component fixes a node's
+kinetics, and it is those kinetics the sign extraction reads. The theorems below discharge that claim
+rather than asserting it, so `componentId` provably cannot move a certificate. -/
+
+/-- The per-port signs depend on a node only through its kind, parameters, and arity. -/
+theorem operatorInputSigns_congr {m n : Node} (hk : m.kind = n.kind) (hp : m.params = n.params)
+    (hi : m.nInputs = n.nInputs) : operatorInputSigns m = operatorInputSigns n := by
+  have ha : m.alphaNums = n.alphaNums := by simp [Node.alphaNums, Node.param?, hp]
+  unfold operatorInputSigns
+  rw [hk, ha, hi]
+
+/-- Regrounding rewires nothing, so the ported inputs of every operator are untouched. -/
+theorem inputsOf_regroundNodes (g : GRN) (f : String → Option String) (id : String) :
+    (g.regroundNodes f).inputsOf id = g.inputsOf id := rfl
+
+/-- Regrounding rewires nothing, so the produced species of every operator are untouched. -/
+theorem outputsOf_regroundNodes (g : GRN) (f : String → Option String) (id : String) :
+    (g.regroundNodes f).outputsOf id = g.outputsOf id := rfl
+
+/-- Regrounding preserves node kinds, so it commutes with selecting the operators. -/
+theorem operators_regroundNodes (g : GRN) (f : String → Option String) :
+    (g.regroundNodes f).operators
+      = g.operators.map (fun n => { n with componentId := f n.id }) := by
+  show List.filter _ (g.nodes.map _) = List.map _ (List.filter _ g.nodes)
+  induction g.nodes with
+  | nil => rfl
+  | cons n ns ih => by_cases h : n.kind.isOperator = true <;> simp [h, ih]
+
+/-- An operator's per-port signs depend on it only through its id, kind, parameters, and arity, and on
+the ambient network only through its wiring. -/
+theorem opEdgeSigns_congr {g h : GRN} {m n : Node} (he : g.edges = h.edges) (hid : m.id = n.id)
+    (hk : m.kind = n.kind) (hp : m.params = n.params) (hi : m.nInputs = n.nInputs) :
+    g.opEdgeSigns m = h.opEdgeSigns n := by
+  have hin : g.inputsOf m.id = h.inputsOf n.id := by simp [GRN.inputsOf, he, hid]
+  have hsig : operatorInputSigns m = operatorInputSigns n := operatorInputSigns_congr hk hp hi
+  unfold GRN.opEdgeSigns
+  rw [hk, hin, hsig]
+
+/-- The edges an operator contributes depend on it only through its id, kind, parameters, and arity. -/
+theorem opEdges_regroundNodes (g : GRN) (f : String → Option String) :
+    ∀ ops : List Node,
+      opEdges (g.regroundNodes f) (ops.map (fun n => { n with componentId := f n.id }))
+        = opEdges g ops
+  | [] => rfl
+  | op :: ops => by
+      have hsigns : (g.regroundNodes f).opEdgeSigns { op with componentId := f op.id }
+          = g.opEdgeSigns op := opEdgeSigns_congr rfl rfl rfl rfl rfl
+      simp [opEdges, hsigns, inputsOf_regroundNodes, outputsOf_regroundNodes,
+        opEdges_regroundNodes g f ops]
+
+/-- **Grounding is provenance.** Two designs that differ only in which Components their nodes are
+grounded in have the same signed interaction graph, so every certificate read from it agrees. A
+structural verdict therefore transfers across a change of parts library, and a Component annotation can
+never manufacture one. -/
+theorem signedInteractionGraph_regroundNodes (g : GRN) (f : String → Option String) :
+    signedInteractionGraph (g.regroundNodes f) = signedInteractionGraph g := by
+  rw [signedInteractionGraph, operators_regroundNodes, opEdges_regroundNodes, signedInteractionGraph]
+
 end GRN

@@ -8,6 +8,7 @@ on:
       - 'lakefile.toml'
       - 'lake-manifest.json'
       - 'lean-toolchain'
+      - 'conformance/**'
       - '.github/workflows/ci.yml'
   pull_request:
     paths:
@@ -15,6 +16,7 @@ on:
       - 'lakefile.toml'
       - 'lake-manifest.json'
       - 'lean-toolchain'
+      - 'conformance/**'
       - '.github/workflows/ci.yml'
 
 jobs:
@@ -43,3 +45,11 @@ jobs:
         with:
           build-args: GRN analyze
           use-mathlib-cache: true
+
+      # Runs `analyze` over the shared certificate contract in `conformance/cases.json`: the signed
+      # interaction graph and every certificate must match the pinned verdict, the bill of parts must
+      # match the grounding in the design, and `--echo` must return every field that was sent. The same
+      # corpus is checked against the Python reading in the design tool that emits these designs, so a
+      # sign-rule change that moves a verdict fails here rather than drifting silently.
+      - name: Certificate conformance
+        run: python3 conformance/check.py

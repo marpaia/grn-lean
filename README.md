@@ -47,6 +47,8 @@ lake exe analyze examples/design.json
     ["aTc", "TF1", 1],
     ["TF1", "GFP", -1]
   ],
+  "billOfParts": [["Rc", "https://synbiohub.org/public/Cello/aTc_sensor"]],
+  "fullyGrounded": false,
   "monotone": true,
   "positiveLoop": false,
   "negativeLoop": false,
@@ -54,7 +56,29 @@ lake exe analyze examples/design.json
 }
 ```
 
-The JSON encoding of the design object round-trips field-for-field (see `GRN.Interop`).
+The JSON encoding of the design object round-trips field-for-field (see `GRN.Interop`): every node's
+kinetics (`alpha`, `K`, `n`, degradation and initial concentration) and its Component grounding are
+carried in, and `analyze --echo` prints the parsed design back in the input schema so a sender can
+confirm the design that was checked is the design it sent. Losslessness is what makes the verdict a
+statement about the sender's design rather than about a projection of it, and it is what lets the
+dynamical layer build a vector field from an imported network instead of from defaults.
+
+### Grounding is provenance, and that is a theorem
+
+When a design is built from characterized parts, each node carries the `componentId` of the SBOL
+Component its kinetics were measured from, and `analyze` reports the resulting bill of parts so a
+verdict is attributable to the parts it was read from. Grounding never *moves* a verdict, and the
+library discharges that rather than asserting it:
+
+```lean
+theorem certifies_regroundNodes (g : GRN) (f : String → Option String) (r : Regime) :
+    certifies (g.regroundNodes f) r = certifies g r
+```
+
+For an arbitrary reassignment of Component identity, every certificate is unchanged. Regrounding a
+design in a different parts library, or stripping its provenance entirely, therefore cannot manufacture
+a certificate or destroy one — the verdict follows from wiring and kinetics, and a Component annotation
+is a record of where those kinetics came from.
 
 ## The same object LOICA integrates
 
@@ -89,6 +113,19 @@ reduces in the kernel, where subtracting would not, since `ℚ` normalizes via `
 residual trust is that the rational parsed from a datum equals the intended measured value; that is data
 provenance, not a gap in the proof.
 
+A design tool reading the same kinetics in floating point is a second implementation of the sign rule,
+and two implementations drift. `conformance/cases.json` is the shared contract that stops them: for a
+corpus of designs it pins the signed interaction graph and every certificate, and both the Lean reading
+here and the Python reading in the tool that emits these designs are tested against it, so a change to
+either that moves a verdict fails its own test suite. The corpus covers the shapes where a sign rule can
+plausibly disagree with itself — a `hill2` operator non-monotone in an input, one whose input has no
+effect, a `sum` whose declared `inputCount` disagrees with its wiring, tied basal and saturating levels,
+and grounded kinetics whose decimals are not exactly representable in binary floating point.
+
+```bash
+lake build analyze && python3 conformance/check.py
+```
+
 ## Layout
 
 - `GRN.Basic`, the design object: LOICA's species (`regulator`/`reporter`/`supplement`) and operators
@@ -96,7 +133,8 @@ provenance, not a gap in the proof.
 - `GRN.InteractionGraph`: the signed species-to-species graph and the edge-sign rule.
 - `GRN.Certificate`: the decidable monotonicity, positive-loop, and negative-loop certificates.
 - `GRN.Examples`: worked circuits (sensor, toggle, repressilator) with kernel-checked certificates.
-- `GRN.Interop` / `Analyze`: the JSON bridge and the `analyze` executable.
+- `GRN.Interop` / `Analyze`: the lossless JSON bridge (both directions) and the `analyze` executable.
+- `conformance/`: the shared sign-rule contract and its checker.
 - `GRN.Dynamics.VectorField`, the dynamical layer: the Hill-kinetic vector field over `ℝ` and the
   dynamical theorems (below). Outside the `import GRN` umbrella, so the core stays light.
 

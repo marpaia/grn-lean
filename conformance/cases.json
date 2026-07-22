@@ -1,0 +1,4237 @@
+{
+  "cases": [
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d1_s0"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d1_s1"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d1_s2"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "reg0"
+          },
+          {
+            "port": 0,
+            "source": "reg0",
+            "target": "op1"
+          },
+          {
+            "port": 0,
+            "source": "op1",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op1",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op1",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "reg0",
+            1
+          ],
+          [
+            "reg0",
+            "out",
+            -1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d2_s0"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "reg0"
+          },
+          {
+            "port": 0,
+            "source": "reg0",
+            "target": "op1"
+          },
+          {
+            "port": 0,
+            "source": "op1",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op1",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op1",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "reg0",
+            1
+          ],
+          [
+            "reg0",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d2_s1"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "reg0"
+          },
+          {
+            "port": 0,
+            "source": "reg0",
+            "target": "op1"
+          },
+          {
+            "port": 0,
+            "source": "op1",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op1",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op1",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "reg0",
+            1
+          ],
+          [
+            "reg0",
+            "out",
+            -1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d2_s2"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "reg0"
+          },
+          {
+            "port": 0,
+            "source": "reg0",
+            "target": "op1"
+          },
+          {
+            "port": 0,
+            "source": "op1",
+            "target": "reg1"
+          },
+          {
+            "port": 0,
+            "source": "reg1",
+            "target": "op2"
+          },
+          {
+            "port": 0,
+            "source": "op2",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op1",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op1",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg1",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg1",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op2",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op2",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "reg0",
+            1
+          ],
+          [
+            "reg0",
+            "reg1",
+            -1
+          ],
+          [
+            "reg1",
+            "out",
+            -1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d3_s0"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "reg0"
+          },
+          {
+            "port": 0,
+            "source": "reg0",
+            "target": "op1"
+          },
+          {
+            "port": 0,
+            "source": "op1",
+            "target": "reg1"
+          },
+          {
+            "port": 0,
+            "source": "reg1",
+            "target": "op2"
+          },
+          {
+            "port": 0,
+            "source": "op2",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op1",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op1",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg1",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg1",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op2",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op2",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "reg0",
+            1
+          ],
+          [
+            "reg0",
+            "reg1",
+            1
+          ],
+          [
+            "reg1",
+            "out",
+            -1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d3_s1"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "reg0"
+          },
+          {
+            "port": 0,
+            "source": "reg0",
+            "target": "op1"
+          },
+          {
+            "port": 0,
+            "source": "op1",
+            "target": "reg1"
+          },
+          {
+            "port": 0,
+            "source": "reg1",
+            "target": "op2"
+          },
+          {
+            "port": 0,
+            "source": "op2",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op1",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op1",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg1",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg1",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op2",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op2",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "reg0",
+            1
+          ],
+          [
+            "reg0",
+            "reg1",
+            -1
+          ],
+          [
+            "reg1",
+            "out",
+            -1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d3_s2"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "reg0"
+          },
+          {
+            "port": 0,
+            "source": "reg0",
+            "target": "op1"
+          },
+          {
+            "port": 0,
+            "source": "op1",
+            "target": "reg1"
+          },
+          {
+            "port": 0,
+            "source": "reg1",
+            "target": "op2"
+          },
+          {
+            "port": 0,
+            "source": "op2",
+            "target": "reg2"
+          },
+          {
+            "port": 0,
+            "source": "reg2",
+            "target": "op3"
+          },
+          {
+            "port": 0,
+            "source": "op3",
+            "target": "reg3"
+          },
+          {
+            "port": 0,
+            "source": "reg3",
+            "target": "op4"
+          },
+          {
+            "port": 0,
+            "source": "op4",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op1",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op1",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg1",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg1",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op2",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op2",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg2",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg2",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op3",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op3",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg3",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg3",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op4",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op4",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "reg0",
+            1
+          ],
+          [
+            "reg0",
+            "reg1",
+            -1
+          ],
+          [
+            "reg1",
+            "reg2",
+            -1
+          ],
+          [
+            "reg2",
+            "reg3",
+            1
+          ],
+          [
+            "reg3",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d5_s0"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "reg0"
+          },
+          {
+            "port": 0,
+            "source": "reg0",
+            "target": "op1"
+          },
+          {
+            "port": 0,
+            "source": "op1",
+            "target": "reg1"
+          },
+          {
+            "port": 0,
+            "source": "reg1",
+            "target": "op2"
+          },
+          {
+            "port": 0,
+            "source": "op2",
+            "target": "reg2"
+          },
+          {
+            "port": 0,
+            "source": "reg2",
+            "target": "op3"
+          },
+          {
+            "port": 0,
+            "source": "op3",
+            "target": "reg3"
+          },
+          {
+            "port": 0,
+            "source": "reg3",
+            "target": "op4"
+          },
+          {
+            "port": 0,
+            "source": "op4",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op1",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op1",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg1",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg1",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op2",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op2",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg2",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg2",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op3",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op3",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg3",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg3",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op4",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op4",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "reg0",
+            1
+          ],
+          [
+            "reg0",
+            "reg1",
+            1
+          ],
+          [
+            "reg1",
+            "reg2",
+            -1
+          ],
+          [
+            "reg2",
+            "reg3",
+            -1
+          ],
+          [
+            "reg3",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d5_s1"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "op0"
+          },
+          {
+            "port": 0,
+            "source": "op0",
+            "target": "reg0"
+          },
+          {
+            "port": 0,
+            "source": "reg0",
+            "target": "op1"
+          },
+          {
+            "port": 0,
+            "source": "op1",
+            "target": "reg1"
+          },
+          {
+            "port": 0,
+            "source": "reg1",
+            "target": "op2"
+          },
+          {
+            "port": 0,
+            "source": "op2",
+            "target": "reg2"
+          },
+          {
+            "port": 0,
+            "source": "reg2",
+            "target": "op3"
+          },
+          {
+            "port": 0,
+            "source": "op3",
+            "target": "reg3"
+          },
+          {
+            "port": 0,
+            "source": "reg3",
+            "target": "op4"
+          },
+          {
+            "port": 0,
+            "source": "op4",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "op0",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "op0",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op1",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op1",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg1",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg1",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op2",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op2",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg2",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg2",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op3",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op3",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "reg3",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "reg3",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "op4",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "op4",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "reg0",
+            1
+          ],
+          [
+            "reg0",
+            "reg1",
+            -1
+          ],
+          [
+            "reg1",
+            "reg2",
+            -1
+          ],
+          [
+            "reg2",
+            "reg3",
+            1
+          ],
+          [
+            "reg3",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "sensor_cascade_d5_s2"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "ind"
+          },
+          {
+            "port": 0,
+            "source": "ind",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regB",
+            "target": "repA"
+          },
+          {
+            "port": 0,
+            "source": "repA",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regA",
+            "target": "repB"
+          },
+          {
+            "port": 0,
+            "source": "repB",
+            "target": "regB"
+          },
+          {
+            "port": 0,
+            "source": "regA",
+            "target": "rep"
+          },
+          {
+            "port": 0,
+            "source": "rep",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "regA",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regA",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "regB",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regB",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "ind",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "ind",
+            "params": {
+              "K": 1.767,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 3.0
+            }
+          },
+          {
+            "id": "repA",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "repA",
+            "params": {
+              "K": 1.767,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 3.0
+            }
+          },
+          {
+            "id": "repB",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "repB",
+            "params": {
+              "K": 1.767,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 3.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          },
+          {
+            "id": "rep",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rep",
+            "params": {
+              "K": 1.767,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 3.0
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": true
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": true,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "regA",
+            1
+          ],
+          [
+            "regB",
+            "regA",
+            -1
+          ],
+          [
+            "regA",
+            "regB",
+            -1
+          ],
+          [
+            "regA",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "toggle_s0"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "regA",
+            "target": "rAB"
+          },
+          {
+            "port": 0,
+            "source": "rAB",
+            "target": "regB"
+          },
+          {
+            "port": 0,
+            "source": "regB",
+            "target": "rBC"
+          },
+          {
+            "port": 0,
+            "source": "rBC",
+            "target": "regC"
+          },
+          {
+            "port": 0,
+            "source": "regC",
+            "target": "rCA"
+          },
+          {
+            "port": 0,
+            "source": "rCA",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regC",
+            "target": "rep"
+          },
+          {
+            "port": 0,
+            "source": "rep",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "regA",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regA",
+            "params": {
+              "degradation_rate": 0.416,
+              "init_concentration": 10.0
+            }
+          },
+          {
+            "id": "regB",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regB",
+            "params": {
+              "degradation_rate": 0.416,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "regC",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regC",
+            "params": {
+              "degradation_rate": 0.416,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "rAB",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rAB",
+            "params": {
+              "K": 1.767,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 3.0
+            }
+          },
+          {
+            "id": "rBC",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rBC",
+            "params": {
+              "K": 1.767,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 3.0
+            }
+          },
+          {
+            "id": "rCA",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rCA",
+            "params": {
+              "K": 1.767,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 3.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.416,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          },
+          {
+            "id": "rep",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rep",
+            "params": {
+              "K": 1.767,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 3.0
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": true,
+          "sensor": false,
+          "switch": false
+        },
+        "monotone": false,
+        "negativeLoop": true,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "regA",
+            "regB",
+            -1
+          ],
+          [
+            "regB",
+            "regC",
+            -1
+          ],
+          [
+            "regC",
+            "regA",
+            -1
+          ],
+          [
+            "regC",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "repressilator_s0"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "ind"
+          },
+          {
+            "port": 0,
+            "source": "ind",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regB",
+            "target": "repA"
+          },
+          {
+            "port": 0,
+            "source": "repA",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regA",
+            "target": "repB"
+          },
+          {
+            "port": 0,
+            "source": "repB",
+            "target": "regB"
+          },
+          {
+            "port": 0,
+            "source": "regB",
+            "target": "rep"
+          },
+          {
+            "port": 0,
+            "source": "rep",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "regA",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regA",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "regB",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regB",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "ind",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "ind",
+            "params": {
+              "K": 0.702,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "repA",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "repA",
+            "params": {
+              "K": 0.702,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "repB",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "repB",
+            "params": {
+              "K": 0.702,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          },
+          {
+            "id": "rep",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rep",
+            "params": {
+              "K": 0.702,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": true
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": true,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "regA",
+            1
+          ],
+          [
+            "regB",
+            "regA",
+            -1
+          ],
+          [
+            "regA",
+            "regB",
+            -1
+          ],
+          [
+            "regB",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "toggle_s1"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "regA",
+            "target": "rAB"
+          },
+          {
+            "port": 0,
+            "source": "rAB",
+            "target": "regB"
+          },
+          {
+            "port": 0,
+            "source": "regB",
+            "target": "rBC"
+          },
+          {
+            "port": 0,
+            "source": "rBC",
+            "target": "regC"
+          },
+          {
+            "port": 0,
+            "source": "regC",
+            "target": "rCA"
+          },
+          {
+            "port": 0,
+            "source": "rCA",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regB",
+            "target": "rep"
+          },
+          {
+            "port": 0,
+            "source": "rep",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "regA",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regA",
+            "params": {
+              "degradation_rate": 0.502,
+              "init_concentration": 10.0
+            }
+          },
+          {
+            "id": "regB",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regB",
+            "params": {
+              "degradation_rate": 0.502,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "regC",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regC",
+            "params": {
+              "degradation_rate": 0.502,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "rAB",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rAB",
+            "params": {
+              "K": 0.702,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "rBC",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rBC",
+            "params": {
+              "K": 0.702,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "rCA",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rCA",
+            "params": {
+              "K": 0.702,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.502,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          },
+          {
+            "id": "rep",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rep",
+            "params": {
+              "K": 0.702,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": true,
+          "sensor": false,
+          "switch": false
+        },
+        "monotone": false,
+        "negativeLoop": true,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "regA",
+            "regB",
+            -1
+          ],
+          [
+            "regB",
+            "regC",
+            -1
+          ],
+          [
+            "regC",
+            "regA",
+            -1
+          ],
+          [
+            "regB",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "repressilator_s1"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "ind"
+          },
+          {
+            "port": 0,
+            "source": "ind",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regB",
+            "target": "repA"
+          },
+          {
+            "port": 0,
+            "source": "repA",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regA",
+            "target": "repB"
+          },
+          {
+            "port": 0,
+            "source": "repB",
+            "target": "regB"
+          },
+          {
+            "port": 0,
+            "source": "regA",
+            "target": "rep"
+          },
+          {
+            "port": 0,
+            "source": "rep",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "regA",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regA",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "regB",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regB",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "ind",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "ind",
+            "params": {
+              "K": 1.934,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "repA",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "repA",
+            "params": {
+              "K": 1.934,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "repB",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "repB",
+            "params": {
+              "K": 1.934,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          },
+          {
+            "id": "rep",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rep",
+            "params": {
+              "K": 1.934,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": true
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": true,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "regA",
+            1
+          ],
+          [
+            "regB",
+            "regA",
+            -1
+          ],
+          [
+            "regA",
+            "regB",
+            -1
+          ],
+          [
+            "regA",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "toggle_s2"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "regA",
+            "target": "rAB"
+          },
+          {
+            "port": 0,
+            "source": "rAB",
+            "target": "regB"
+          },
+          {
+            "port": 0,
+            "source": "regB",
+            "target": "rBC"
+          },
+          {
+            "port": 0,
+            "source": "rBC",
+            "target": "regC"
+          },
+          {
+            "port": 0,
+            "source": "regC",
+            "target": "rCA"
+          },
+          {
+            "port": 0,
+            "source": "rCA",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regB",
+            "target": "rep"
+          },
+          {
+            "port": 0,
+            "source": "rep",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "regA",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regA",
+            "params": {
+              "degradation_rate": 0.437,
+              "init_concentration": 10.0
+            }
+          },
+          {
+            "id": "regB",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regB",
+            "params": {
+              "degradation_rate": 0.437,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "regC",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regC",
+            "params": {
+              "degradation_rate": 0.437,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "rAB",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rAB",
+            "params": {
+              "K": 1.934,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "rBC",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rBC",
+            "params": {
+              "K": 1.934,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "rCA",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rCA",
+            "params": {
+              "K": 1.934,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.437,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          },
+          {
+            "id": "rep",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rep",
+            "params": {
+              "K": 1.934,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": true,
+          "sensor": false,
+          "switch": false
+        },
+        "monotone": false,
+        "negativeLoop": true,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "regA",
+            "regB",
+            -1
+          ],
+          [
+            "regB",
+            "regC",
+            -1
+          ],
+          [
+            "regC",
+            "regA",
+            -1
+          ],
+          [
+            "regB",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "repressilator_s2"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "ind"
+          },
+          {
+            "port": 0,
+            "source": "ind",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regB",
+            "target": "repA"
+          },
+          {
+            "port": 0,
+            "source": "repA",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regA",
+            "target": "repB"
+          },
+          {
+            "port": 0,
+            "source": "repB",
+            "target": "regB"
+          },
+          {
+            "port": 0,
+            "source": "regA",
+            "target": "rep"
+          },
+          {
+            "port": 0,
+            "source": "rep",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "regA",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regA",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "regB",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regB",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "ind",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "ind",
+            "params": {
+              "K": 0.857,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 4.0
+            }
+          },
+          {
+            "id": "repA",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "repA",
+            "params": {
+              "K": 0.857,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 4.0
+            }
+          },
+          {
+            "id": "repB",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "repB",
+            "params": {
+              "K": 0.857,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 4.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          },
+          {
+            "id": "rep",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rep",
+            "params": {
+              "K": 0.857,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 4.0
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": true
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": true,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "regA",
+            1
+          ],
+          [
+            "regB",
+            "regA",
+            -1
+          ],
+          [
+            "regA",
+            "regB",
+            -1
+          ],
+          [
+            "regA",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "toggle_s3"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "regA",
+            "target": "rAB"
+          },
+          {
+            "port": 0,
+            "source": "rAB",
+            "target": "regB"
+          },
+          {
+            "port": 0,
+            "source": "regB",
+            "target": "rBC"
+          },
+          {
+            "port": 0,
+            "source": "rBC",
+            "target": "regC"
+          },
+          {
+            "port": 0,
+            "source": "regC",
+            "target": "rCA"
+          },
+          {
+            "port": 0,
+            "source": "rCA",
+            "target": "regA"
+          },
+          {
+            "port": 0,
+            "source": "regC",
+            "target": "rep"
+          },
+          {
+            "port": 0,
+            "source": "rep",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "regA",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regA",
+            "params": {
+              "degradation_rate": 0.452,
+              "init_concentration": 10.0
+            }
+          },
+          {
+            "id": "regB",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regB",
+            "params": {
+              "degradation_rate": 0.452,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "regC",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "regC",
+            "params": {
+              "degradation_rate": 0.452,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "rAB",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rAB",
+            "params": {
+              "K": 0.857,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 4.0
+            }
+          },
+          {
+            "id": "rBC",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rBC",
+            "params": {
+              "K": 0.857,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 4.0
+            }
+          },
+          {
+            "id": "rCA",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rCA",
+            "params": {
+              "K": 0.857,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 4.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.452,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          },
+          {
+            "id": "rep",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "rep",
+            "params": {
+              "K": 0.857,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 4.0
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": true,
+          "sensor": false,
+          "switch": false
+        },
+        "monotone": false,
+        "negativeLoop": true,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "regA",
+            "regB",
+            -1
+          ],
+          [
+            "regB",
+            "regC",
+            -1
+          ],
+          [
+            "regC",
+            "regA",
+            -1
+          ],
+          [
+            "regC",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "repressilator_s3"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "recv"
+          },
+          {
+            "port": 0,
+            "source": "recv",
+            "target": "r0"
+          },
+          {
+            "port": 0,
+            "source": "r0",
+            "target": "opP"
+          },
+          {
+            "port": 0,
+            "source": "opP",
+            "target": "out"
+          },
+          {
+            "port": 0,
+            "source": "r0",
+            "target": "opN"
+          },
+          {
+            "port": 0,
+            "source": "opN",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "r0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "r0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "recv",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "recv",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "opP",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "opP",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                0.0,
+                100.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "opN",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "opN",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                100.0,
+                0.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": false,
+          "switch": false
+        },
+        "monotone": false,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "r0",
+            1
+          ],
+          [
+            "r0",
+            "out",
+            1
+          ],
+          [
+            "r0",
+            "out",
+            -1
+          ]
+        ]
+      },
+      "name": "incoherent_ffl"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "a",
+            "target": "G"
+          },
+          {
+            "port": 1,
+            "source": "b",
+            "target": "G"
+          },
+          {
+            "port": 0,
+            "source": "G",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "a",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "a",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "b",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "b",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "G",
+            "inputCount": 2,
+            "kind": "hill2",
+            "name": "AND",
+            "params": {
+              "K": [
+                1.0,
+                1.0
+              ],
+              "alpha": [
+                0.0,
+                1.0,
+                1.0,
+                10.0
+              ],
+              "n": [
+                2.0,
+                2.0
+              ]
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "a",
+            "out",
+            1
+          ],
+          [
+            "b",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "hill2_and_activating"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "a",
+            "target": "G"
+          },
+          {
+            "port": 1,
+            "source": "b",
+            "target": "G"
+          },
+          {
+            "port": 0,
+            "source": "G",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "a",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "a",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "b",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "b",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "G",
+            "inputCount": 2,
+            "kind": "hill2",
+            "name": "NOR",
+            "params": {
+              "K": [
+                1.0,
+                1.0
+              ],
+              "alpha": [
+                10.0,
+                1.0,
+                1.0,
+                0.0
+              ],
+              "n": [
+                2.0,
+                2.0
+              ]
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "a",
+            "out",
+            -1
+          ],
+          [
+            "b",
+            "out",
+            -1
+          ]
+        ]
+      },
+      "name": "hill2_both_repressing"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "a",
+            "target": "G"
+          },
+          {
+            "port": 1,
+            "source": "b",
+            "target": "G"
+          },
+          {
+            "port": 0,
+            "source": "G",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "a",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "a",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "b",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "b",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "G",
+            "inputCount": 2,
+            "kind": "hill2",
+            "name": "XOR",
+            "params": {
+              "K": [
+                1.0,
+                1.0
+              ],
+              "alpha": [
+                0.0,
+                10.0,
+                10.0,
+                0.0
+              ],
+              "n": [
+                2.0,
+                2.0
+              ]
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": false,
+          "switch": false
+        },
+        "monotone": false,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "a",
+            "out",
+            0
+          ],
+          [
+            "b",
+            "out",
+            0
+          ]
+        ]
+      },
+      "name": "hill2_xor_nonmonotone"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "a",
+            "target": "G"
+          },
+          {
+            "port": 1,
+            "source": "b",
+            "target": "G"
+          },
+          {
+            "port": 0,
+            "source": "G",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "a",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "a",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "b",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "b",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "G",
+            "inputCount": 2,
+            "kind": "hill2",
+            "name": "P0",
+            "params": {
+              "K": [
+                1.0,
+                1.0
+              ],
+              "alpha": [
+                0.0,
+                10.0,
+                0.0,
+                10.0
+              ],
+              "n": [
+                2.0,
+                2.0
+              ]
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "a",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "hill2_port0_only"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "a",
+            "target": "G"
+          },
+          {
+            "port": 1,
+            "source": "b",
+            "target": "G"
+          },
+          {
+            "port": 0,
+            "source": "G",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "a",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "a",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "b",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "b",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "G",
+            "inputCount": 2,
+            "kind": "hill2",
+            "name": "P1inert",
+            "params": {
+              "K": [
+                1.0,
+                1.0
+              ],
+              "alpha": [
+                1.0,
+                5.0,
+                1.0,
+                5.0
+              ],
+              "n": [
+                2.0,
+                2.0
+              ]
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "a",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "hill2_port1_inert"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "r0",
+            "target": "S"
+          },
+          {
+            "port": 1,
+            "source": "r1",
+            "target": "S"
+          },
+          {
+            "port": 2,
+            "source": "r2",
+            "target": "S"
+          },
+          {
+            "port": 0,
+            "source": "S",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "r0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "r0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "r1",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "r1",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "r2",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "r2",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "S",
+            "inputCount": 3,
+            "kind": "sum",
+            "name": "S",
+            "params": {
+              "K": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "alpha": [
+                [
+                  0.0,
+                  1.0
+                ],
+                [
+                  0.0,
+                  1.0
+                ],
+                [
+                  0.0,
+                  1.0
+                ]
+              ],
+              "n": [
+                2.0,
+                2.0,
+                2.0
+              ]
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "r0",
+            "out",
+            1
+          ],
+          [
+            "r1",
+            "out",
+            1
+          ],
+          [
+            "r2",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "sum_arity_matches"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "r0",
+            "target": "S"
+          },
+          {
+            "port": 1,
+            "source": "r1",
+            "target": "S"
+          },
+          {
+            "port": 2,
+            "source": "r2",
+            "target": "S"
+          },
+          {
+            "port": 0,
+            "source": "S",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "r0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "r0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "r1",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "r1",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "r2",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "r2",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "S",
+            "inputCount": 1,
+            "kind": "sum",
+            "name": "S",
+            "params": {
+              "K": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "alpha": [
+                [
+                  0.0,
+                  1.0
+                ],
+                [
+                  0.0,
+                  1.0
+                ],
+                [
+                  0.0,
+                  1.0
+                ]
+              ],
+              "n": [
+                2.0,
+                2.0,
+                2.0
+              ]
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "r0",
+            "out",
+            1
+          ],
+          [
+            "r1",
+            "out",
+            1
+          ],
+          [
+            "r2",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "sum_arity_under_declared"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "r0",
+            "target": "S"
+          },
+          {
+            "port": 1,
+            "source": "r1",
+            "target": "S"
+          },
+          {
+            "port": 0,
+            "source": "S",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "r0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "r0",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "r1",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "r1",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "id": "S",
+            "inputCount": 4,
+            "kind": "sum",
+            "name": "S",
+            "params": {
+              "K": [
+                1.0,
+                1.0
+              ],
+              "alpha": [
+                [
+                  0.0,
+                  1.0
+                ],
+                [
+                  0.0,
+                  1.0
+                ]
+              ],
+              "n": [
+                2.0,
+                2.0
+              ]
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "r0",
+            "out",
+            1
+          ],
+          [
+            "r1",
+            "out",
+            1
+          ]
+        ]
+      },
+      "name": "sum_arity_over_declared"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "recv"
+          },
+          {
+            "port": 0,
+            "source": "recv",
+            "target": "r0"
+          },
+          {
+            "port": 0,
+            "source": "r0",
+            "target": "p0"
+          },
+          {
+            "port": 0,
+            "source": "p0",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "componentId": "https://synbiohub.org/public/Cello/aTc",
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "componentId": "https://synbiohub.org/public/Cello/aTc_sensor",
+            "id": "recv",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "aTc_sensor",
+            "params": {
+              "K": 0.0121,
+              "alpha": [
+                0.0034,
+                2.8
+              ],
+              "n": 3.07
+            }
+          },
+          {
+            "componentId": "https://synbiohub.org/public/Cello/AmtR",
+            "id": "r0",
+            "inputCount": 1,
+            "kind": "regulator",
+            "name": "AmtR",
+            "params": {
+              "degradation_rate": 1.0,
+              "init_concentration": 0.0
+            }
+          },
+          {
+            "componentId": "https://synbiohub.org/public/Cello/A1_AmtR",
+            "id": "p0",
+            "inputCount": 1,
+            "kind": "hill1",
+            "name": "A1_AmtR",
+            "params": {
+              "K": 0.07,
+              "alpha": [
+                3.8,
+                0.06
+              ],
+              "n": 1.6
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": [
+          [
+            "sup",
+            "r0",
+            1
+          ],
+          [
+            "r0",
+            "out",
+            -1
+          ]
+        ]
+      },
+      "name": "grounded_decimals"
+    },
+    {
+      "design": {
+        "edges": [
+          {
+            "port": 0,
+            "source": "sup",
+            "target": "recv"
+          },
+          {
+            "port": 0,
+            "source": "recv",
+            "target": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "sup",
+            "inputCount": 1,
+            "kind": "supplement",
+            "name": "aTc",
+            "params": {}
+          },
+          {
+            "id": "recv",
+            "inputCount": 1,
+            "kind": "receiver",
+            "name": "recv",
+            "params": {
+              "K": 1.0,
+              "alpha": [
+                5.0,
+                5.0
+              ],
+              "n": 2.0
+            }
+          },
+          {
+            "id": "out",
+            "inputCount": 1,
+            "kind": "reporter",
+            "name": "GFP",
+            "params": {
+              "degradation_rate": 0.0,
+              "init_concentration": 0.0,
+              "signal_id": "gfp"
+            }
+          }
+        ],
+        "version": 1
+      },
+      "expected": {
+        "certifies": {
+          "oscillator": false,
+          "sensor": true,
+          "switch": false
+        },
+        "monotone": true,
+        "negativeLoop": false,
+        "positiveLoop": false,
+        "signedInteractionGraph": []
+      },
+      "name": "tie_no_effect"
+    }
+  ]
+}

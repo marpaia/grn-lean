@@ -148,4 +148,24 @@ def hasNegativeLoop (g : GRN) : Bool := hasNegativeLoopEdges (signedInteractionG
 /-- Whether a GRN carries the necessary-condition certificate for a regime. -/
 def certifies (g : GRN) (r : Regime) : Bool := certifiesEdges (signedInteractionGraph g) r
 
+/-- **A certificate cannot depend on the parts list.** Every certificate is invariant under an arbitrary
+reassignment of Component grounding, because each is read from the signed interaction graph and
+`signedInteractionGraph_regroundNodes` fixes that graph. Grounding a design in a different library, or
+stripping its provenance entirely, therefore never changes the verdict. -/
+theorem certifies_regroundNodes (g : GRN) (f : String → Option String) (r : Regime) :
+    certifies (g.regroundNodes f) r = certifies g r := by
+  rw [certifies, signedInteractionGraph_regroundNodes, certifies]
+
+theorem isMonotone_regroundNodes (g : GRN) (f : String → Option String) :
+    isMonotone (g.regroundNodes f) = isMonotone g := by
+  rw [isMonotone, signedInteractionGraph_regroundNodes, isMonotone]
+
+theorem hasPositiveLoop_regroundNodes (g : GRN) (f : String → Option String) :
+    hasPositiveLoop (g.regroundNodes f) = hasPositiveLoop g := by
+  rw [hasPositiveLoop, signedInteractionGraph_regroundNodes, hasPositiveLoop]
+
+theorem hasNegativeLoop_regroundNodes (g : GRN) (f : String → Option String) :
+    hasNegativeLoop (g.regroundNodes f) = hasNegativeLoop g := by
+  rw [hasNegativeLoop, signedInteractionGraph_regroundNodes, hasNegativeLoop]
+
 end GRN
