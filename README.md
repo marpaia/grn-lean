@@ -1,4 +1,4 @@
-# Gene-Regulatory Circuit Design Verification in Lean 4
+# A Lean 4 Formalization of Gene-Regulatory Circuits in the Hill-Kinetic ODE Perspective
 
 [![CI](https://github.com/marpaia/grn-lean/actions/workflows/ci.yml/badge.svg)](https://github.com/marpaia/grn-lean/actions/workflows/ci.yml)
 ![Lean](https://img.shields.io/badge/Lean-4.31.0-blue)
