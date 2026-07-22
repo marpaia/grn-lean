@@ -1,6 +1,6 @@
 # The LOICA vector field (reference)
 
-The exact ODE LOICA integrates, transcribed from `~/git/RudgeLab/LOICA` so the Lean vector
+The exact ODE LOICA integrates, transcribed from [RudgeLab/LOICA](https://github.com/RudgeLab/LOICA) so the Lean vector
 field matches the simulator that scores candidate designs. Sign conventions here are the source of truth
 for `GRN.InteractionGraph`.
 

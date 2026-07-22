@@ -32,7 +32,7 @@ each certificate.
 
 ```bash
 # a serialized design in, a machine-checked structural verdict out
-lake exe analyze design.json
+lake exe analyze examples/design.json
 ```
 
 ```json
@@ -85,11 +85,12 @@ provenance, not a gap in the proof.
 lake exe cache get  # prebuilt Mathlib oleans
 lake build          # library + kernel-checked examples
 lake build analyze  # the design/validation executable
-lake exe analyze design.json
+lake exe analyze examples/design.json
 ```
 
 The package is pinned to `leanprover/lean4:v4.31.0`, on Mathlib `v4.31.0`, and depends on
 [crnt-lean](https://github.com/marpaia/crnt-lean) (same pins) for the dynamical-systems substrate.
+Both are fetched by `lake`, so a fresh clone builds with no further setup.
 
 ## From checked graph fact to proven dynamical guarantee
 
